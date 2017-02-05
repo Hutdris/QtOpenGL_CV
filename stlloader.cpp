@@ -9,7 +9,19 @@
 #include <fstream>
 #include <iostream>
 using namespace std;
+void STLloader::array2vec(char *a, vector <GLfloat>&vec ) {
+	char x[4] = { a[0], a[1], a[2], a[3] };
+	char y[4] = { a[4], a[5],a[6],a[7] };
+	char z[4] = { a[8], a[9],a[10],a[11] };
 
+	float xx = *((float*)x);
+	float yy = *((float*)y);
+	float zz = *((float*)z);
+	vec[0] = xx;
+	vec[1] = yy;
+	vec[2] = zz;
+
+}
 void STLloader::set_path(const char * file_path)
 {
 	path.assign(file_path);
@@ -30,19 +42,29 @@ void STLloader::load(){
         myFile.read(triangle_counts, 4);
         nTriLong = *((unsigned long*)triangle_counts);
         cout << nTriLong << endl;
+		for (unsigned long i = 0; i < nTriLong; i++) {
+			char corr[4];
+			float _corr = 0.0f;
+			//normal vector x, y, z 4 char per float
+			for (int j = 0; j < 3; j++) {
+				myFile.read(corr, 4);
+				_corr = *((float*)corr);
+				normals.push_back(_corr);
+			}
+			//1 triangle = 3 vertex = 12 points/floats = 48 chars
+			for (int t = 0; t < 3; t++) {
+				for (int v = 0; v < 3; v++) {
+					myFile.read(corr, 4);
+					_corr = *((float*)corr);
+					vertexs.push_back(_corr);
+				}
 
-        for (unsigned long i = 0; i < nTriLong; i++) {
-            char triangle[50] = "";
-            myFile.read(triangle, 50);
-            for (int j = 0; j < 12; j++)
-                this->normals.push_back(triangle[j]);
-
-            for (int v = 0; v < 3; v++) {
-                for (int k = 0; k < 12; k++)
-                    this->vertexs.push_back(triangle[12 * v + k + 12]);
-            }
-        }
-        myFile.close();
+			}
+			//redundent bytes
+			char space[2];
+			myFile.read(space, 2);
+		}
+	 myFile.close();
     }
 
 }
