@@ -26,12 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     openglwindow.cpp \
-    stlloader.cpp
+    stlloader.cpp\
+	ICP.cpp
 
 INCLUDEPATH += C:\Qt\5.8\msvc2015_64\include
 
 HEADERS  += mainwindow.h \
     openglwindow.h \
-    stlloader.h
+    stlloader.h\
+	ICP.h
 
 FORMS    += mainwindow.ui
