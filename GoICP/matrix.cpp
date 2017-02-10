@@ -817,7 +817,7 @@ ostream& operator<< (ostream& out,const Matrix& M) {
     char buffer[1024];
     for (int32_t i=0; i<M.m; i++) {
       for (int32_t j=0; j<M.n; j++) {
-        sprintf(buffer,"%12.7f ",M.val[i][j]);
+        sprintf_s(buffer,"%12.7f ",M.val[i][j]);
         out << buffer;
       }
       if (i<M.m-1)

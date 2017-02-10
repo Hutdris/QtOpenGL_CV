@@ -30,7 +30,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #ifndef _MSC_VER
   #include <stdint.h>
 #else
-  //typedef __int8            int8_t;
+//  typedef __int8            int8_t;
   typedef __int16           int16_t;
   typedef __int32           int32_t;
   typedef __int64           int64_t;
@@ -42,8 +42,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 #define endll endl << endl // double end line definition
 
-typedef double FLOAT;      // double precision
-//typedef float  FLOAT;    // single precision
+//typedef double FLOAT;      // double precision
+typedef float  FLOAT;    // single precision
 
 class Matrix {
 

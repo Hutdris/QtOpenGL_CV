@@ -75,7 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>FlyCapture2_v140.lib;$(QTDIR)\lib\qtmain.lib;shell32.lib;$(QTDIR)\lib\Qt5OpenGL.lib;$(QTDIR)\lib\Qt5Widgets.lib;$(QTDIR)\lib\Qt5Gui.lib;$(QTDIR)\lib\Qt5Core.lib;%(AdditionalDependencies);opencv_world310.lib;opencv_world310d.lib</AdditionalDependencies>
+      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5Widgetsd.lib;FlyCapture2_v140.lib;shell32.lib;%(AdditionalDependencies);opencv_world310.lib;opencv_world310d.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\opencv\build\x64\vc14\lib;C:\Program Files\Point Grey Research\FlyCapture2\lib64;C:\Program Files\Point Grey Research\FlyCapture2\bin64\vs2015;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;$(OPENCV_DIR)\build\x64\vc14\lib;$(QTDIR)\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -117,7 +117,7 @@
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>FlyCapture2_v140.lib;$(QTDIR)\lib\qtmaind.lib;shell32.lib;$(QTDIR)\lib\Qt5OpenGLd.lib;$(QTDIR)\lib\Qt5Widgetsd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Cored.lib;%(AdditionalDependencies);opencv_world310.lib;opencv_world310d.lib</AdditionalDependencies>
+      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5Widgetsd.lib;FlyCapture2_v140.lib;shell32.lib;%(AdditionalDependencies);opencv_world310.lib;opencv_world310d.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\opencv\build\x64\vc14\lib;C:\Program Files\Point Grey Research\FlyCapture2\lib64;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\opencv\build\x64\vc14\lib;$(QTDIR)\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -141,24 +141,16 @@
     <ClCompile Include="Debug\moc_mainwindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Debug\moc_openglwindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="GoICP\ConfigMap.cpp" />
     <ClCompile Include="GoICP\jly_3ddt.cpp" />
     <ClCompile Include="GoICP\jly_goicp.cpp" />
-    <ClCompile Include="GoICP\jly_main.cpp" />
     <ClCompile Include="GoICP\matrix.cpp" />
     <ClCompile Include="GoICP\StringTokenizer.cpp" />
+    <ClCompile Include="OpenGLWidget.cpp" />
     <ClCompile Include="pgapi.cpp" />
-    <ClCompile Include="ICP.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
-    <ClCompile Include="openglwindow.cpp" />
     <ClCompile Include="Release\moc_mainwindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Release\moc_openglwindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="stlloader.cpp" />
@@ -173,6 +165,7 @@
     <ClInclude Include="GoICP\matrix.h" />
     <ClInclude Include="GoICP\nanoflann.hpp" />
     <ClInclude Include="GoICP\StringTokenizer.hpp" />
+    <ClInclude Include="OpenGLWidget.h" />
     <ClInclude Include="Tracer.h" />
     <CustomBuild Include="mainwindow.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG  "-IC:\opencv\build\include" "-IC:\Qt\5.8\msvc2015_64\include" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I." "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I.\GeneratedFiles" "-I$(INHERIT)\." "-IC:\Program Files\Point Grey Research\FlyCapture2\include"</Command>
@@ -184,19 +177,8 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
-    <CustomBuild Include="openglwindow.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG  "-IC:\opencv\build\include" "-IC:\Qt\5.8\msvc2015_64\include" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I." "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I.\GeneratedFiles" "-I$(INHERIT)\." "-IC:\Program Files\Point Grey Research\FlyCapture2\include"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing openglwindow.h...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_DEPRECATED_WARNINGS -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB  "-IC:\Program Files\Point Grey Research\FlyCapture2\include" "-IC:\opencv\build\include" "-IC:\Qt\5.8\msvc2015_64\include" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2015" "-I.\GeneratedFiles" "-I$(OPENCV_DIR)\build\include" "-I$(INHERIT)\."</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing openglwindow.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-    </CustomBuild>
     <ClInclude Include="Fly_cap_resource.h" />
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h" />
-    <ClInclude Include="ICP.h" />
     <ClInclude Include="pgapi.h" />
     <ClInclude Include="stlloader.h" />
   </ItemGroup>

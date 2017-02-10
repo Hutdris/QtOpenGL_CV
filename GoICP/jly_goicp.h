@@ -31,6 +31,7 @@ using namespace std;
 #include "jly_icp3d.hpp"
 #include "jly_3ddt.h"
 
+#include <time.h>
 #define PI 3.1415926536
 #define SQRT3 1.732050808
 

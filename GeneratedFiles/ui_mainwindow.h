@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.6.2
+** Created by: Qt User Interface Compiler version 5.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -17,10 +17,10 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "OpenGLWidget.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -38,7 +38,7 @@ public:
     QLabel *upperLabel;
     QLabel *lowerLabel;
     QLabel *centerLabel;
-    QOpenGLWidget *openGLWidget;
+    OpenGLWidget *openGLWidget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
 
@@ -86,7 +86,7 @@ public:
         centerLabel->setObjectName(QStringLiteral("centerLabel"));
         centerLabel->setGeometry(QRect(90, 300, 121, 31));
         centerLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-        openGLWidget = new QOpenGLWidget(centralWidget);
+        openGLWidget = new OpenGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
         openGLWidget->setGeometry(QRect(360, 140, 561, 401));
         MainWindow->setCentralWidget(centralWidget);
@@ -105,14 +105,14 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "Import STL", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", 0));
-        upperButton->setText(QApplication::translate("MainWindow", "Upper", 0));
-        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", 0));
-        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", 0));
-        lowerButton->setText(QApplication::translate("MainWindow", "Lower", 0));
-        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        pushButton->setText(QApplication::translate("MainWindow", "Import STL", Q_NULLPTR));
+        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", Q_NULLPTR));
+        upperButton->setText(QApplication::translate("MainWindow", "Upper", Q_NULLPTR));
+        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", Q_NULLPTR));
+        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", Q_NULLPTR));
+        lowerButton->setText(QApplication::translate("MainWindow", "Lower", Q_NULLPTR));
+        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", Q_NULLPTR));
         upperLabel->setText(QString());
         lowerLabel->setText(QString());
         centerLabel->setText(QString());

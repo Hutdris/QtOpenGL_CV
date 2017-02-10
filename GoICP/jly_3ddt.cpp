@@ -58,7 +58,7 @@ DEucl3D MINforwardDE3(Array3dDEucl3D& A, int z,int y,int x)
   //              MASK:
   //
   //             (0,0,0)(0,0,1)
-  //      (0,1,1)(0,1,0)(0,1,1)uyuuuuuuu
+  //      (0,1,1)(0,1,0)(0,1,1)
   //
   
   DEucl3D mask[5];

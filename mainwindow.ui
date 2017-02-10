@@ -159,7 +159,7 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QOpenGLWidget" name="openGLWidget">
+   <widget class="OpenGLWidget" name="openGLWidget">
     <property name="geometry">
      <rect>
       <x>360</x>
@@ -190,6 +190,13 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>OpenGLWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>OpenGLWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

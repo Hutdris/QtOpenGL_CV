@@ -5,16 +5,10 @@
 #include <iostream>
 #include <string>
 #include "opencv\cv.h"
-#include "ICP.h"
 
 #include "GoICP/jly_goicp.h"
 int main(int argc, char *argv[])
 {
-
-	ICP myicp(1000, 0.1, 10);
-	myicp.readfile("porsche.stl", "porsche.stl");
-	myicp.run();
-	myicp.writefile("out.obj");
 
 	QApplication a(argc, argv);
 	MainWindow w;
