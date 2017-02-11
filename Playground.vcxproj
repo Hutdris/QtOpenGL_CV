@@ -146,6 +146,7 @@
     <ClCompile Include="GoICP\jly_goicp.cpp" />
     <ClCompile Include="GoICP\matrix.cpp" />
     <ClCompile Include="GoICP\StringTokenizer.cpp" />
+    <ClCompile Include="ICP.cpp" />
     <ClCompile Include="OpenGLWidget.cpp" />
     <ClCompile Include="pgapi.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="GoICP\matrix.h" />
     <ClInclude Include="GoICP\nanoflann.hpp" />
     <ClInclude Include="GoICP\StringTokenizer.hpp" />
+    <ClInclude Include="ICP.h" />
     <ClInclude Include="OpenGLWidget.h" />
     <ClInclude Include="Tracer.h" />
     <CustomBuild Include="mainwindow.h">
