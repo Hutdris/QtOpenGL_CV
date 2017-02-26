@@ -1,8 +1,15 @@
-﻿  Moc'ing OpenGLWidget.h...
-  moc_OpenGLWidget.cpp
+﻿  ICP.cpp
+ICP.cpp(65): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(66): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(70): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(72): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(73): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(74): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   OpenGLWidget.cpp
-OpenGLWidget.cpp(48): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-  mainwindow.cpp
   Generating Code...
   Playground.vcxproj -> C:\Users\JS\Documents\Visual Studio 2015\Projects\QtOpenGL_CV\debug\Playground.exe
   Playground.vcxproj -> debug\Playground.pdb (Full PDB)

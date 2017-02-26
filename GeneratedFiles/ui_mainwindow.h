@@ -18,6 +18,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -41,6 +42,7 @@ public:
     QLabel *centerLabel;
     OpenGLWidget *openGLWidget;
     QTextBrowser *textBrowser;
+    QSlider *ZoomBar;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
 
@@ -94,6 +96,13 @@ public:
         textBrowser = new QTextBrowser(centralWidget);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
         textBrowser->setGeometry(QRect(310, 680, 911, 141));
+        ZoomBar = new QSlider(centralWidget);
+        ZoomBar->setObjectName(QStringLiteral("ZoomBar"));
+        ZoomBar->setGeometry(QRect(260, 30, 31, 441));
+        ZoomBar->setMinimum(1);
+        ZoomBar->setMaximum(100);
+        ZoomBar->setValue(100);
+        ZoomBar->setOrientation(Qt::Vertical);
         MainWindow->setCentralWidget(centralWidget);
         pushButton_2->raise();
         upperButton->raise();
@@ -107,6 +116,7 @@ public:
         openGLWidget->raise();
         textBrowser->raise();
         pushButton->raise();
+        ZoomBar->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1259, 21));
@@ -117,6 +127,7 @@ public:
 
         retranslateUi(MainWindow);
         QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(animate()));
+        QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), openGLWidget, SLOT(setZoomRatio(int)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi

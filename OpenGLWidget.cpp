@@ -34,9 +34,9 @@ void OpenGLWidget::initializeGL()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	set_stlModel("cube.stl", Lower);
-	set_stlModel("cube.stl", Upper);
-	set_stlModel("cube.stl", Center);
+	set_stlModel("Models/cube.stl", Lower);
+	set_stlModel("Models/cube.stl", Upper);
+	set_stlModel("Models/cube.stl", Center);
 
 	rTri = 0.0;
 	//
@@ -45,7 +45,7 @@ void OpenGLWidget::initializeGL()
 
 void OpenGLWidget::draw_model(STLModel &model) {
 
-	glRotatef(rTri, 0.5, 1.0, 0.3);
+	//glRotatef(rTri, 0.5, 1.0, 0.3);
 
 	glColor3f(0.5, 0.5, 0.0);
 	glBegin(GL_TRIANGLES);
@@ -104,9 +104,12 @@ void OpenGLWidget::animate() {
 }
 
 void OpenGLWidget::model_normalize(STLModel &model) {
-	auto max_corr = *(std::max_element(model.vertexs.begin(), model.vertexs.end()));
+	//Normalize vertexs from (min, max) to (-1, 1)
+	//TODO: Different model should divide by the same ratio, not max(vertexs)!!
+
+	//auto max_corr = *(std::max_element(model.vertexs.begin(), model.vertexs.end()));
 	for (auto i = 0; i < model.vertexs.size(); i++) {
-		model.vertexs[i] /= max_corr;
+		model.vertexs[i] /= (GLfloat)Zoom_ratio;
 	}
 }
 
@@ -115,6 +118,7 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 		stlloader.set_path(model_path);
 		stlloader.load();
 		//STLModel *ptm;
+		//TODO: using pointer instead of copy&paste = =
 	switch (p) {
 	case Upper:
 		//ptm = &upper;
@@ -142,3 +146,11 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 	*/
 }
 
+void OpenGLWidget::setZoomRatio(int _zoom_ratio) {
+	Zoom_ratio = _zoom_ratio; 
+	model_normalize(center);
+	model_normalize(lower);
+	model_normalize(upper);
+	update();
+
+};

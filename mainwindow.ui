@@ -179,6 +179,28 @@
      </rect>
     </property>
    </widget>
+   <widget class="QSlider" name="ZoomBar">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>30</y>
+      <width>31</width>
+      <height>441</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="value">
+     <number>100</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
    <zorder>pushButton_2</zorder>
    <zorder>upperButton</zorder>
    <zorder>pushButton_4</zorder>
@@ -191,6 +213,7 @@
    <zorder>openGLWidget</zorder>
    <zorder>textBrowser</zorder>
    <zorder>pushButton</zorder>
+   <zorder>ZoomBar</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -220,6 +243,7 @@
    <slots>
     <slot>setModel(QString)</slot>
     <slot>animate()</slot>
+    <slot>setZoomRatio(int)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -238,6 +262,22 @@
     <hint type="destinationlabel">
      <x>410</x>
      <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ZoomBar</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>setZoomRatio(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>270</y>
     </hint>
    </hints>
   </connection>

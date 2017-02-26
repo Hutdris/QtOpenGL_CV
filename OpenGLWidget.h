@@ -36,6 +36,7 @@ protected:
 public slots:
 	void keyPressEvent(QKeyEvent *e);
 	void animate();
+	void setZoomRatio(int _zoom_ratio);
 	signals:
 
 private:
@@ -43,6 +44,7 @@ private:
 	STLModel upper, lower, center;
 	GLfloat rTri;
 	GLuint  m_Pos;
+	int Zoom_ratio = 100;
 };
 
 
