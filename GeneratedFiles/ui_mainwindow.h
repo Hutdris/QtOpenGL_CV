@@ -18,6 +18,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 #include "OpenGLWidget.h"
@@ -39,6 +40,7 @@ public:
     QLabel *lowerLabel;
     QLabel *centerLabel;
     OpenGLWidget *openGLWidget;
+    QTextBrowser *textBrowser;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
 
@@ -46,7 +48,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(986, 656);
+        MainWindow->resize(1259, 878);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         pushButton = new QPushButton(centralWidget);
@@ -60,10 +62,10 @@ public:
         upperButton->setGeometry(QRect(30, 170, 51, 51));
         pushButton_4 = new QPushButton(centralWidget);
         pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
-        pushButton_4->setGeometry(QRect(30, 530, 171, 51));
+        pushButton_4->setGeometry(QRect(30, 420, 171, 51));
         pushButton_5 = new QPushButton(centralWidget);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
-        pushButton_5->setGeometry(QRect(30, 470, 171, 51));
+        pushButton_5->setGeometry(QRect(30, 360, 171, 51));
         lowerButton = new QPushButton(centralWidget);
         lowerButton->setObjectName(QStringLiteral("lowerButton"));
         lowerButton->setGeometry(QRect(30, 230, 51, 51));
@@ -88,17 +90,33 @@ public:
         centerLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         openGLWidget = new OpenGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-        openGLWidget->setGeometry(QRect(360, 140, 561, 401));
+        openGLWidget->setGeometry(QRect(310, 20, 911, 631));
+        textBrowser = new QTextBrowser(centralWidget);
+        textBrowser->setObjectName(QStringLiteral("textBrowser"));
+        textBrowser->setGeometry(QRect(310, 680, 911, 141));
         MainWindow->setCentralWidget(centralWidget);
+        pushButton_2->raise();
+        upperButton->raise();
+        pushButton_4->raise();
+        pushButton_5->raise();
+        lowerButton->raise();
+        centerButton->raise();
+        upperLabel->raise();
+        lowerLabel->raise();
+        centerLabel->raise();
+        openGLWidget->raise();
+        textBrowser->raise();
+        pushButton->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 986, 21));
+        menuBar->setGeometry(QRect(0, 0, 1259, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
 
         retranslateUi(MainWindow);
+        QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(animate()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi

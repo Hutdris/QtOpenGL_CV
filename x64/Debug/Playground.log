@@ -1,26 +1,8 @@
-﻿  ICP.cpp
-ICP.cpp(65): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(66): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(70): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(72): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(73): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-ICP.cpp(74): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  main.cpp
-C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+﻿  Moc'ing OpenGLWidget.h...
+  moc_OpenGLWidget.cpp
+  OpenGLWidget.cpp
+OpenGLWidget.cpp(48): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  mainwindow.cpp
   Generating Code...
   Playground.vcxproj -> C:\Users\JS\Documents\Visual Studio 2015\Projects\QtOpenGL_CV\debug\Playground.exe
   Playground.vcxproj -> debug\Playground.pdb (Full PDB)

@@ -10,6 +10,7 @@
 
 int main(int argc, char *argv[])
 {
+	/* ICP TEST
 
 	STLloader model1("porsche.stl");
 	STLloader lower("lower.stl");
@@ -19,9 +20,13 @@ int main(int argc, char *argv[])
 	icp1.load_points(lower.get_vertexs(), lower.get_vertexs());
 	icp1.readConfig("config.txt");
 	icp1.run();
-
+*/
+	
 	QApplication a(argc, argv);
+
+
 	MainWindow w;
+	
 	/*
 	unsigned int s1 = 16154282u;
 	unsigned int s2 = 16154288u;

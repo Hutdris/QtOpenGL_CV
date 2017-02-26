@@ -32,6 +32,8 @@ void STLloader::set_path(const string file_path) {
 }
 
 void STLloader::load() {
+	vertexs.clear();
+	normals.clear();
 	ifstream myFile(
 		this->path.c_str(), ios::in | ios::binary);
 	char header_info[80] = "";

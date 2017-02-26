@@ -92,65 +92,67 @@
     <ClCompile Include="ICP.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\moc_OpenGLWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_OpenGLWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="stlloader.h">
+    <CustomBuild Include="OpenGLWidget.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
+    </CustomBuild>
+    <CustomBuild Include="packages.config" />
+    <CustomBuild Include="ICP.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GeneratedFiles\ui_mainwindow.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Tracer.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Fly_cap_resource.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pgapi.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="stlloader.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\ConfigMap.hpp">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\jly_3ddt.h">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\jly_goicp.h">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\jly_icp3d.hpp">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\jly_sorting.hpp">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\matrix.h">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\nanoflann.hpp">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GoICP\StringTokenizer.hpp">
+      <Filter>GoICP</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fly_cap_resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pgapi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Tracer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\ConfigMap.hpp">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\jly_3ddt.h">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\jly_goicp.h">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\jly_icp3d.hpp">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\jly_sorting.hpp">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\matrix.h">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\nanoflann.hpp">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="GoICP\StringTokenizer.hpp">
-      <Filter>GoICP</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGLWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ICP.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

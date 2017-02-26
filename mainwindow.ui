@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>986</width>
-    <height>656</height>
+    <width>1259</width>
+    <height>878</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>530</y>
+      <y>420</y>
       <width>171</width>
       <height>51</height>
      </rect>
@@ -70,7 +70,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>470</y>
+      <y>360</y>
       <width>171</width>
       <height>51</height>
      </rect>
@@ -162,20 +162,42 @@
    <widget class="OpenGLWidget" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>140</y>
-      <width>561</width>
-      <height>401</height>
+      <x>310</x>
+      <y>20</y>
+      <width>911</width>
+      <height>631</height>
      </rect>
     </property>
    </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>680</y>
+      <width>911</width>
+      <height>141</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>pushButton_2</zorder>
+   <zorder>upperButton</zorder>
+   <zorder>pushButton_4</zorder>
+   <zorder>pushButton_5</zorder>
+   <zorder>lowerButton</zorder>
+   <zorder>centerButton</zorder>
+   <zorder>upperLabel</zorder>
+   <zorder>lowerLabel</zorder>
+   <zorder>centerLabel</zorder>
+   <zorder>openGLWidget</zorder>
+   <zorder>textBrowser</zorder>
+   <zorder>pushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>986</width>
+     <width>1259</width>
      <height>21</height>
     </rect>
    </property>
@@ -195,8 +217,29 @@
    <class>OpenGLWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>OpenGLWidget.h</header>
+   <slots>
+    <slot>setModel(QString)</slot>
+    <slot>animate()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>animate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>410</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
