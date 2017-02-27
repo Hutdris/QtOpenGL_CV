@@ -38,12 +38,15 @@ int main(int argc, char *argv[])
 	icp1.readConfig("config.txt");
 	icp1.run();
 */
-	
+	/*QT part
+
+
+	*/
+
 	QApplication a(argc, argv);
 	//a.installEventFilter(new QApplicationFilter());
 	MainWindow w;
-	
-	/*
+    /*
 	unsigned int s1 = 16154282u;
 	unsigned int s2 = 16154288u;
 	cv::Mat img1, img2;
@@ -53,15 +56,16 @@ int main(int argc, char *argv[])
 
 
 	while(true){
+		//PGmgr.RunMultipleCamera(img1, img2);
 	PGmgr.GetStereoImage(img1, img2);
 	cv::imshow("img1", img1);
 	cv::waitKey(10);
 	cv::imshow("img2", img2);
 	cv::waitKey(10);}
+	return 0;
+	//
 	
-	//PGmgr.RunMultipleCamera(img1, img2);
-	*/
-    w.show();
-    return a.exec();
-
+ */
+	w.show();
+	return a.exec();
 }

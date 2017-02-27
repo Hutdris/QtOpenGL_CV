@@ -22,13 +22,8 @@
 //=============================================================================
 // $Id: FlyCapture2Test.cpp 300855 2016-09-30 22:48:39Z erich $
 //=============================================================================
-
-#include <FlyCapture2.h>
 #include <iostream>
 #include <sstream>
-#include <opencv2\core\core.hpp>
-#include <opencv2\highgui\highgui.hpp>
-#include <opencv\cv.h>
 #include "pgapi.h"
 
 
@@ -186,6 +181,7 @@ bool PGApi::PollForTriggerReady(Camera *pCam)
 }
 
 void PGApi::GetStereoImage(cv::Mat &image1, cv::Mat &image2) {
+	//image 1 filp !!
 	Image rawImage1, rawImage2;
 	PollForTriggerReady(&cam1);
 	Error error;
@@ -217,7 +213,8 @@ void PGApi::GetStereoImage(cv::Mat &image1, cv::Mat &image2) {
 			convertedImage1.GetData(),
 			rowBytes1
 		);
-		_img1.copyTo(image1);
+		cv::flip(_img1, image1, 0);
+		//_img1.copyTo(image1);
 		unsigned int rowBytes2 = static_cast<uint>((double)convertedImage2.GetReceivedDataSize() / (double)convertedImage2.GetRows());
 		cv::Mat _img2(convertedImage2.GetRows(), convertedImage2.GetCols(), CV_8U, convertedImage2.GetData(), rowBytes2);
 		_img2.copyTo(image2);

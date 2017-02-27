@@ -5,7 +5,11 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <String>
+#include <vector>
 #include "ICP.h"
+#include "pgapi.h"
+#include "Tracer.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -29,11 +33,17 @@ private slots:
     void on_pushButton_2_pressed();
 	
 	void runICP();
+	void initCameras();
+	void camerasDisplay();
 
 private:
     Ui::MainWindow *ui;
 	void append_textBrowser(const QString &s);
 	ICP icp;
+	PGApi PGmgr;
+	Tracer tracer;
+	cv::Mat img1, img2, tri_points;
+
 };
 
 #endif // MAINWINDOW_H
