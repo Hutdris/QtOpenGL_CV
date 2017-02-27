@@ -1,6 +1,7 @@
 #include "OpenGLWidget.h"
 #include <algorithm>
 
+#include <QTimer>
 OpenGLWidget::STLModel::STLModel() {
 
 }
@@ -9,6 +10,10 @@ OpenGLWidget::STLModel:: ~STLModel() { vertexs.clear(); normals.clear();}
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	:QOpenGLWidget(parent)
 {
+
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	timer->start(int(1000/24));
 }
 
 
@@ -44,24 +49,32 @@ void OpenGLWidget::initializeGL()
 }
 
 void OpenGLWidget::draw_model(STLModel &model) {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0, 0, 5.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
+	glRotatef(rTri, 0.5, 1.0, 0.3);
+	auto _zoomratio = 1.0f / Zoom_ratio;
 
-	//glRotatef(rTri, 0.5, 1.0, 0.3);
-
-	glColor3f(0.5, 0.5, 0.0);
+	glScalef(_zoomratio, _zoomratio, _zoomratio);
 	glBegin(GL_TRIANGLES);
 for (auto itt = model.vertexs.begin(); itt != model.vertexs.end(); itt += 9){
+	glColor3f(0.5, 0.5, 0.0);
 	glVertex3f(*itt, *(itt + 1), *(itt + 2));
 	glVertex3f(*(itt+3), *(itt + 4), *(itt + 5));
 	glVertex3f(*(itt+6), *(itt + 7), *(itt + 8));
 }
 	glEnd();
+	glScalef(Zoom_ratio, Zoom_ratio, Zoom_ratio);
+	//glLoadIdentity();
 }
 void OpenGLWidget::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	draw_model(lower);
 	draw_model(upper);
 	draw_model(center);
+	rTri += Zoom_ratio/10.0f;
 	//glLoadIdentity();
 	//glTranslatef(-1.5, 0.0, 0.0);
 	/*
@@ -98,7 +111,6 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e)
 	}
 }
 void OpenGLWidget::animate() {
-	rTri += 3.0f;
 	update();
 	//paintGL();
 }
@@ -113,6 +125,7 @@ void OpenGLWidget::model_normalize(STLModel &model) {
 	}
 }
 
+
 void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 
 		stlloader.set_path(model_path);
@@ -124,16 +137,16 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 		//ptm = &upper;
 		upper.vertexs = stlloader.get_vertexs();
 		upper.normals = stlloader.get_normals();
-		model_normalize(upper);
+		//model_normalize(upper);
 	case Lower:
 		//ptm = &lower;
 		lower.vertexs = stlloader.get_vertexs();
 		lower.normals = stlloader.get_normals();
-		model_normalize(lower);
+		//model_normalize(lower);
 	case Center:
 		center.vertexs = stlloader.get_vertexs();
 		center.normals = stlloader.get_normals();
-		model_normalize(center);
+		//model_normalize(center);
 		//ptm = &center;
 		}
 	/* ISSUE:Can't access pointer???
@@ -146,11 +159,21 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 	*/
 }
 
+void OpenGLWidget::model_resize(STLModel &model, int old_ratio) {
+
+	GLfloat muti = ((GLfloat)old_ratio / Zoom_ratio);
+	for (auto i = 0; i < model.vertexs.size(); i++) {
+		model.vertexs[i] *= muti;
+	}
+}
 void OpenGLWidget::setZoomRatio(int _zoom_ratio) {
+	GLfloat old_ratio = Zoom_ratio;
 	Zoom_ratio = _zoom_ratio; 
-	model_normalize(center);
-	model_normalize(lower);
-	model_normalize(upper);
+	/*
+	model_resize(upper, old_ratio);
+	model_resize(lower, old_ratio);
+	model_resize(center, old_ratio);
+	*/
 	update();
 
 };

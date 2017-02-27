@@ -7,6 +7,7 @@
 #include <QOpenGLWidget>
 //#include <QOpenGLVertexArrayObject>
 #include <QKeyEvent>
+
 #include <gl/GLU.h>
 #include <gl/GL.h>
 
@@ -32,6 +33,7 @@ protected:
 	void paintGL();
 	void initializeGL();
 	void model_normalize(STLModel &model);
+	void model_resize(STLModel &model, int old_ratio);
 	void draw_model(STLModel &model); 
 public slots:
 	void keyPressEvent(QKeyEvent *e);
@@ -44,7 +46,8 @@ private:
 	STLModel upper, lower, center;
 	GLfloat rTri;
 	GLuint  m_Pos;
-	int Zoom_ratio = 100;
+	int Zoom_ratio = 50;
+	
 };
 
 

@@ -201,6 +201,16 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="QLCDNumber" name="lcdNumber">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>490</y>
+      <width>64</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>pushButton_2</zorder>
    <zorder>upperButton</zorder>
    <zorder>pushButton_4</zorder>
@@ -214,6 +224,7 @@
    <zorder>textBrowser</zorder>
    <zorder>pushButton</zorder>
    <zorder>ZoomBar</zorder>
+   <zorder>lcdNumber</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -278,6 +289,22 @@
     <hint type="destinationlabel">
      <x>349</x>
      <y>270</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ZoomBar</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lcdNumber</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>272</x>
+     <y>436</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>269</x>
+     <y>534</y>
     </hint>
    </hints>
   </connection>

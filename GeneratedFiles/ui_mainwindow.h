@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -43,6 +44,7 @@ public:
     OpenGLWidget *openGLWidget;
     QTextBrowser *textBrowser;
     QSlider *ZoomBar;
+    QLCDNumber *lcdNumber;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
 
@@ -103,6 +105,9 @@ public:
         ZoomBar->setMaximum(100);
         ZoomBar->setValue(100);
         ZoomBar->setOrientation(Qt::Vertical);
+        lcdNumber = new QLCDNumber(centralWidget);
+        lcdNumber->setObjectName(QStringLiteral("lcdNumber"));
+        lcdNumber->setGeometry(QRect(230, 490, 64, 23));
         MainWindow->setCentralWidget(centralWidget);
         pushButton_2->raise();
         upperButton->raise();
@@ -117,6 +122,7 @@ public:
         textBrowser->raise();
         pushButton->raise();
         ZoomBar->raise();
+        lcdNumber->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1259, 21));
@@ -128,20 +134,22 @@ public:
         retranslateUi(MainWindow);
         QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(animate()));
         QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), openGLWidget, SLOT(setZoomRatio(int)));
+        QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), lcdNumber, SLOT(display(int)));
+
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
-        pushButton->setText(QApplication::translate("MainWindow", "Import STL", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", Q_NULLPTR));
-        upperButton->setText(QApplication::translate("MainWindow", "Upper", Q_NULLPTR));
-        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", Q_NULLPTR));
-        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", Q_NULLPTR));
-        lowerButton->setText(QApplication::translate("MainWindow", "Lower", Q_NULLPTR));
-        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "Import STL", 0));
+        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", 0));
+        upperButton->setText(QApplication::translate("MainWindow", "Upper", 0));
+        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", 0));
+        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", 0));
+        lowerButton->setText(QApplication::translate("MainWindow", "Lower", 0));
+        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", 0));
         upperLabel->setText(QString());
         lowerLabel->setText(QString());
         centerLabel->setText(QString());
