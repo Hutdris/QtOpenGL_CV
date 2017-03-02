@@ -6,7 +6,6 @@
 #include <QWidget>
 #include <QOpenGLWidget>
 //#include <QOpenGLVertexArrayObject>
-#include <QKeyEvent>
 #include <QtOpenGL/qgl.h>
 #include <QtOpenGL>
 
@@ -20,7 +19,7 @@ class OpenGLWidget : public QOpenGLWidget
 	Q_OBJECT	
 	Q_ENUMS(Position)
 public:
-	enum Position{Upper, Lower, Center};
+	enum Position{Upper, Lower, Center, EndCase};
 	OpenGLWidget(QWidget *parent = 0);
 	~OpenGLWidget();
 	class STLModel {
@@ -38,8 +37,11 @@ protected:
 	void model_normalize(STLModel &model);
 	void model_resize(STLModel &model, int old_ratio);
 	void draw_model(STLModel &model); 
-public slots:
+	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void mouseMoveEvent(QMouseEvent *event);
 	void keyPressEvent(QKeyEvent *e);
+	void whellEvent(QWheelEvent *whell_event);
+public slots:
 	void animate();
 	void setZoomRatio(int _zoom_ratio);
 	signals:
@@ -48,10 +50,13 @@ private:
 	STLloader stlloader;
 	STLModel upper, lower, center;
 	GLfloat rTri;
+	QVector3D rotate;
 	GLuint  m_Pos;
 	int Zoom_ratio = 50;
 	GLuint  fps;
 	vector <GLuint> model_list;
+	QPoint m_start_pos;
+	
 };
 
 
