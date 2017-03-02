@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QDebug>
 //#include "OpenGLWidget.h"
 #include <String>
 namespace Ui {
@@ -15,6 +16,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+protected:
+	virtual void keyPressEvent(QKeyEvent *e);
+	
 private slots:
     void on_upperButton_clicked();
     void on_lowerButton_clicked();

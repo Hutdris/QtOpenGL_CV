@@ -30,6 +30,7 @@ public:
 	};
 	void set_stlModel(const char *model_path, Position p);
 	GLuint makeObject(STLModel model);
+	void keyPressEvent(QKeyEvent *e);
 protected:
 	void resizeGL(int, int);
 	void paintGL();
@@ -39,20 +40,22 @@ protected:
 	void draw_model(STLModel &model); 
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
-	void keyPressEvent(QKeyEvent *e);
+	//void keyPressEvent(QKeyEvent *e);
 	void whellEvent(QWheelEvent *whell_event);
 public slots:
 	void animate();
 	void setZoomRatio(int _zoom_ratio);
 	signals:
+	void getZoomRatio(int z_r);
 
 private:
+	void emitGetZoomRatio();
 	STLloader stlloader;
 	STLModel upper, lower, center;
 	GLfloat rTri;
 	QVector3D rotate;
 	GLuint  m_Pos;
-	int Zoom_ratio = 50;
+	int Zoom_ratio = 2;
 	GLuint  fps;
 	vector <GLuint> model_list;
 	QPoint m_start_pos;

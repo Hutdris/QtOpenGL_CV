@@ -252,6 +252,7 @@
    <extends>QOpenGLWidget</extends>
    <header>OpenGLWidget.h</header>
    <slots>
+    <signal>getZoomRatio(int)</signal>
     <slot>setModel(QString)</slot>
     <slot>animate()</slot>
     <slot>setZoomRatio(int)</slot>
@@ -305,6 +306,38 @@
     <hint type="destinationlabel">
      <x>269</x>
      <y>534</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>getZoomRatio(int)</signal>
+   <receiver>lcdNumber</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>444</x>
+     <y>534</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>264</x>
+     <y>535</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>getZoomRatio(int)</signal>
+   <receiver>ZoomBar</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>384</x>
+     <y>363</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>278</x>
+     <y>360</y>
     </hint>
    </hints>
   </connection>

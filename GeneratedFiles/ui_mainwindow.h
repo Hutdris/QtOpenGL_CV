@@ -135,7 +135,8 @@ public:
         QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(animate()));
         QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), openGLWidget, SLOT(setZoomRatio(int)));
         QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), lcdNumber, SLOT(display(int)));
-
+        QObject::connect(openGLWidget, SIGNAL(getZoomRatio(int)), lcdNumber, SLOT(display(int)));
+        QObject::connect(openGLWidget, SIGNAL(getZoomRatio(int)), ZoomBar, SLOT(setValue(int)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi

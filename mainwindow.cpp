@@ -15,6 +15,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *e) {
+	ui->openGLWidget->keyPressEvent(e);
+}
 void MainWindow::on_upperButton_clicked()
 {
     QString upperPath = "upper.stl";

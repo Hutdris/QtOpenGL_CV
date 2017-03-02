@@ -22,7 +22,7 @@ void SetLightSource()
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);      //環境光(Ambient Light) 
 	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);      //散射光(Diffuse Light) 
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);     //反射光(Specular Light) 
-	float light_position[] = { 0.0f, 0.0f, 10.0f };
+	float light_position[] = { 0.0f, 10.0f, 10.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);     //光的座標 
 
 	glEnable(GL_LIGHT0);
@@ -140,9 +140,6 @@ void OpenGLWidget::paintGL()
 	for (int model_index = Upper; model_index < EndCase; model_index++) {
 		glCallList(model_list.at(model_index));
 	}
-	glScalef(Zoom_ratio, Zoom_ratio, Zoom_ratio);
-	glRotatef(-1 * rTri, 0.0, 1.0, 0.0);
-	rTri += 0.5;
 }
 
 
@@ -156,28 +153,29 @@ void OpenGLWidget::resizeGL(int w, int h)
 	glLoadIdentity();
 	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 }
-void OpenGLWidget::keyPressEvent(QKeyEvent *e)
+void OpenGLWidget::keyPressEvent(QKeyEvent* e)
 {
+
 	switch (e->key())
 	{
 	case Qt::Key_Q:
 		rTri += 1.0f;
 		update();
 		break;
-	case Qt::Key_Up:
+	case Qt::Key_W:
 		if (Zoom_ratio < 100)
 			Zoom_ratio += 1;
 		update();
 		break;
-	case Qt::Key_Down:
-		if (Zoom_ratio > 0)
+	case Qt::Key_S:
+		if (Zoom_ratio > 1)
 			Zoom_ratio -= 1;
 		update();
 		break;
-		
-	case Qt::Key_Escape:
-		close();
+	case Qt::Key_Z:
+		qDebug("rotate: %f, %f, %f", rotate.x(), rotate.y(), rotate.z());
 	}
+	emitGetZoomRatio();
 }
 void OpenGLWidget::animate() {
 	update();
@@ -259,6 +257,12 @@ void OpenGLWidget::setZoomRatio(int _zoom_ratio) {
 void OpenGLWidget::mousePressEvent(QMouseEvent *event) {
 	Q_UNUSED(event);
 	qDebug("Start pos: %d, %d", event->x(), event->y());
+	// Double click -> reset rotation
+	if ((event->x() == m_start_pos.x()) & (event->y() == m_start_pos.y())) {
+		rotate.setX(0);
+		rotate.setY(0);
+		rotate.setZ(0);
+	}
 	m_start_pos = event->pos();
 }
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -312,4 +316,7 @@ for (auto itt = model.vertexs.begin(); itt != model.vertexs.end(); itt += 9){
 	glScalef(Zoom_ratio, Zoom_ratio, Zoom_ratio);
 	//glutSwapBuffers();
 	//glLoadIdentity();
+}
+void OpenGLWidget::emitGetZoomRatio() {
+	emit getZoomRatio(Zoom_ratio);
 }
