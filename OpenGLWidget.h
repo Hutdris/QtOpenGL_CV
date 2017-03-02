@@ -7,9 +7,11 @@
 #include <QOpenGLWidget>
 //#include <QOpenGLVertexArrayObject>
 #include <QKeyEvent>
+#include <QtOpenGL/qgl.h>
+#include <QtOpenGL>
 
-#include <gl/GLU.h>
-#include <gl/GL.h>
+#include <gl/GLUT.h>
+//#include <gl/GL.h>
 
 #include "stlloader.h"
 #include <vector>
@@ -28,6 +30,7 @@ public:
 		vector<GLfloat> vertexs, normals;
 	};
 	void set_stlModel(const char *model_path, Position p);
+	GLuint makeObject(STLModel model);
 protected:
 	void resizeGL(int, int);
 	void paintGL();
@@ -47,7 +50,8 @@ private:
 	GLfloat rTri;
 	GLuint  m_Pos;
 	int Zoom_ratio = 50;
-	
+	GLuint  fps;
+	vector <GLuint> model_list;
 };
 
 

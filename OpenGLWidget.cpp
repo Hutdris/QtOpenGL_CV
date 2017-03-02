@@ -2,18 +2,48 @@
 #include <algorithm>
 
 #include <QTimer>
+void SetLightSource()
+{
+	float light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+	glEnable(GL_LIGHTING);                                 //開燈 
+
+														   // 設定發光體的光源的特性 
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);      //環境光(Ambient Light) 
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);      //散射光(Diffuse Light) 
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);     //反射光(Specular Light) 
+	float light_position[] = { -10.0f, 10.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);     //光的座標 
+
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);                               //啟動深度測試 
+}
+
+void SetMaterial()
+{
+	float material_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	float material_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };
+	float material_specular[] = { 0.2, 0.2, 0.2, 1.0 };
+
+	//glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+	//glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+}
 OpenGLWidget::STLModel::STLModel() {
 
 }
 OpenGLWidget::STLModel:: ~STLModel() { vertexs.clear(); normals.clear();}
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
-	:QOpenGLWidget(parent)
+	:QOpenGLWidget(parent),fps(60)
 {
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-	timer->start(int(1000/24));
+	timer->start(int(1000/fps));
+	model_list.resize(3);
 }
 
 
@@ -22,6 +52,29 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
+GLuint OpenGLWidget::makeObject(STLModel model) {
+	GLuint _list;
+	_list = glGenLists(1);
+
+	glNewList(_list, GL_COMPILE);
+	SetMaterial();
+	glColor3f(1.0, 1.0, 0.0);
+	glBegin(GL_TRIANGLES);
+	auto normal_itt = model.normals.begin();
+	for (auto itt = model.vertexs.begin(); itt != model.vertexs.end(); itt += 9){
+		glNormal3f(*normal_itt, *(normal_itt+1), *(normal_itt+2));
+		normal_itt += 3;
+		glVertex3f(*itt, *(itt + 1), *(itt + 2));
+		glVertex3f(*(itt+3), *(itt + 4), *(itt + 5));
+		glVertex3f(*(itt+6), *(itt + 7), *(itt + 8));
+	}
+	glEnd();
+	glEndList();
+
+	return _list;
+
+
+}
 
 void OpenGLWidget::initializeGL()
 {
@@ -31,19 +84,29 @@ void OpenGLWidget::initializeGL()
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
 */
-	// Web version
-	glShadeModel(GL_SMOOTH);
-	glClearColor(0.0, 0.0, 0.0, 0.5);
+	// Web version 
+	//Laggy version
+
+	
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	// ref: http://blog.csdn.net/shuaihj/article/details/7230867
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
 
-	set_stlModel("Models/cube.stl", Lower);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	//SetLightSource();
+	//SetMaterial();
 	set_stlModel("Models/cube.stl", Upper);
+	set_stlModel("Models/cube.stl", Lower);
 	set_stlModel("Models/cube.stl", Center);
 
 	rTri = 0.0;
+	model_list.at(Upper) = makeObject(this->upper);
+	model_list.at(Lower) = makeObject(this->lower);
+	model_list.at(Center) = makeObject(this->center);
+	glShadeModel(GL_SMOOTH);
 	//
 
 }
@@ -56,25 +119,43 @@ void OpenGLWidget::draw_model(STLModel &model) {
 	auto _zoomratio = 1.0f / Zoom_ratio;
 
 	glScalef(_zoomratio, _zoomratio, _zoomratio);
+	glColor3f(1.0, 0.5, 0.0);
 	glBegin(GL_TRIANGLES);
+	auto normal_itt = model.normals.begin();
 for (auto itt = model.vertexs.begin(); itt != model.vertexs.end(); itt += 9){
-	glColor3f(0.5, 0.5, 0.0);
+
+	glNormal3f(*normal_itt, *(normal_itt+1), *(normal_itt+2));
+	normal_itt += 3;
 	glVertex3f(*itt, *(itt + 1), *(itt + 2));
 	glVertex3f(*(itt+3), *(itt + 4), *(itt + 5));
 	glVertex3f(*(itt+6), *(itt + 7), *(itt + 8));
 }
 	glEnd();
 	glScalef(Zoom_ratio, Zoom_ratio, Zoom_ratio);
+	//glutSwapBuffers();
 	//glLoadIdentity();
 }
 void OpenGLWidget::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glPolygonMode(GL_BACK, GL_LINE); //show model's back by lines 
+	//draw_model(lower);
+	//draw_model(upper);
+	//draw_model(center);
+	SetLightSource();
+	glRotatef(rTri, 0.0 ,1.0, 0.0);
+	
+	//gluLookAt(0, 0, 5.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
+	//glTranslatef(-1*rTri/10.f, 0.0f, 0.0f);
+	auto _zoomratio = 1.0f / Zoom_ratio;
+	glScalef(_zoomratio, _zoomratio, _zoomratio);
+	glCallList(model_list.at(Upper));
+	glCallList(model_list.at(Lower));
+	glCallList(model_list.at(Center));
+	glScalef(Zoom_ratio, Zoom_ratio, Zoom_ratio);
+	glRotatef(-1 * rTri, 0.0, 1.0, 0.0);
+	rTri += 0.5;
 
-	draw_model(lower);
-	draw_model(upper);
-	draw_model(center);
-	rTri += Zoom_ratio/10.0f;
 	//glLoadIdentity();
 	//glTranslatef(-1.5, 0.0, 0.0);
 	/*
@@ -137,15 +218,24 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 		//ptm = &upper;
 		upper.vertexs = stlloader.get_vertexs();
 		upper.normals = stlloader.get_normals();
+
+		glDeleteLists(model_list.at(Upper), 1);
+		model_list.at(Upper) = makeObject(this->upper);
+
 		//model_normalize(upper);
 	case Lower:
 		//ptm = &lower;
 		lower.vertexs = stlloader.get_vertexs();
 		lower.normals = stlloader.get_normals();
+		glDeleteLists(model_list.at(Lower), 1);
+		model_list.at(Lower) = makeObject(this->lower);
+
 		//model_normalize(lower);
 	case Center:
 		center.vertexs = stlloader.get_vertexs();
 		center.normals = stlloader.get_normals();
+		glDeleteLists(model_list.at(Center), 1);
+		model_list.at(Center) = makeObject(this->center);
 		//model_normalize(center);
 		//ptm = &center;
 		}
