@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1259</width>
-    <height>878</height>
+    <width>1247</width>
+    <height>886</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -165,50 +165,56 @@
       <x>310</x>
       <y>20</y>
       <width>911</width>
-      <height>631</height>
+      <height>611</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>680</width>
+      <height>480</height>
+     </size>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
     </property>
    </widget>
    <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>680</y>
+      <y>660</y>
       <width>911</width>
-      <height>141</height>
+      <height>171</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QSlider" name="ZoomBar">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>30</y>
-      <width>31</width>
-      <height>441</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="value">
-     <number>100</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
     </property>
    </widget>
    <widget class="QLCDNumber" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>490</y>
+      <x>200</x>
+      <y>650</y>
       <width>64</width>
       <height>23</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="icpButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>490</y>
+      <width>56</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run ICP</string>
     </property>
    </widget>
    <zorder>pushButton_2</zorder>
@@ -223,16 +229,16 @@
    <zorder>openGLWidget</zorder>
    <zorder>textBrowser</zorder>
    <zorder>pushButton</zorder>
-   <zorder>ZoomBar</zorder>
    <zorder>lcdNumber</zorder>
+   <zorder>icpButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1259</width>
-     <height>21</height>
+     <width>1247</width>
+     <height>18</height>
     </rect>
    </property>
   </widget>
@@ -278,38 +284,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>ZoomBar</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setZoomRatio(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>281</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>349</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ZoomBar</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>lcdNumber</receiver>
-   <slot>display(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>272</x>
-     <y>436</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>269</x>
-     <y>534</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>openGLWidget</sender>
    <signal>getZoomRatio(int)</signal>
    <receiver>lcdNumber</receiver>
@@ -320,26 +294,29 @@
      <y>534</y>
     </hint>
     <hint type="destinationlabel">
-     <x>264</x>
-     <y>535</y>
+     <x>263</x>
+     <y>676</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>openGLWidget</sender>
-   <signal>getZoomRatio(int)</signal>
-   <receiver>ZoomBar</receiver>
-   <slot>setValue(int)</slot>
+   <sender>icpButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>runICP()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>384</x>
-     <y>363</y>
+     <x>61</x>
+     <y>525</y>
     </hint>
     <hint type="destinationlabel">
-     <x>278</x>
-     <y>360</y>
+     <x>117</x>
+     <y>531</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>runICP()</slot>
+ </slots>
 </ui>

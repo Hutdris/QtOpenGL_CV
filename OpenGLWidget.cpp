@@ -43,12 +43,23 @@ OpenGLWidget::STLModel::STLModel() {
 }
 OpenGLWidget::STLModel:: ~STLModel() { vertexs.clear(); normals.clear();}
 
+vector <GLfloat> OpenGLWidget::getModelVertexs(Position mPos) {
+	switch (mPos) {
+	case Upper:
+		return upper.vertexs;
+	case Lower:
+		return lower.vertexs;
+	case Center:
+		return center.vertexs;
+
+	}
+}
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	:QOpenGLWidget(parent),fps(60)
 {
 	QTimer *timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-	timer->start(int(1000/fps));
+	//connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	//timer->start(int(1000/fps));
 	model_list.resize(3);
 }
 
@@ -175,7 +186,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* e)
 	case Qt::Key_Z:
 		qDebug("rotate: %f, %f, %f", rotate.x(), rotate.y(), rotate.z());
 	}
-	emitGetZoomRatio();
+	checkZoomRatio();
 }
 void OpenGLWidget::animate() {
 	update();
@@ -264,9 +275,11 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *event) {
 		rotate.setZ(0);
 	}
 	m_start_pos = event->pos();
+	update();
 }
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
 	Q_UNUSED(event);
+
 	auto step = 50.f;
 	auto x_delta = event->x() - m_start_pos.x();
 	auto y_delta = event->y() - m_start_pos.y();
@@ -283,14 +296,17 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
 			rotate.setZ(qNormalizeAngle(rotate.z() + y_delta / step));
 		}
 		else if (event->buttons() & Qt::MiddleButton) {
-			Zoom_ratio = (Zoom_ratio + x_delta/(int)step) % 100;
+			Zoom_ratio = (Zoom_ratio + x_delta/(int)step);
+			checkZoomRatio();
 		}
 	}
+	update();
 }
-void OpenGLWidget::whellEvent(QWheelEvent *whell_event) {
+void OpenGLWidget::wheelEvent(QWheelEvent *whell_event) {
 	Q_UNUSED(whell_event);
-	qDebug("Whell move: %d", whell_event->angleDelta());
-	whell_event->angleDelta();
+	qDebug("Wheel move: %d", whell_event->delta());
+	Zoom_ratio += whell_event->delta() / 40;
+	checkZoomRatio();
 
 }
 void OpenGLWidget::draw_model(STLModel &model) {
@@ -317,6 +333,9 @@ for (auto itt = model.vertexs.begin(); itt != model.vertexs.end(); itt += 9){
 	//glutSwapBuffers();
 	//glLoadIdentity();
 }
-void OpenGLWidget::emitGetZoomRatio() {
+void OpenGLWidget::checkZoomRatio() {
+	if (Zoom_ratio < 1) Zoom_ratio = 1;
+	if (Zoom_ratio > 100) Zoom_ratio = 100;
 	emit getZoomRatio(Zoom_ratio);
+	update();
 }

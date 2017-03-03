@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QDebug>
-//#include "OpenGLWidget.h"
 #include <String>
+#include "ICP.h"
 namespace Ui {
 class MainWindow;
 }
@@ -27,9 +27,13 @@ private slots:
     void on_pushButton_2_clicked();
 
     void on_pushButton_2_pressed();
+	
+	void runICP();
 
 private:
     Ui::MainWindow *ui;
+	void append_textBrowser(const QString &s);
+	ICP icp;
 };
 
 #endif // MAINWINDOW_H

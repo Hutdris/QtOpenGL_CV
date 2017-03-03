@@ -19,7 +19,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -43,8 +42,8 @@ public:
     QLabel *centerLabel;
     OpenGLWidget *openGLWidget;
     QTextBrowser *textBrowser;
-    QSlider *ZoomBar;
     QLCDNumber *lcdNumber;
+    QPushButton *icpButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
 
@@ -52,7 +51,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1259, 878);
+        MainWindow->resize(1247, 886);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         pushButton = new QPushButton(centralWidget);
@@ -94,20 +93,23 @@ public:
         centerLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         openGLWidget = new OpenGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-        openGLWidget->setGeometry(QRect(310, 20, 911, 631));
+        openGLWidget->setGeometry(QRect(310, 20, 911, 611));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(openGLWidget->sizePolicy().hasHeightForWidth());
+        openGLWidget->setSizePolicy(sizePolicy);
+        openGLWidget->setMinimumSize(QSize(680, 480));
+        openGLWidget->setLayoutDirection(Qt::RightToLeft);
         textBrowser = new QTextBrowser(centralWidget);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(310, 680, 911, 141));
-        ZoomBar = new QSlider(centralWidget);
-        ZoomBar->setObjectName(QStringLiteral("ZoomBar"));
-        ZoomBar->setGeometry(QRect(260, 30, 31, 441));
-        ZoomBar->setMinimum(1);
-        ZoomBar->setMaximum(100);
-        ZoomBar->setValue(100);
-        ZoomBar->setOrientation(Qt::Vertical);
+        textBrowser->setGeometry(QRect(310, 660, 911, 171));
         lcdNumber = new QLCDNumber(centralWidget);
         lcdNumber->setObjectName(QStringLiteral("lcdNumber"));
-        lcdNumber->setGeometry(QRect(230, 490, 64, 23));
+        lcdNumber->setGeometry(QRect(200, 650, 64, 23));
+        icpButton = new QPushButton(centralWidget);
+        icpButton->setObjectName(QStringLiteral("icpButton"));
+        icpButton->setGeometry(QRect(30, 490, 56, 17));
         MainWindow->setCentralWidget(centralWidget);
         pushButton_2->raise();
         upperButton->raise();
@@ -121,11 +123,11 @@ public:
         openGLWidget->raise();
         textBrowser->raise();
         pushButton->raise();
-        ZoomBar->raise();
         lcdNumber->raise();
+        icpButton->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1259, 21));
+        menuBar->setGeometry(QRect(0, 0, 1247, 18));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -133,10 +135,8 @@ public:
 
         retranslateUi(MainWindow);
         QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(animate()));
-        QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), openGLWidget, SLOT(setZoomRatio(int)));
-        QObject::connect(ZoomBar, SIGNAL(valueChanged(int)), lcdNumber, SLOT(display(int)));
         QObject::connect(openGLWidget, SIGNAL(getZoomRatio(int)), lcdNumber, SLOT(display(int)));
-        QObject::connect(openGLWidget, SIGNAL(getZoomRatio(int)), ZoomBar, SLOT(setValue(int)));
+        QObject::connect(icpButton, SIGNAL(clicked()), MainWindow, SLOT(runICP()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -154,6 +154,7 @@ public:
         upperLabel->setText(QString());
         lowerLabel->setText(QString());
         centerLabel->setText(QString());
+        icpButton->setText(QApplication::translate("MainWindow", "Run ICP", 0));
     } // retranslateUi
 
 };
