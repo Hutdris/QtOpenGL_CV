@@ -46,7 +46,7 @@ private:
 	cv::Mat raw_src1, raw_src2, frame1, frame2, frame1_with_led, frame2_with_led;
 	cv::SimpleBlobDetector::Params glob_blob_p;
 	cv::Ptr<cv::SimpleBlobDetector> glob_blob_detector;
-	string cam_config_dir = "config/cam_config.txt";
+	//string cam_config_dir = "config/cam_config.txt";
 
 };
 

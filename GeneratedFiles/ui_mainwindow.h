@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -155,20 +155,20 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
-        pushButton->setText(QApplication::translate("MainWindow", "Import STL", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", Q_NULLPTR));
-        upperButton->setText(QApplication::translate("MainWindow", "Upper", Q_NULLPTR));
-        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", Q_NULLPTR));
-        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", Q_NULLPTR));
-        lowerButton->setText(QApplication::translate("MainWindow", "Lower", Q_NULLPTR));
-        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "Import STL", 0));
+        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", 0));
+        upperButton->setText(QApplication::translate("MainWindow", "Upper", 0));
+        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", 0));
+        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", 0));
+        lowerButton->setText(QApplication::translate("MainWindow", "Lower", 0));
+        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", 0));
         upperLabel->setText(QString());
         lowerLabel->setText(QString());
         centerLabel->setText(QString());
-        icpButton->setText(QApplication::translate("MainWindow", "Run ICP", Q_NULLPTR));
-        pushButton_3->setText(QApplication::translate("MainWindow", "Camera display", Q_NULLPTR));
-        pushButton_6->setText(QApplication::translate("MainWindow", "initCameras", Q_NULLPTR));
+        icpButton->setText(QApplication::translate("MainWindow", "Run ICP", 0));
+        pushButton_3->setText(QApplication::translate("MainWindow", "Camera display", 0));
+        pushButton_6->setText(QApplication::translate("MainWindow", "initCameras", 0));
     } // retranslateUi
 
 };

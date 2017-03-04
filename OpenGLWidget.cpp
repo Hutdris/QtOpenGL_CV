@@ -218,6 +218,7 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 
 		glDeleteLists(model_list.at(Upper), 1);
 		model_list.at(Upper) = makeObject(this->upper);
+		break;
 
 		//model_normalize(upper);
 	case Lower:
@@ -226,13 +227,15 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 		lower.normals = stlloader.get_normals();
 		glDeleteLists(model_list.at(Lower), 1);
 		model_list.at(Lower) = makeObject(this->lower);
-
+		break;
 		//model_normalize(lower);
 	case Center:
 		center.vertexs = stlloader.get_vertexs();
 		center.normals = stlloader.get_normals();
 		glDeleteLists(model_list.at(Center), 1);
 		model_list.at(Center) = makeObject(this->center);
+		break;
+
 		//model_normalize(center);
 		//ptm = &center;
 		}
