@@ -94,7 +94,7 @@ void ICP::run() {
 
 	// Build Distance Transform
 	goicp.BuildDT();
-	int NdDownsampled = 1000;
+	int NdDownsampled = min(1000, Nd);
 	// Run GO-ICP
 	if (NdDownsampled > 0)
 	{

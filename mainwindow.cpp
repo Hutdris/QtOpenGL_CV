@@ -3,16 +3,20 @@
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent), PGmgr(16154282u, 16154288u),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
-
-
 }
 
 MainWindow::~MainWindow()
 {
+	PGmgr.~PGApi();
+	img1.release();
+	img2.release();
+	icp.~ICP();
+	tracer.~Tracer();
     delete ui;
 }
 
@@ -95,5 +99,23 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_2_pressed()
 {
+
+}
+
+void MainWindow::initCameras() {
+}
+void MainWindow::camerasDisplay() {
+		//PGmgr.RunMultipleCamera(img1, img2);
+    /*
+	PGmgr.GetStereoImage(img1, img2);
+	qDebug("get images");
+	cv::imshow("img1", img1);
+	cv::waitKey(10);
+	cv::imshow("img2", img2);
+	cv::waitKey(10);
+*/
+	tracer.image_update(PGmgr);
+	tracer.points_update();
+	tracer.leds_triangulate(tri_points);
 
 }
