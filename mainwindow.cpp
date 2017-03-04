@@ -6,8 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), PGmgr(16154282u, 16154288u),
     ui(new Ui::MainWindow)
 {
-	tracer.initialize();
-	tracer.load_calibrate_result();
+
     ui->setupUi(this);
 }
 

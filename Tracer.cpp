@@ -79,7 +79,7 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		//sort(f_leds2.begin(), f_leds2.end(), pt_compare_by_y);
 		//4*N {x, y, z, alpha}^T each col
 		tri_points.create(4, led_num, CV_32F);
-		triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
+		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
 		cout << tri_points << endl;
 	}
 }
@@ -106,6 +106,7 @@ void Tracer::leds_triangulate(vector<cv::KeyPoint> &leds1, vector<cv::KeyPoint> 
 
 Tracer::Tracer()
 {
+	initialize();
 }
 void Tracer::initialize() {
 	//Initalization
@@ -122,24 +123,36 @@ void Tracer::initialize() {
 	glob_blob_p.minArea = 100;
 	glob_blob_p.maxArea = 300;
 	glob_blob_p.filterByCircularity = false;
-	glob_blob_p.minCircularity = 0.1;
+	glob_blob_p.minCircularity = 0.1f;
 	glob_blob_p.filterByConvexity = false;
-	glob_blob_p.minConvexity = 0.7;
+	glob_blob_p.minConvexity = 0.7f;
 	glob_blob_p.filterByInertia = false;
-	glob_blob_p.minInertiaRatio = 0.1;
+	glob_blob_p.minInertiaRatio = 0.1f;
 	glob_blob_detector = cv::SimpleBlobDetector::create(glob_blob_p);
+	auto check = 0;
 }
 void Tracer::points_update() {
-	cvtColor(raw_src1, frame1, cv::COLOR_RGB2GRAY);
-	cvtColor(raw_src2, frame2, cv::COLOR_RGB2GRAY);
-	glob_blob_detector->detect(frame1, all_leds_key1);
-	glob_blob_detector->detect(frame2, all_leds_key2);
+ /*
+	cv::imshow("cam1", raw_src1);
+	cv::waitKey(0);
+ */
+	cv::cvtColor(this->raw_src1, this->raw_src1, cv::COLOR_RGB2GRAY);
+	cv::cvtColor(this->raw_src2, this->raw_src2, cv::COLOR_RGB2GRAY);
+	glob_blob_detector->detect(raw_src1, all_leds_key1);
+	glob_blob_detector->detect(raw_src2, all_leds_key2);
+	if ((all_leds_key1.size() > 9) || (all_leds_key1.size() > 9)){
+		all_leds_key1.clear();
+		all_leds_key2.clear();
+		return;
+	}
 	std::sort(all_leds_key1.begin(), all_leds_key1.end(), compare_by_pt_y);
 	std::sort(all_leds_key2.begin(), all_leds_key2.end(), compare_by_pt_y);
 	
+/*
 	drawKeypoints(frame1, all_leds_key1, frame1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	drawKeypoints(frame2, all_leds_key2, frame2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-
+*/
+	
 }
 void Tracer::image_update(PGApi &pgmgr) {
 	pgmgr.GetStereoImage(raw_src1, raw_src2);
