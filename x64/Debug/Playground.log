@@ -1,4 +1,16 @@
-﻿  OpenGLWidget.cpp
-OpenGLWidget.cpp(55): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-OpenGLWidget.cpp(170): warning C4189: 'old_ratio': local variable is initialized but not referenced
-  Playground.vcxproj -> C:\Users\JohnShee\Documents\Visual Studio 2015\Projects\QtOpenGL_CV\QtOpenGL_CV\debug\Playground.exe
+﻿  Tracer.cpp
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+Tracer.cpp(46): warning C4100: 'fund_mat': unreferenced formal parameter
+Tracer.cpp(63): warning C4100: 'file': unreferenced formal parameter
+Tracer.cpp(132): warning C4189: 'check': local variable is initialized but not referenced
+  Playground.vcxproj -> C:\Users\JohnShee\Desktop\QtOpenGL_CV\debug\Playground.exe

@@ -8,10 +8,10 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 */
-#include <opencv/cv.h>
-#include <opencv2/core/core.hpp>
+//#include <opencv/cv.h>
+//#include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/features2d.hpp>
 #include "pgapi.h"
@@ -34,7 +34,7 @@ public:
 	void image_update(PGApi &pgmgr);
 
 private:
-	cv::Mat left_image, right_image;
+	//cv::Mat left_image, right_image;
 	//calibration results matrixs
 	cv::Mat dist1, dist2, mtx1, mtx2, RT1, RT2, fund_mat, test, project1, project2;
 	//led points

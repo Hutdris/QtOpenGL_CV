@@ -75,8 +75,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>C:\Qt\5.7\msvc2015_64\lib\qtmaind.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Cored.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Guid.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5OpenGLd.lib;opengl32.lib;glu32.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Widgetsd.lib;FlyCapture2_v140.lib;shell32.lib;%(AdditionalDependencies);opencv_world310.lib;opencv_world310d.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files\Point Grey Research\FlyCapture2\bin64\vs2015;C:\opencv\build\x64\vc14\lib;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\Program Files\Point Grey Research\FlyCapture2\bin64\vs2015;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;$(OPENCV_DIR)\build\x64\vc14\lib;C:\Qt\5.7\msvc2015_64\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\Qt\5.7\msvc2015_64\lib\qtmain.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Core.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Gui.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5OpenGL.lib;opengl32.lib;glu32.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Widgets.lib;FlyCapture2_v140.lib;shell32.lib;%(AdditionalDependencies);opencv_world310.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;$(OPENCV_DIR)\build\x64\vc14\lib;C:\Qt\5.7\msvc2015_64\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -117,7 +117,7 @@
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>C:\Qt\5.7\msvc2015_64\lib\qtmaind.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Cored.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Guid.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5OpenGLd.lib;opengl32.lib;glu32.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Widgetsd.lib;FlyCapture2_v140.lib;shell32.lib;%(AdditionalDependencies);opencv_world310.lib;opencv_world310d.lib</AdditionalDependencies>
+      <AdditionalDependencies>C:\Qt\5.7\msvc2015_64\lib\qtmaind.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Cored.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Guid.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5OpenGLd.lib;opengl32.lib;glu32.lib;C:\Qt\5.7\msvc2015_64\lib\Qt5Widgetsd.lib;FlyCapture2d_v140.lib;shell32.lib;opencv_world310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files\Point Grey Research\FlyCapture2\bin64\vs2015;$(OPENCV_DIR)\build\x64\vc14\lib;C:\Qt\5.7\msvc2015_64\lib;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\Qt\5.7\msvc2015_64\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>

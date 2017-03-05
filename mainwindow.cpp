@@ -12,11 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-	PGmgr.~PGApi();
-	img1.release();
-	img2.release();
-	icp.~ICP();
-	tracer.~Tracer();
+
     delete ui;
 }
 
@@ -117,5 +113,5 @@ void MainWindow::camerasDisplay() {
 	tracer.image_update(PGmgr);
 	tracer.points_update();
 	tracer.leds_triangulate(tri_points);
-
+	qDebug("%d, %d", tri_points.size[0], tri_points.size[1]);
 }

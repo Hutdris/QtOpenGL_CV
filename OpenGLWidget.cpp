@@ -2,15 +2,7 @@
 #include <algorithm>
 #include <QTimer>
 
-float qNormalizeAngle(float angle) {
-	while (angle > 360.f)
-		angle -= 360.f;
-	while (angle < 0.f)
-		angle += 360.f;
-	return angle;
-	
-}
-void SetLightSource()
+void OpenGLWidget::SetLightSource()
 {
 	float light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -22,22 +14,22 @@ void SetLightSource()
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);      //環境光(Ambient Light) 
 	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);      //散射光(Diffuse Light) 
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);     //反射光(Specular Light) 
-	float light_position[] = { 0.0f, 10.0f, 10.0f };
+	float light_position[] = { 5.0f, 5.0f, 10.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);     //光的座標 
 
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);                               //啟動深度測試 
 }
 
-void SetMaterial()
+void OpenGLWidget::SetMaterial()
 {
-	float material_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	float material_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	float material_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };
 	float material_specular[] = { 0.2, 0.2, 0.2, 1.0 };
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
 	//glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
 }
 OpenGLWidget::STLModel::STLModel() {
 }
@@ -69,15 +61,15 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
-GLuint OpenGLWidget::makeObject(STLModel model) {
+GLuint OpenGLWidget::makeObject(STLModel *model) {
 	GLuint _list;
 	_list = glGenLists(1);
 
 	glNewList(_list, GL_COMPILE);
-	//glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0, 1.0, 1.0);
 	glBegin(GL_TRIANGLES);
-	auto normal_itt = model.normals.begin();
-	for (auto itt = model.vertexs.begin(); itt != model.vertexs.end(); itt += 9){
+	auto normal_itt = model->normals.begin();
+	for (auto itt = model->vertexs.begin(); itt != model->vertexs.end(); itt += 9){
 		glNormal3f(*normal_itt, *(normal_itt+1), *(normal_itt+2));
 		normal_itt += 3;
 		glVertex3f(*itt, *(itt + 1), *(itt + 2));
@@ -116,12 +108,11 @@ void OpenGLWidget::initializeGL()
 	set_stlModel("Models/cube.stl", Lower);
 	set_stlModel("Models/cube.stl", Center);
 
-	model_list.at(Upper) = makeObject(this->upper);
-	model_list.at(Lower) = makeObject(this->lower);
-	model_list.at(Center) = makeObject(this->center);
+	model_list.at(Upper) = makeObject(&upper);
+	model_list.at(Lower) = makeObject(&lower);
+	model_list.at(Center) = makeObject(&center);
 	glShadeModel(GL_SMOOTH);
-	SetLightSource();
-	SetMaterial();
+
 	//
 
 }
@@ -135,7 +126,8 @@ void OpenGLWidget::paintGL()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0, 0, 10.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
-
+	SetLightSource();
+	SetMaterial();
 	//glEnable(GL_BLEND);//啟動混和功能 需要半透明功能時使用
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//draw_model(lower);
@@ -210,6 +202,7 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 		stlloader.load();
 		//STLModel *ptm;
 		//TODO: using pointer instead of copy&paste = =
+		/* old school
 	switch (p) {
 	case Upper:
 		//ptm = &upper;
@@ -239,14 +232,25 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 		//model_normalize(center);
 		//ptm = &center;
 		}
-	/* ISSUE:Can't access pointer???
+*/
+	// ISSUE:Can't access pointer???
 
-	ptm->vertexs.resize(stlloader.get_vertexs().size());
+	STLModel *ptm;
+	switch (p) {
+	case (Upper):
+		ptm = &upper;
+		break;
+	case (Lower):
+		ptm = &lower;
+		break;
+	case(Center):
+		ptm = &center;
+		break;
+	}
 	ptm->vertexs = stlloader.get_vertexs();
-	ptm->normals.clear();
 	ptm->normals = stlloader.get_normals();
-	model_normalize(*ptm);
-	*/
+	glDeleteLists(model_list.at(p), 1);
+	model_list.at(p) = makeObject(ptm);
 }
 
 void OpenGLWidget::model_resize(STLModel &model, int old_ratio) {

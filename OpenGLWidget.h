@@ -29,9 +29,19 @@ public:
 		vector<GLfloat> vertexs, normals;
 	};
 	void set_stlModel(const char *model_path, Position p);
-	GLuint makeObject(STLModel model);
+	GLuint makeObject(STLModel *model);
 	void keyPressEvent(QKeyEvent *e);
 	vector <GLfloat> getModelVertexs(Position mPos);
+	void SetLightSource();
+	void SetMaterial();
+
+	float qNormalizeAngle(float angle) {
+	while (angle > 360.f)
+		angle -= 360.f;
+	while (angle < 0.f)
+		angle += 360.f;
+	return angle;
+	}
 protected:
 	void resizeGL(int, int);
 	void paintGL();

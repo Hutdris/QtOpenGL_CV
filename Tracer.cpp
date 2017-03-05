@@ -4,7 +4,7 @@
 #define LOWER_LED_NUM 4
 // STD
 #include <iostream>
-
+#include <qDebug>
 #include <fstream>
 #include <cmath>
 #include <algorithm>
@@ -22,10 +22,9 @@ using namespace std;
 //#include "shader.h"
 //#include "Camera.h"
 // Function prototypes
-
+inline bool compare_by_pt_y(cv::KeyPoint &k1,cv::KeyPoint &k2) { return k1.pt.y < k2.pt.y; };
+inline bool compare_by_pt_x(cv::KeyPoint &k1,cv::KeyPoint &k2) { return k1.pt.x < k2.pt.x; };
 // GL control
-bool compare_by_pt_y(cv::KeyPoint k1, cv::KeyPoint k2) { return k1.pt.y < k2.pt.y; };
-bool compare_by_pt_x(cv::KeyPoint k1, cv::KeyPoint k2) { return k1.pt.x < k2.pt.x; };
 void Tracer::load_calibrate_result(void) {
 	mtx1 = (cv::Mat_<float>(3, 3) << 2441.347367, 0.000000, 661.608922
 		, 0.000000, 2437.002900, 509.925022
@@ -117,13 +116,13 @@ void Tracer::initialize() {
 	//BlobDetector parms
 	glob_blob_p.minThreshold = 110;
 	glob_blob_p.maxThreshold = 400;
-	glob_blob_p.filterByColor = false;
-	glob_blob_p.blobColor = 200;
+	glob_blob_p.filterByColor = true;
+	glob_blob_p.blobColor = 255;
 	glob_blob_p.filterByArea = true;
 	glob_blob_p.minArea = 100;
-	glob_blob_p.maxArea = 300;
-	glob_blob_p.filterByCircularity = false;
-	glob_blob_p.minCircularity = 0.1f;
+	glob_blob_p.maxArea = 1000;
+	glob_blob_p.filterByCircularity = true;
+	glob_blob_p.minCircularity = 0.7f;
 	glob_blob_p.filterByConvexity = false;
 	glob_blob_p.minConvexity = 0.7f;
 	glob_blob_p.filterByInertia = false;
@@ -131,16 +130,54 @@ void Tracer::initialize() {
 	glob_blob_detector = cv::SimpleBlobDetector::create(glob_blob_p);
 	auto check = 0;
 }
+
+string type2str(int type) {
+	string r;
+
+	uchar depth = type & CV_MAT_DEPTH_MASK;
+	uchar chans = 1 + (type >> CV_CN_SHIFT);
+
+	switch (depth) {
+	case CV_8U:  r = "8U"; break;
+	case CV_8S:  r = "8S"; break;
+	case CV_16U: r = "16U"; break;
+	case CV_16S: r = "16S"; break;
+	case CV_32S: r = "32S"; break;
+	case CV_32F: r = "32F"; break;
+	case CV_64F: r = "64F"; break;
+	default:     r = "User"; break;
+	}
+
+	r += "C";
+	r += (chans + '0');
+
+	return r;
+}
 void Tracer::points_update() {
+	const int total_leds_cnt = 9;
+	string _check = type2str(raw_src1.type());
+
+	cv::Ptr<cv::SimpleBlobDetector>test_detector = cv::SimpleBlobDetector::create(glob_blob_p);
  /*
-	cv::imshow("cam1", raw_src1);
-	cv::waitKey(0);
- */
-	cv::cvtColor(this->raw_src1, this->raw_src1, cv::COLOR_RGB2GRAY);
-	cv::cvtColor(this->raw_src2, this->raw_src2, cv::COLOR_RGB2GRAY);
+	cv::cvtColor(this->raw_src1, this->raw_src1, cv::COLOR_BGR2GRAY);
+	cv::cvtColor(this->raw_src2, this->raw_src2, cv::COLOR_BGR2GRAY);
 	glob_blob_detector->detect(raw_src1, all_leds_key1);
 	glob_blob_detector->detect(raw_src2, all_leds_key2);
-	if ((all_leds_key1.size() > 9) || (all_leds_key1.size() > 9)){
+	*/
+	vector <cv::KeyPoint> test_leds;
+	raw_src1 = cv::imread("qrc/l.png", 0);
+	raw_src2 = cv::imread("qrc/r.png", 0);
+	test_detector->detect(this->raw_src1, all_leds_key1);
+	test_detector->detect(raw_src2, all_leds_key2);
+	drawKeypoints(raw_src1, all_leds_key1, raw_src1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+	drawKeypoints(raw_src2, all_leds_key2, raw_src2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+
+	cv::imshow("cam1", raw_src1);
+	cv::waitKey(0);
+	cv::imshow("cam2", raw_src2);
+	cv::waitKey(0);
+	qDebug("%d, %d", all_leds_key1.size(), all_leds_key2.size());
+	if ((all_leds_key1.size() > total_leds_cnt) || (all_leds_key1.size() > total_leds_cnt)){
 		all_leds_key1.clear();
 		all_leds_key2.clear();
 		return;
