@@ -1,12 +1,16 @@
-﻿  OpenGLWidget.cpp
-OpenGLWidget.cpp(26): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-OpenGLWidget.cpp(26): warning C4305: 'initializing': truncation from 'double' to 'float'
-OpenGLWidget.cpp(27): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-OpenGLWidget.cpp(27): warning C4305: 'initializing': truncation from 'double' to 'float'
-OpenGLWidget.cpp(28): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-OpenGLWidget.cpp(28): warning C4305: 'initializing': truncation from 'double' to 'float'
-OpenGLWidget.cpp(52): warning C4189: 'timer': local variable is initialized but not referenced
-OpenGLWidget.cpp(264): warning C4189: 'old_ratio': local variable is initialized but not referenced
-OpenGLWidget.cpp(323): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\johnshee\desktop\qtopengl_cv\openglwidget.cpp(48): warning C4715: 'OpenGLWidget::getModelVertexs': not all control paths return a value
-  Playground.vcxproj -> C:\Users\JohnShee\Desktop\QtOpenGL_CV\release\Playground.exe
+﻿  Tracer.cpp
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+Tracer.cpp(44): warning C4100: 'fund_mat': unreferenced formal parameter
+Tracer.cpp(187): warning C4189: 'check': local variable is initialized but not referenced
+  Playground.vcxproj -> C:\Users\JS\Documents\Visual Studio 2015\Projects\qt_git\QtOpenGL_CV\release\Playground.exe

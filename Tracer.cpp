@@ -4,7 +4,6 @@
 #define LOWER_LED_NUM 4
 // STD
 #include <iostream>
-#include <qDebug>
 #include <fstream>
 #include <cmath>
 #include <algorithm>
@@ -58,9 +57,66 @@ void Tracer::load_calibrate_result(cv::Mat &mtx1, cv::Mat &mtx2, cv::Mat &RT1, c
 		0.012590, 0.999862, -0.010835, -2.722954,
 		-0.718670, 0.016582, 0.695154, 99.387476);
 }
+void Tracer::load_mtx(fstream &fileReader, vector <float> &mat, int mat_size) {
+	string _text;
+	mat.clear();
+	for (int i = 0; i<mat_size; i++) {
+		fileReader >> _text;
+		mat.push_back(stof(_text));
+	}
+}
+void Tracer::load_calibrate_result(const char *filePath) {
+	fstream fr(filePath);
+	if (!filePath) {
+		qDebug("Calibrate file reading fail.");
+	}
+	else {
+		/*
+		#LeftCamK>>mtx1		3*3
+		#LeftCamDist>>dist1 1*5 -> 5*1
+		#LeftCamRT>>RT1     3*4 -> 3*4
+		 RightCam->Cam2
+		*/
+		string text;
+		while (fr >> text) {
+			vector <float> _mat;
+			if (text.at(0) == '#') {
+				if (text == "#LeftCamK") {
+					load_mtx(fr, _mat, 3 * 3);
+					mtx1 = cv::Mat(3, 3, CV_32F, &(_mat[0]));
+					for (int i = 0; i < 3; i++) {
+						qDebug("%f, %f, %f", mtx1.at<float>(i, 0), mtx1.at<float>(i, 1), mtx1.at<float>(i, 2)) ;
+					}
+				}
+				else if (text == "#RightCamK") {
+					load_mtx(fr, _mat, 3 * 3);
+					mtx2 = cv::Mat(3, 3, CV_32F, &(_mat[0]));
+					for (int i = 0; i < 3; i++) {
+						qDebug("%f, %f, %f", mtx2.at<float>(i, 0), mtx1.at<float>(i, 1), mtx1.at<float>(i, 2)) ;
+					}
+				}
+				else if (text == "#LeftCamDist") {
+					load_mtx(fr, _mat, 5*1);
+					dist1 = cv::Mat(5, 1, CV_32F, &(_mat[0]));
+				}
+				else if (text == "#RightCamDist") {
+					load_mtx(fr, _mat, 5*1);
+					dist2 = cv::Mat(5, 1, CV_32F, &(_mat[0]));
+				}
+				else if (text == "#LeftCamRT") {
+					load_mtx(fr, _mat, 3*4);
+					RT1 = cv::Mat(3, 4, CV_32F, &(_mat[0]));
+				}
+				else if (text == "#RightCamRT") {
+					load_mtx(fr, _mat, 3*4);
+					RT2 = cv::Mat(3, 4, CV_32F, &(_mat[0]));
+				}
+			}
 
-void Tracer::load_calibrate_result(const char * file) {
-
+		}
+		cout << endl;
+		fr.close();
+	}
 
 }
 
@@ -110,7 +166,7 @@ Tracer::Tracer()
 void Tracer::initialize() {
 	//Initalization
 	// Cali params	
-	load_calibrate_result();
+	load_calibrate_result("qrc/cam_config.txt");
 	project1 = mtx1*RT1;
 	project2 = mtx2*RT2;
 	//BlobDetector parms

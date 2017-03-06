@@ -1,21 +1,14 @@
 #pragma once
 #include <vector>
 #include <string>
-/*
-#include <opencv/cv.h>
-#include <opencv2/opencv.hpp>
-//#include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-*/
-//#include <opencv/cv.h>
-//#include <opencv2/core/core.hpp>
+
 #include <opencv2/imgproc/imgproc.hpp>
-//#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/features2d.hpp>
+
+#include <qDebug>
 #include "pgapi.h"
-//using namespace cv;
+
 using namespace std;
 class Tracer
 {
@@ -24,9 +17,10 @@ public:
 	void initialize();
 	void load_calibrate_result(cv::Mat &mtx1, cv::Mat &mtx2, cv::Mat &RT1, cv::Mat &RT2, cv::Mat &dist1, cv::Mat &dist2, cv::Mat &fund_mat);
 	void load_calibrate_result();
+	void load_calibrate_result(const char *filePath);
+	void load_mtx(fstream &fileReader, vector <float> &mat, int mat_size);
 	void leds_triangulate(vector<cv::KeyPoint> &leds1, vector<cv::KeyPoint> &leds2, const cv::Mat &project1, const cv::Mat &project2, int led_num, cv::Mat &tri_points);
 	void leds_triangulate(cv::Mat &tri_points);
-	void load_calibrate_result(const char * cam_config_file);
 	void nothing() {};
 	//inline bool pt_compare_by_y(Point2d p1, Point2d p2) { return p1.y < p2.y; };
 
