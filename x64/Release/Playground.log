@@ -1,16 +1,12 @@
-﻿  Tracer.cpp
-C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
-Tracer.cpp(44): warning C4100: 'fund_mat': unreferenced formal parameter
-Tracer.cpp(187): warning C4189: 'check': local variable is initialized but not referenced
-  Playground.vcxproj -> C:\Users\JS\Documents\Visual Studio 2015\Projects\qt_git\QtOpenGL_CV\release\Playground.exe
+﻿  ICP.cpp
+ICP.cpp(64): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(65): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(66): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(70): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(72): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(73): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Playground.vcxproj -> C:\Users\JohnShee\Documents\Visual Studio 2015\Projects\QtOpenGL_CV\release\Playground.exe

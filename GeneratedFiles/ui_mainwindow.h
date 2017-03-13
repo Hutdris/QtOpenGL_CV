@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
@@ -46,6 +47,7 @@ public:
     QPushButton *icpButton;
     QPushButton *pushButton_3;
     QPushButton *pushButton_6;
+    QCheckBox *RecCheckBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
 
@@ -118,6 +120,9 @@ public:
         pushButton_6 = new QPushButton(centralWidget);
         pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
         pushButton_6->setGeometry(QRect(40, 550, 101, 21));
+        RecCheckBox = new QCheckBox(centralWidget);
+        RecCheckBox->setObjectName(QStringLiteral("RecCheckBox"));
+        RecCheckBox->setGeometry(QRect(110, 490, 63, 15));
         MainWindow->setCentralWidget(centralWidget);
         pushButton_2->raise();
         upperButton->raise();
@@ -135,9 +140,10 @@ public:
         icpButton->raise();
         pushButton_3->raise();
         pushButton_6->raise();
+        RecCheckBox->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1247, 21));
+        menuBar->setGeometry(QRect(0, 0, 1247, 20));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -149,26 +155,28 @@ public:
         QObject::connect(icpButton, SIGNAL(clicked()), MainWindow, SLOT(runICP()));
         QObject::connect(pushButton_3, SIGNAL(clicked()), MainWindow, SLOT(camerasDisplay()));
         QObject::connect(pushButton_6, SIGNAL(clicked()), MainWindow, SLOT(initCameras()));
+        QObject::connect(pushButton_5, SIGNAL(clicked()), MainWindow, SLOT(recording()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
-        pushButton->setText(QApplication::translate("MainWindow", "Import STL", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", Q_NULLPTR));
-        upperButton->setText(QApplication::translate("MainWindow", "Upper", Q_NULLPTR));
-        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", Q_NULLPTR));
-        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", Q_NULLPTR));
-        lowerButton->setText(QApplication::translate("MainWindow", "Lower", Q_NULLPTR));
-        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "Import STL", 0));
+        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", 0));
+        upperButton->setText(QApplication::translate("MainWindow", "Upper", 0));
+        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", 0));
+        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", 0));
+        lowerButton->setText(QApplication::translate("MainWindow", "Lower", 0));
+        centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", 0));
         upperLabel->setText(QString());
         lowerLabel->setText(QString());
         centerLabel->setText(QString());
-        icpButton->setText(QApplication::translate("MainWindow", "Run ICP", Q_NULLPTR));
-        pushButton_3->setText(QApplication::translate("MainWindow", "Camera display", Q_NULLPTR));
-        pushButton_6->setText(QApplication::translate("MainWindow", "initCameras", Q_NULLPTR));
+        icpButton->setText(QApplication::translate("MainWindow", "Run ICP", 0));
+        pushButton_3->setText(QApplication::translate("MainWindow", "Camera display", 0));
+        pushButton_6->setText(QApplication::translate("MainWindow", "initCameras", 0));
+        RecCheckBox->setText(QApplication::translate("MainWindow", "Recording", 0));
     } // retranslateUi
 
 };

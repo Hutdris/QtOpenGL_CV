@@ -1,0 +1,13 @@
+﻿  ICP.cpp
+ICP.cpp(66): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(70): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(71): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(72): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(73): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(74): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+ICP.cpp(75): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Playground.vcxproj -> C:\Users\Louis\Documents\Visual Studio 2015\Projects\QtOpenGL_CV-master\debug\Playground.exe
+  Playground.vcxproj -> debug\Playground.pdb (Full PDB)
