@@ -1,4 +1,186 @@
-﻿  ICP.cpp
+﻿  Moc'ing OpenGLWidget.h...
+  Moc'ing mainwindow.h...
+  Uic'ing mainwindow.ui...
+  ConfigMap.cpp
+  jly_3ddt.cpp
+GoICP\jly_3ddt.cpp(73): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(86): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(111): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(116): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(54): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(151): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(162): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(138): warning C4189: 'Zdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(136): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(137): warning C4189: 'Ydim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(196): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(208): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(221): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(232): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(237): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(174): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(189): warning C4101: 'temp': unreferenced local variable
+GoICP\jly_3ddt.cpp(175): warning C4189: 'Ydim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(273): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(284): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(257): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(258): warning C4189: 'Ydim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(321): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(334): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(347): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(360): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(373): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(386): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(399): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(412): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(425): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(444): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(457): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(470): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(481): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(487): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(313): warning C4101: 'temp': unreferenced local variable
+GoICP\jly_3ddt.cpp(526): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(538): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(551): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(563): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(575): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(587): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(599): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(611): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(623): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(645): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(659): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(674): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(686): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(692): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(505): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(511): warning C4101: 'temp': unreferenced local variable
+GoICP\jly_3ddt.cpp(753): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(779): warning C4189: 'Xdim': local variable is initialized but not referenced
+GoICP\jly_3ddt.cpp(973): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(994): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(999): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(1005): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(1010): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(1016): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(1021): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+GoICP\jly_3ddt.cpp(1025): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  jly_goicp.cpp
+GoICP\jly_goicp.cpp(36): warning C4305: '=': truncation from 'double' to 'float'
+GoICP\jly_goicp.cpp(37): warning C4305: '=': truncation from 'double' to 'float'
+GoICP\jly_goicp.cpp(38): warning C4305: '=': truncation from 'double' to 'float'
+GoICP\jly_goicp.cpp(39): warning C4305: '=': truncation from 'double' to 'float'
+GoICP\jly_goicp.cpp(127): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_goicp.cpp(128): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_goicp.cpp(131): warning C4305: '=': truncation from 'double' to 'float'
+GoICP\jly_goicp.cpp(231): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+GoICP\jly_goicp.cpp(318): warning C4101: 'dis': unreferenced local variable
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(115): warning C4305: '=': truncation from 'double' to 'float'
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(113): note: while compiling class template member function 'ICP3D<float>::ICP3D(void)'
+  GoICP\jly_goicp.cpp(35): note: see reference to function template instantiation 'ICP3D<float>::ICP3D(void)' being compiled
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_goicp.h(122): note: see reference to class template instantiation 'ICP3D<float>' being compiled
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(201): warning C4267: 'argument': conversion from 'size_t' to 'const int32_t', possible loss of data
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(182): note: while compiling class template member function 'float ICP3D<float>::Run(T *,size_t,Matrix &,Matrix &,size_t,T)'
+          with
+          [
+              T=float
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(165): note: see reference to function template instantiation 'float ICP3D<float>::Run(T *,size_t,Matrix &,Matrix &,size_t,T)' being compiled
+          with
+          [
+              T=float
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(113): note: while compiling class template member function 'ICP3D<float>::ICP3D(void)'
+  GoICP\jly_goicp.cpp(35): note: see reference to function template instantiation 'ICP3D<float>::ICP3D(void)' being compiled
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(202): warning C4267: 'argument': conversion from 'size_t' to 'const int32_t', possible loss of data
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(232): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(233): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(254): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(264): warning C4267: 'argument': conversion from 'size_t' to 'const int32_t', possible loss of data
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(265): warning C4267: 'argument': conversion from 'size_t' to 'const int32_t', possible loss of data
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(70): warning C4100: 'bb': unreferenced formal parameter
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(897): note: see reference to function template instantiation 'bool PointCloud<T>::kdtree_get_bbox<std::vector<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::Interval,std::allocator<_Ty>>>(BBOX &) const' being compiled
+          with
+          [
+              T=float,
+              _Ty=nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval,
+              BBOX=std::vector<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval,std::allocator<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval>>
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(897): note: see reference to function template instantiation 'bool PointCloud<T>::kdtree_get_bbox<std::vector<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::Interval,std::allocator<_Ty>>>(BBOX &) const' being compiled
+          with
+          [
+              T=float,
+              _Ty=nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval,
+              BBOX=std::vector<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval,std::allocator<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval>>
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(895): note: while compiling class template member function 'void nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::computeBoundingBox(std::vector<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::Interval,std::allocator<_Ty>> &)'
+          with
+          [
+              T=float,
+              _Ty=nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(759): note: see reference to function template instantiation 'void nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::computeBoundingBox(std::vector<nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::Interval,std::allocator<_Ty>> &)' being compiled
+          with
+          [
+              T=float,
+              _Ty=nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud<float>,float>,PointCloud<float>,3,size_t>::Interval
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(126): note: see reference to class template instantiation 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>' being compiled
+          with
+          [
+              T=float
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(124): note: while compiling class template member function 'ICP3D<float>::~ICP3D(void)'
+  GoICP\jly_goicp.cpp(35): note: see reference to function template instantiation 'ICP3D<float>::~ICP3D(void)' being compiled
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(821): warning C4100: 'nChecks_IGNORED': unreferenced formal parameter
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(822): note: while compiling class template member function 'void nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::knnSearch(const float *,const size_t,IndexType *,float *,const int) const'
+          with
+          [
+              T=float,
+              IndexType=size_t
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(229): note: see reference to function template instantiation 'void nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<T,PointCloud<T>,T>,PointCloud<T>,3,size_t>::knnSearch(const float *,const size_t,IndexType *,float *,const int) const' being compiled
+          with
+          [
+              T=float,
+              IndexType=size_t
+          ]
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(48): warning C4100: 'size': unreferenced formal parameter
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(49): note: while compiling class template member function 'float PointCloud<T>::kdtree_distance(const T *,const size_t,size_t) const'
+          with
+          [
+              T=float
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\nanoflann.hpp(356): note: see reference to function template instantiation 'float PointCloud<T>::kdtree_distance(const T *,const size_t,size_t) const' being compiled
+          with
+          [
+              T=float
+          ]
+  c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\jly_icp3d.hpp(102): note: see reference to class template instantiation 'PointCloud<T>' being compiled
+          with
+          [
+              T=float
+          ]
+  matrix.cpp
+GoICP\matrix.cpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+GoICP\matrix.cpp(138): warning C4267: 'argument': conversion from 'size_t' to 'const int32_t', possible loss of data
+GoICP\matrix.cpp(480): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(538): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(569): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(518): warning C4100: 'eps': unreferenced formal parameter
+GoICP\matrix.cpp(663): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(691): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(717): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(744): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(854): warning C4244: 'return': conversion from 'double' to 'FLOAT', possible loss of data
+GoICP\matrix.cpp(856): warning C4244: 'return': conversion from 'double' to 'FLOAT', possible loss of data
+  StringTokenizer.cpp
+GoICP\StringTokenizer.cpp(10): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+GoICP\StringTokenizer.cpp(26): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+GoICP\StringTokenizer.cpp(50): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  ICP.cpp
 ICP.cpp(66): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 ICP.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 ICP.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
@@ -9,4 +191,82 @@ ICP.cpp(72): warning C4244: '=': conversion from 'double' to 'float', possible l
 ICP.cpp(73): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 ICP.cpp(74): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 ICP.cpp(75): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Playground.vcxproj -> C:\Users\Louis\Documents\Visual Studio 2015\Projects\QtOpenGL_CV-master\release\Playground.exe
+  OpenGLWidget.cpp
+OpenGLWidget.cpp(26): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+OpenGLWidget.cpp(26): warning C4305: 'initializing': truncation from 'double' to 'float'
+OpenGLWidget.cpp(27): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+OpenGLWidget.cpp(27): warning C4305: 'initializing': truncation from 'double' to 'float'
+OpenGLWidget.cpp(28): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+OpenGLWidget.cpp(28): warning C4305: 'initializing': truncation from 'double' to 'float'
+OpenGLWidget.cpp(52): warning C4189: 'timer': local variable is initialized but not referenced
+OpenGLWidget.cpp(264): warning C4189: 'old_ratio': local variable is initialized but not referenced
+OpenGLWidget.cpp(323): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  pgapi.cpp
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+  main.cpp
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+  mainwindow.cpp
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+  moc_mainwindow.cpp
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+  moc_OpenGLWidget.cpp
+  stlloader.cpp
+  Tracer.cpp
+C:\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+C:\Program Files\Point Grey Research\FlyCapture2\include\FlyCapture2.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\FlyCapture2Defs.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Error.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Camera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\CameraBase.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\GigECamera.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Image.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+c:\program files\point grey research\flycapture2\include\Utilities.h : warning C4819: The file contains a character that cannot be represented in the current code page (950). Save the file in Unicode format to prevent data loss
+Tracer.cpp(66): warning C4100: 'fund_mat': unreferenced formal parameter
+Tracer.cpp(218): warning C4189: 'check': local variable is initialized but not referenced
+  Generating Code...
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\openglwidget.cpp(48): warning C4715: 'OpenGLWidget::getModelVertexs': not all control paths return a value
+c:\users\johnshee\documents\visual studio 2015\projects\qtopengl_cv\qtopengl_cv-master\goicp\matrix.cpp(419): warning C4715: 'Matrix::det': not all control paths return a value
+  Playground.vcxproj -> C:\Users\JohnShee\Documents\Visual Studio 2015\Projects\QtOpenGL_CV\QtOpenGL_CV-master\release\Playground.exe
