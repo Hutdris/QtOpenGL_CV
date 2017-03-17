@@ -152,6 +152,9 @@ void Tracer::load_calibrate_result(const char *filePath) {
 
 void Tracer::leds_triangulate(cv::Mat &tri_points) {
 	const int led_num = 9;
+	const double EPISON = 1E-6;
+	cv::Mat _tri_points, __tri_points;
+	//tri_points = cv::Mat::zeros(3, 9, CV_32FC1);
 	if ((all_leds_key1.size() == all_leds_key2.size())&(all_leds_key2.size() == led_num)) {
 		//traiangluate eat '2*N' array not '1*N' points vector
 		//Tranlate keypoints to sorted vector<Point2d>
@@ -163,31 +166,21 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		//sort(f_leds1.begin(), f_leds1.end(), pt_compare_by_y);
 		//sort(f_leds2.begin(), f_leds2.end(), pt_compare_by_y);
 		//4*N {x, y, z, alpha}^T each col
-		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
-		cout << tri_points << endl;
+		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, _tri_points);
+		//qDebug(type2str(_tri_points.type()).c_str());
+		for (int j = 0; j < 9; j++) {
+			if (abs(_tri_points.at<double>(3, j) - 0) >= EPISON) {
+				for (int i = 0; i < 3; i++) {
+					tri_points.at<double>(i, j) = _tri_points.at<double>(i, j) / _tri_points.at<double>(3, j);
+				}
+			}
+}
 		//qDebug(type2str(tri_points.type()).c_str());
 	}
 }
 
 
-void Tracer::leds_triangulate(vector<cv::KeyPoint> &leds1, vector<cv::KeyPoint> &leds2,
-	const cv::Mat &project1, const cv::Mat &project2, int led_num, cv::Mat &tri_points) {
-	if ((leds1.size() == leds2.size())&(leds1.size() == led_num)) {
-		//traiangluate eat '2*N' array not '1*N' points vector
-		//Tranlate keypoints to sorted vector<Point2d>
-		vector<cv::Point2d> f_leds1, f_leds2;
-		for (int i = 0; i < led_num; i++) {
-			f_leds1.push_back(leds1[i].pt);
-			f_leds2.push_back(leds2[i].pt);
-		}
-		//sort(f_leds1.begin(), f_leds1.end(), pt_compare_by_y);
-		//sort(f_leds2.begin(), f_leds2.end(), pt_compare_by_y);
-		//4*N {x, y, z, alpha}^T each col
-		tri_points.create(4, led_num, CV_32FC1);
-		triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
-		cout << tri_points << endl;
-	}
-}
+
 
 Tracer::Tracer()
 {
@@ -208,7 +201,7 @@ void Tracer::initialize() {
 	glob_blob_p.filterByArea = true;
 	glob_blob_p.minArea = 10;
 	glob_blob_p.maxArea = 1000;
-	glob_blob_p.filterByCircularity = true;
+	glob_blob_p.filterByCircularity = false;
 	glob_blob_p.minCircularity = 0.4f;
 	glob_blob_p.filterByConvexity = false;
 	glob_blob_p.minConvexity = 0.7f;

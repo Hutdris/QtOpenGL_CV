@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
-	tri_points = cv::Mat::zeros(4, 9, CV_32FC1);
+	tri_points = cv::Mat::zeros(3, 9, CV_64FC1);
 }
 
 MainWindow::~MainWindow()
@@ -100,7 +100,7 @@ void MainWindow::on_pushButton_2_pressed()
 }
 
 void MainWindow::initCameras() {
-	const int fps = 1;
+	const int fps = 60;
 	tracer.initialize();
 
 	QTimer *tracer_timer = new QTimer(this);
@@ -114,7 +114,7 @@ void MainWindow::recording() {
 		append_textBrowser("Start recoding.\n");
 	}
 	else {
-	ofstream od("result/tri_points.txt");
+	ofstream od("result/tri_points.csv");
 	for (auto itt = tri_pts_buffer.begin(); itt != tri_pts_buffer.end(); itt++) {
 		od << *itt << endl;
 	}
@@ -136,6 +136,8 @@ void MainWindow::camerasDisplay() {
 	tracer.image_update(PGmgr);
 	tracer.points_update();
 	tracer.leds_triangulate(tri_points);
+	ui->openGLWidget->set_tracing_points(&tri_points);
+	ui->openGLWidget->update();
 	if (rec_flag){
 		tri_pts_buffer.push_back(tri_points);
 	}

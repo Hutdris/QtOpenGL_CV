@@ -8,7 +8,7 @@
 //#include <QOpenGLVertexArrayObject>
 #include <QtOpenGL/qgl.h>
 #include <QtOpenGL>
-
+#include <opencv/cv.h>
 #include <gl/GLUT.h>
 //#include <gl/GL.h>
 
@@ -19,9 +19,15 @@ class OpenGLWidget : public QOpenGLWidget
 	Q_OBJECT	
 	Q_ENUMS(Position)
 public:
+
+
+	cv::Mat *tracing_points;
+	cv::Mat init_pos, mass_point;
+	vector <cv::Mat> trace;
 	enum Position{Upper, Lower, Center, EndCase};
 	OpenGLWidget(QWidget *parent = 0);
 	~OpenGLWidget();
+	void set_tracing_points(cv::Mat *points);
 	class STLModel {
 	public:
 		STLModel();
@@ -43,6 +49,8 @@ public:
 	return angle;
 	}
 protected:
+
+	void drawTrace();
 	void resizeGL(int, int);
 	void paintGL();
 	void initializeGL();
@@ -56,6 +64,10 @@ protected:
 public slots:
 	void animate();
 	void setZoomRatio(int _zoom_ratio);
+	void setInitPos() {
+		init_pos = tracing_points->clone();
+		trace.clear();
+	};
 	signals:
 	void getZoomRatio(int z_r);
 

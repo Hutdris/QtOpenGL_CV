@@ -53,6 +53,10 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 	//connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 	//timer->start(int(1000/fps));
 	model_list.resize(3);
+	init_pos = cv::Mat::zeros(3, 9, CV_64FC1);
+	mass_point = cv::Mat::zeros(3, 1, CV_64FC1);
+	tracing_points = &(init_pos);
+	qDebug("wait");
 }
 
 
@@ -61,6 +65,33 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
+void OpenGLWidget::set_tracing_points(cv::Mat *points) {
+	tracing_points = points;
+	cv::Mat _mass_point = cv::Mat::zeros(3, 1, CV_64FC1);
+	for (int i = 0; i < 3; i++) {
+		double _sum = 0;
+		for (int j = 6 - 1; j < 9; j++) {
+			_sum +=
+				(tracing_points->at<double>(i, j) - init_pos.at<double>(i, j));
+		}
+		_sum /= 4.0f;
+		_mass_point.at<double>(i, 0) = _sum;
+	}
+	mass_point = _mass_point.clone();
+	this->trace.push_back(_mass_point);
+};
+void OpenGLWidget::drawTrace() {
+	glLineWidth(300.0);
+	glBegin(GL_LINES);
+	for (auto itt = trace.begin(); itt != trace.end(); itt++){
+		glVertex3d(itt->at<double>(0, 0), itt->at<double>(1, 0), itt->at<double>(2, 0));
+	}
+	glEnd();
+	if (trace.end() != trace.begin()){
+	cv::Mat last = *(trace.end()-1);
+	qDebug("%f, %f, %f", last.at<double>(0, 0), last.at<double>(1, 0), last.at<double>(2, 0));
+}
+}
 GLuint OpenGLWidget::makeObject(STLModel *model) {
 	GLuint _list;
 	_list = glGenLists(1);
@@ -119,6 +150,7 @@ void OpenGLWidget::initializeGL()
 
 void OpenGLWidget::paintGL()
 {
+	int pointSize = 1E3;
 	glClearColor(0.0,0.0,0.0,1.0 );
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPolygonMode(GL_BACK, GL_LINE); //show model's back by lines 
@@ -140,9 +172,19 @@ void OpenGLWidget::paintGL()
 	//glTranslatef(-1*rTri/10.f, 0.0f, 0.0f);
 	auto _zoomratio = 1.0f / Zoom_ratio;
 	glScalef(_zoomratio, _zoomratio, _zoomratio);
+	//glTranslated(mass_point.at<double>(0, 0), mass_point.at<double>(1, 0), mass_point.at<double>(2, 0));
+	drawTrace();
 	for (int model_index = Upper; model_index < EndCase; model_index++) {
 		glCallList(model_list.at(model_index));
 	}
+	/*
+	glBegin(GL_POINTS);
+	glPointSize(pointSize);
+	for (int i = 6-1; i < 9; i++) {
+		glVertex3f(tracing_points->at<double>(0, i),tracing_points->at<double>(1, i),
+			tracing_points->at<double>(2, i));
+	}
+	glEnd();*/
 }
 
 
@@ -200,41 +242,6 @@ void OpenGLWidget::set_stlModel(const char *model_path, Position p) {
 
 		stlloader.set_path(model_path);
 		stlloader.load();
-		//STLModel *ptm;
-		//TODO: using pointer instead of copy&paste = =
-		/* old school
-	switch (p) {
-	case Upper:
-		//ptm = &upper;
-		upper.vertexs = stlloader.get_vertexs();
-		upper.normals = stlloader.get_normals();
-
-		glDeleteLists(model_list.at(Upper), 1);
-		model_list.at(Upper) = makeObject(this->upper);
-		break;
-
-		//model_normalize(upper);
-	case Lower:
-		//ptm = &lower;
-		lower.vertexs = stlloader.get_vertexs();
-		lower.normals = stlloader.get_normals();
-		glDeleteLists(model_list.at(Lower), 1);
-		model_list.at(Lower) = makeObject(this->lower);
-		break;
-		//model_normalize(lower);
-	case Center:
-		center.vertexs = stlloader.get_vertexs();
-		center.normals = stlloader.get_normals();
-		glDeleteLists(model_list.at(Center), 1);
-		model_list.at(Center) = makeObject(this->center);
-		break;
-
-		//model_normalize(center);
-		//ptm = &center;
-		}
-*/
-	// ISSUE:Can't access pointer???
-
 	STLModel *ptm;
 	switch (p) {
 	case (Upper):
@@ -263,11 +270,6 @@ void OpenGLWidget::model_resize(STLModel &model, int old_ratio) {
 void OpenGLWidget::setZoomRatio(int _zoom_ratio) {
 	GLfloat old_ratio = Zoom_ratio;
 	Zoom_ratio = _zoom_ratio; 
-	/*
-	model_resize(upper, old_ratio);
-	model_resize(lower, old_ratio);
-	model_resize(center, old_ratio);
-	*/
 	update();
 
 };
