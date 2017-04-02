@@ -100,26 +100,35 @@ void MainWindow::on_pushButton_2_pressed()
 }
 
 void MainWindow::initCameras() {
-	const int fps = 1;
+	const int fps = 60;
 	tracer.initialize();
 
 	QTimer *tracer_timer = new QTimer(this);
 	connect(tracer_timer, SIGNAL(timeout()), this, SLOT(camerasDisplay()));
 	tracer_timer->start(int(1000 / fps));
+	//tracer_timer->stop();
 
 }
 void MainWindow::recording() {
 	if (!rec_flag) {
 		rec_flag = true;
-		append_textBrowser("Start recoding.\n");
+		tri_pts_buffer.reserve(100000);
+		RT_buffer.reserve(100000);
+		append_textBrowser("Start recording.\n");
 	}
 	else {
 	ofstream od("result/tri_points.txt");
 	for (auto itt = tri_pts_buffer.begin(); itt != tri_pts_buffer.end(); itt++) {
 		od << *itt << endl;
 	}
+	ofstream ort("result/RT.txt");
+	for (auto itt = RT_buffer.begin(); itt != RT_buffer.end(); itt++) {
+		ort << *itt << endl;
+	}
+	ort.close();
 	od.close();
 	tri_pts_buffer.clear();
+	RT_buffer.clear();
 	append_textBrowser("Stop recoding.\n");
 	}
 }
@@ -133,10 +142,23 @@ void MainWindow::camerasDisplay() {
 	cv::imshow("img2", img2);
 	cv::waitKey(10);
 */
-	tracer.image_update(PGmgr);
+	tracer.image_update_from_video();
+	//tracer.image_update(PGmgr);
 	tracer.points_update();
 	tracer.leds_triangulate(tri_points);
+
+	std::vector<float> _array;
+	_array.clear();
+	// RT:4*4 -> 16 array openGL
+	for (int i = 0; i < 4; i++) { //col
+		for (int j = 0; j < 4; j++) { //row
+			_array.push_back(tracer.lower_RT.at<float>(j, i));
+		}
+	}
+    ui->openGLWidget->updateRT(&(_array[0]));
+	ui->openGLWidget->update();
 	if (rec_flag){
-		tri_pts_buffer.push_back(tri_points);
+		tri_pts_buffer.push_back(tri_points.clone());
+		RT_buffer.push_back(tracer.lower_RT.clone());
 	}
 }

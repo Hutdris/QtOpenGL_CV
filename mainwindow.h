@@ -22,7 +22,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 	cv::Mat tri_points;
-	vector <cv::Mat> tri_pts_buffer;
+	vector <cv::Mat> tri_pts_buffer, RT_buffer;
 protected:
 	virtual void keyPressEvent(QKeyEvent *e);
 	
