@@ -14,32 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>40</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Import STL</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>110</y>
-      <width>171</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Import </string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="upperButton">
     <property name="geometry">
      <rect>
@@ -63,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>End&amp;Save</string>
+     <string>Pause</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_5">
@@ -76,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Rcording</string>
+     <string>Start/Stop Recording</string>
     </property>
    </widget>
    <widget class="QPushButton" name="lowerButton">
@@ -188,17 +162,17 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>660</y>
+      <y>710</y>
       <width>911</width>
-      <height>171</height>
+      <height>121</height>
      </rect>
     </property>
    </widget>
    <widget class="QLCDNumber" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>650</y>
+      <x>230</x>
+      <y>790</y>
       <width>64</width>
       <height>23</height>
      </rect>
@@ -227,7 +201,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Camera display</string>
+     <string>Set first frame</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_6">
@@ -248,31 +222,14 @@
      <rect>
       <x>110</x>
       <y>490</y>
-      <width>63</width>
-      <height>15</height>
+      <width>101</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>Recording</string>
     </property>
    </widget>
-   <zorder>pushButton_2</zorder>
-   <zorder>upperButton</zorder>
-   <zorder>pushButton_4</zorder>
-   <zorder>pushButton_5</zorder>
-   <zorder>lowerButton</zorder>
-   <zorder>centerButton</zorder>
-   <zorder>upperLabel</zorder>
-   <zorder>lowerLabel</zorder>
-   <zorder>centerLabel</zorder>
-   <zorder>openGLWidget</zorder>
-   <zorder>textBrowser</zorder>
-   <zorder>pushButton</zorder>
-   <zorder>lcdNumber</zorder>
-   <zorder>icpButton</zorder>
-   <zorder>pushButton_3</zorder>
-   <zorder>pushButton_6</zorder>
-   <zorder>RecCheckBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -304,28 +261,11 @@
     <slot>setModel(QString)</slot>
     <slot>animate()</slot>
     <slot>setZoomRatio(int)</slot>
-    <slot>setInitPos()</slot>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>animate()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>99</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>410</x>
-     <y>216</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>openGLWidget</sender>
    <signal>getZoomRatio(int)</signal>
@@ -337,8 +277,8 @@
      <y>534</y>
     </hint>
     <hint type="destinationlabel">
-     <x>263</x>
-     <y>701</y>
+     <x>293</x>
+     <y>845</y>
     </hint>
    </hints>
   </connection>
@@ -403,22 +343,6 @@
     <hint type="destinationlabel">
      <x>216</x>
      <y>414</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_6</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setInitPos()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>95</x>
-     <y>603</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>369</x>
-     <y>586</y>
     </hint>
    </hints>
   </connection>

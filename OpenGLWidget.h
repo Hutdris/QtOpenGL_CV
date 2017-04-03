@@ -33,6 +33,14 @@ public:
 		STLModel();
 		~STLModel();
 		vector<GLfloat> vertexs, normals;
+		float RT[16] = {
+			1.0, 0.0, 0.0, 0.0, // x
+			0.0 ,1.0, 0.0, 0.0, // y
+			0.0, 0.0, 1.0, 0.0, // z
+			0.0, 0.0, 0.0, 1.0  //dummy
+		};
+	private:
+
 	};
 	void set_stlModel(const char *model_path, Position p);
 	GLuint makeObject(STLModel *model);
@@ -40,7 +48,7 @@ public:
 	vector <GLfloat> getModelVertexs(Position mPos);
 	void SetLightSource();
 	void SetMaterial();
-
+	void updateRT(float *RT);
 	float qNormalizeAngle(float angle) {
 	while (angle > 360.f)
 		angle -= 360.f;

@@ -9,22 +9,12 @@
 #include <algorithm>
 
 using namespace std;
-// GLM
-//#include <glm.hpp>
-//#include <gtc/matrix_transform.hpp>
-//#include <gtc/type_ptr.hpp>
 
-
-
-//My header
-//#include "Mesh.h"
-//#include "shader.h"
-//#include "Camera.h"
-// Function prototypes
 inline bool compare_by_pt_y(cv::KeyPoint &k1,cv::KeyPoint &k2) { return k1.pt.y < k2.pt.y; };
 inline bool compare_by_pt_x(cv::KeyPoint &k1,cv::KeyPoint &k2) { return k1.pt.x < k2.pt.x; };
-// GL control
+
 string type2str(int type) {
+	// print cv::Mat type
 	string r;
 
 	uchar depth = type & CV_MAT_DEPTH_MASK;
@@ -46,52 +36,11 @@ string type2str(int type) {
 
 	return r;
 }
-void Tracer::load_calibrate_result(void) {
-	mtx1 = (cv::Mat_<float>(3, 3) << 2441.347367, 0.000000, 661.608922
-		, 0.000000, 2437.002900, 509.925022
-		, 0, 0, 1);
-	mtx2 = (cv::Mat_<float>(3, 3) <<
-		2412.136458, 0.000000, 742.768353,
-		0.000000, 2409.743589, 569.840267,
-		0, 0, 1)
-		;
-	dist1 = (cv::Mat_<float>(5, 1) << -0.418326, 12.064726, 0.006454, 0.006439, 0.0);
-	dist2 = (cv::Mat_<float>(5, 1) << 0.013682, -4.051145, 0.005566, 0.004979, 0.0);
-	RT1 = (cv::Mat_<float>(3, 4) << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
-	RT2 = (cv::Mat_<float>(3, 4) << 0.695238, -0.000966, 0.718779, -236.973392,
-		0.012590, 0.999862, -0.010835, -2.722954,
-		-0.718670, 0.016582, 0.695154, 99.387476);
 
-}
-void Tracer::load_calibrate_result(cv::Mat &mtx1, cv::Mat &mtx2, cv::Mat &RT1, cv::Mat &RT2, cv::Mat &dist1, cv::Mat &dist2, cv::Mat &fund_mat) {
-	mtx1 = (cv::Mat_<float>(3, 3) << 2441.347367, 0.000000, 661.608922
-		, 0.000000, 2437.002900, 509.925022
-		, 0, 0, 1);
-	mtx2 = (cv::Mat_<float>(3, 3) <<
-		2412.136458, 0.000000, 742.768353,
-		0.000000, 2409.743589, 569.840267,
-		0, 0, 1)
-		;
-	dist1 = (cv::Mat_<float>(5, 1) << -0.418326, 12.064726, 0.006454, 0.006439, 0.0);
-	dist2 = (cv::Mat_<float>(5, 1) << 0.013682, -4.051145, 0.005566, 0.004979, 0.0);
-	RT1 = (cv::Mat_<float>(3, 4) << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
-	RT2 = (cv::Mat_<float>(3, 4) << 0.695238, -0.000966, 0.718779, -236.973392,
-		0.012590, 0.999862, -0.010835, -2.722954,
-		-0.718670, 0.016582, 0.695154, 99.387476);
-}
-void Tracer::load_mtx(fstream &fileReader, vector <float> &mat, int mat_size) {
-	string _text;
-	mat.clear();
-	for (int i = 0; i<mat_size; i++) {
-		fileReader >> _text;
-		mat.push_back(stof(_text));
-	}
-	//qDebug("mat_size: %d, vec_size: %d", mat_size, int(mat.size()));
-}
 void Tracer::load_calibrate_result(const char *filePath) {
 	fstream fr(filePath);
 	if (!filePath) {
-		qDebug("Calibrate file reading fail.");
+		qDebug("Calibrate file loaded fail.");
 	}
 	else {
 		/*
@@ -150,15 +99,13 @@ void Tracer::load_calibrate_result(const char *filePath) {
 
 }
 
+
 void Tracer::leds_triangulate(cv::Mat &tri_points) {
 	const int led_num = 9;
-	const double EPISON = 1E-6;
-	cv::Mat _tri_points, __tri_points;
-	//tri_points = cv::Mat::zeros(3, 9, CV_32FC1);
 	if ((all_leds_key1.size() == all_leds_key2.size())&(all_leds_key2.size() == led_num)) {
 		//traiangluate eat '2*N' array not '1*N' points vector
 		//Tranlate keypoints to sorted vector<Point2d>
-		vector<cv::Point2d> f_leds1, f_leds2;
+		vector<cv::Point2f> f_leds1, f_leds2;
 		for (int i = 0; i < led_num; i++) {
 			f_leds1.push_back(all_leds_key1[i].pt);
 			f_leds2.push_back(all_leds_key2[i].pt);
@@ -166,16 +113,26 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		//sort(f_leds1.begin(), f_leds1.end(), pt_compare_by_y);
 		//sort(f_leds2.begin(), f_leds2.end(), pt_compare_by_y);
 		//4*N {x, y, z, alpha}^T each col
-		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, _tri_points);
-		//qDebug(type2str(_tri_points.type()).c_str());
-		for (int j = 0; j < 9; j++) {
-			if (abs(_tri_points.at<double>(3, j) - 0) >= EPISON) {
-				for (int i = 0; i < 3; i++) {
-					tri_points.at<double>(i, j) = _tri_points.at<double>(i, j) / _tri_points.at<double>(3, j);
-				}
+		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
+		// x/=w, y/=w, z/=w, w/=w
+		for (int i = 0; i < led_num; i++) {
+			for (int j = 0; j < 4; j++) {
+				tri_points.at<float>(j, i) /= tri_points.at<float>(3, i);
 			}
-}
-		//qDebug(type2str(tri_points.type()).c_str());
+		}
+		if (!RT_inited) {
+			pre_tri_points = tri_points.clone();
+			RT_inited = true;
+		}
+		lower_RT = tri_points(cv::Range(0, 4), cv::Range(5, 9)) *
+			pre_tri_points(cv::Range(0, 4), cv::Range(5, 9)).inv() // 
+			* lower_RT; // 
+		cout << tri_points << endl;
+		char buffer_tri[300];
+		pre_tri_points = tri_points.clone();
+		qDebug(type2str(tri_points.type()).c_str());
+		qDebug(type2str(pre_tri_points.type()).c_str());
+		cout << '!' << endl;
 	}
 }
 
@@ -185,6 +142,24 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 Tracer::Tracer()
 {
 	const int led_num = 9;
+	vh.leftCam =  cv::VideoCapture("qrc/video/camL.mp4");
+	vh.rightCam = cv::VideoCapture("qrc/video/camR.mp4");
+	vh.rightFlip = false;
+	vh.leftFlip = true;
+	pre_tri_points = 
+		(cv::Mat_<float>(4, 9)<<
+		1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, // x
+		0.0 ,1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, // y
+		0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, // z
+		1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 // w
+		);
+	lower_RT = 
+		(cv::Mat_<float>(4, 4)<<
+		1.0, 0.0, 0.0, 0.0, // x
+		0.0 ,1.0, 0.0, 0.0, // y
+		0.0, 0.0, 1.0, 0.0, // z
+		0.0, 0.0, 0.0, 1.0  //dummy
+		);
 	initialize();
 }
 void Tracer::initialize() {
@@ -201,36 +176,62 @@ void Tracer::initialize() {
 	glob_blob_p.filterByArea = true;
 	glob_blob_p.minArea = 10;
 	glob_blob_p.maxArea = 1000;
-	glob_blob_p.filterByCircularity = false;
+	glob_blob_p.filterByCircularity = true;
 	glob_blob_p.minCircularity = 0.4f;
 	glob_blob_p.filterByConvexity = false;
 	glob_blob_p.minConvexity = 0.7f;
 	glob_blob_p.filterByInertia = false;
 	glob_blob_p.minInertiaRatio = 0.1f;
 	glob_blob_detector = cv::SimpleBlobDetector::create(glob_blob_p);
-	auto check = 0;
-	ofstream of("result/calibrate.txt");
-	of << "mtx1:" << endl << mtx1 <<endl;
-	of << "mtx2:" << endl << mtx2 <<endl;
-	of << "project1" << endl << project1 <<endl;
-	of << "project2" << endl << project2 <<endl;
-	of << "dist1"<< endl << dist1 <<endl;
-	of << "dist2"<< endl << dist2 <<endl;
-	of << "RT1"<< endl << RT1 <<endl;
-	of << "RT1"<< endl << RT2 <<endl;
-	of.close();
+}
+void keys2pts(vector <cv::KeyPoint> &keys, vector <cv::Point2f> &pts) {
+	if (keys.size() != 9) {
+		return;
+	}
+	pts.clear();
+	pts.reserve(9);
+	for (int i = 0; i < keys.size(); i++) {
+		pts.push_back(keys.at(i).pt);
+	}
+}
+void pts2keys(vector <cv::Point2f> &pts, vector <cv::KeyPoint> &keys) {
+	if (keys.size() != 9) {
+		return;
+	}
+	for (int i = 0; i < keys.size(); i++) {
+		keys.at(i).pt = pts[i];
+	}
 }
 
 void Tracer::points_update() {
 	const int total_leds_cnt = 9;
-	string _check = type2str(raw_src1.type());
-	bool display_flag = false;
-	//cv::Ptr<cv::SimpleBlobDetector>test_detector = cv::SimpleBlobDetector::create(glob_blob_p);
-	//cv::cvtColor(this->raw_src1, this->raw_src1, cv::COLOR_BGR2GRAY);
-	//cv::cvtColor(this->raw_src2, this->raw_src2, cv::COLOR_BGR2GRAY);
-	glob_blob_detector->detect(raw_src1, all_leds_key1);
-	glob_blob_detector->detect(raw_src2, all_leds_key2);
+	bool display_flag = true;
+	if (!points_init) {
+		glob_blob_detector->detect(raw_src1, all_leds_key1);
+		glob_blob_detector->detect(raw_src2, all_leds_key2);
+		points_init = true;
+	}
+	else {
+		pair <vector<cv::Point2f>, vector<cv::Point2f>> pre_pts, pts;
+		// ¯ä
+		keys2pts(all_leds_key1, pts.first);
+		keys2pts(all_leds_key2, pts.second);
+		keys2pts(pre_leds.first, pre_pts.first);
+		keys2pts(pre_leds.second, pre_pts.second);
 
+		vector<uchar> status;
+		vector<float> err;
+		const int max_pry = 3;
+		cv::Size winsize(21, 21);
+		cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
+		cv::calcOpticalFlowPyrLK(pre_raw_src.first, raw_src1, pre_pts.first, pts.first, status, err, winsize,
+			max_pry, termcrit, 0, 0.1);
+		cv::calcOpticalFlowPyrLK(pre_raw_src.second, raw_src2, pre_pts.second, pts.second, status, err, winsize,
+			max_pry, termcrit, 0, 0.1);
+
+		pts2keys(pts.first, all_leds_key1);
+		pts2keys(pts.second, all_leds_key2);
+	}
 	//vector <cv::KeyPoint> test_leds;
 	/*
 	raw_src1 = cv::imread("qrc/l.png", 0);
@@ -240,11 +241,11 @@ void Tracer::points_update() {
 	if (display_flag) {
 		drawKeypoints(raw_src1, all_leds_key1, raw_src1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 		drawKeypoints(raw_src2, all_leds_key2, raw_src2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-		cv::imshow("cam1", raw_src1);
-		cv::waitKey(0);
-		cv::imshow("cam2", raw_src2);
-		cv::waitKey(0);
-		cv::destroyAllWindows();
+		cv::imshow("camL", raw_src1);
+		cv::waitKey(10);
+		cv::imshow("camR", raw_src2);
+		cv::waitKey(10);
+		//cv::destroyAllWindows();
 	}
 	//qDebug("%d, %d", all_leds_key1.size(), all_leds_key2.size());
 	if ((all_leds_key1.size() > total_leds_cnt) | (all_leds_key1.size() > total_leds_cnt)){
@@ -253,16 +254,60 @@ void Tracer::points_update() {
 		return;
 	}
 	std::sort(all_leds_key1.begin(), all_leds_key1.end(), compare_by_pt_y);
+	std::sort(all_leds_key1.begin(), all_leds_key1.begin()+5, compare_by_pt_x);
+	std::sort(all_leds_key1.begin()+5, all_leds_key1.end(), compare_by_pt_x);
+
 	std::sort(all_leds_key2.begin(), all_leds_key2.end(), compare_by_pt_y);
+	std::sort(all_leds_key2.begin(), all_leds_key2.begin()+5, compare_by_pt_x);
+	std::sort(all_leds_key2.begin()+5, all_leds_key2.end(), compare_by_pt_x);
 	
-/*
-	drawKeypoints(frame1, all_leds_key1, frame1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-	drawKeypoints(frame2, all_leds_key2, frame2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-*/
-	
+}
+
+void Tracer::pre_frame_check() {
+	if (!(raw_src1.empty()&&raw_src2.empty())) {
+		pre_raw_src.first = raw_src1.clone();
+		pre_raw_src.second = raw_src2.clone();
+	}
+	if ((all_leds_key1.size() != 0) && (all_leds_key2.size() != 0)) {
+		pre_leds.first.reserve(9);
+		pre_leds.second.reserve(9);
+
+		pre_leds.first = all_leds_key1;
+		pre_leds.second = all_leds_key2;
+	}
 }
 void Tracer::image_update(PGApi &pgmgr) {
 	pgmgr.GetStereoImage(raw_src1, raw_src2);
 }
 
+void Tracer::image_update_from_video() {
+		if (vh.leftCam.isOpened() & vh.rightCam.isOpened()){
+			if (vh.leftCam.read(raw_src1)&vh.rightCam.read(raw_src2)) {
+				if (vh.rightFlip) 
+					cv::flip(raw_src1, raw_src1, 0);
+				if (vh.leftFlip) 
+					cv::flip(raw_src2, raw_src2, 0);
 
+				int _zoom = 2;
+				cv::resize(raw_src1, raw_src1, raw_src1.size() / _zoom);
+				cv::resize(raw_src2, raw_src2, raw_src2.size() / _zoom);
+			}
+			else {  // reset frames pos when video ends
+				vh.leftCam.set(CV_CAP_PROP_POS_FRAMES, 0);
+				vh.rightCam.set(CV_CAP_PROP_POS_FRAMES, 0);
+				image_update_from_video();
+			}
+		}
+		
+
+}
+
+void Tracer::load_mtx(fstream &fileReader, vector <float> &mat, int mat_size) {
+	string _text;
+	mat.clear();
+	for (int i = 0; i<mat_size; i++) {
+		fileReader >> _text;
+		mat.push_back(stof(_text));
+	}
+	//qDebug("mat_size: %d, vec_size: %d", mat_size, int(mat.size()));
+}

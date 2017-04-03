@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_OpenGLWidget_t {
-    QByteArrayData data[12];
-    char stringdata0[100];
+    QByteArrayData data[13];
+    char stringdata0[111];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,16 +36,17 @@ QT_MOC_LITERAL(3, 27, 3), // "z_r"
 QT_MOC_LITERAL(4, 31, 7), // "animate"
 QT_MOC_LITERAL(5, 39, 12), // "setZoomRatio"
 QT_MOC_LITERAL(6, 52, 11), // "_zoom_ratio"
-QT_MOC_LITERAL(7, 64, 8), // "Position"
-QT_MOC_LITERAL(8, 73, 5), // "Upper"
-QT_MOC_LITERAL(9, 79, 5), // "Lower"
-QT_MOC_LITERAL(10, 85, 6), // "Center"
-QT_MOC_LITERAL(11, 92, 7) // "EndCase"
+QT_MOC_LITERAL(7, 64, 10), // "setInitPos"
+QT_MOC_LITERAL(8, 75, 8), // "Position"
+QT_MOC_LITERAL(9, 84, 5), // "Upper"
+QT_MOC_LITERAL(10, 90, 5), // "Lower"
+QT_MOC_LITERAL(11, 96, 6), // "Center"
+QT_MOC_LITERAL(12, 103, 7) // "EndCase"
 
     },
     "OpenGLWidget\0getZoomRatio\0\0z_r\0animate\0"
-    "setZoomRatio\0_zoom_ratio\0Position\0"
-    "Upper\0Lower\0Center\0EndCase"
+    "setZoomRatio\0_zoom_ratio\0setInitPos\0"
+    "Position\0Upper\0Lower\0Center\0EndCase"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,19 +56,20 @@ static const uint qt_meta_data_OpenGLWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
-       1,   36, // enums/sets
+       1,   42, // enums/sets
        0,    0, // constructors
        0,       // flags
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   29,    2, 0x06 /* Public */,
+       1,    1,   34,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   32,    2, 0x0a /* Public */,
-       5,    1,   33,    2, 0x0a /* Public */,
+       4,    0,   37,    2, 0x0a /* Public */,
+       5,    1,   38,    2, 0x0a /* Public */,
+       7,    0,   41,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -75,15 +77,16 @@ static const uint qt_meta_data_OpenGLWidget[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    6,
+    QMetaType::Void,
 
  // enums: name, flags, count, data
-       7, 0x0,    4,   40,
+       8, 0x0,    4,   46,
 
  // enum data: key, value
-       8, uint(OpenGLWidget::Upper),
-       9, uint(OpenGLWidget::Lower),
-      10, uint(OpenGLWidget::Center),
-      11, uint(OpenGLWidget::EndCase),
+       9, uint(OpenGLWidget::Upper),
+      10, uint(OpenGLWidget::Lower),
+      11, uint(OpenGLWidget::Center),
+      12, uint(OpenGLWidget::EndCase),
 
        0        // eod
 };
@@ -97,6 +100,7 @@ void OpenGLWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 0: _t->getZoomRatio((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 1: _t->animate(); break;
         case 2: _t->setZoomRatio((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->setInitPos(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -137,13 +141,13 @@ int OpenGLWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }

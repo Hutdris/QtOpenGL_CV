@@ -67,29 +67,29 @@ OpenGLWidget::~OpenGLWidget()
 
 void OpenGLWidget::set_tracing_points(cv::Mat *points) {
 	tracing_points = points;
-	cv::Mat _mass_point = cv::Mat::zeros(3, 1, CV_64FC1);
+	cv::Mat _mass_point = cv::Mat::zeros(3, 1, CV_32FC1);
 	for (int i = 0; i < 3; i++) {
-		double _sum = 0;
+		float _sum = 0;
 		for (int j = 6 - 1; j < 9; j++) {
 			_sum +=
-				(tracing_points->at<double>(i, j) - init_pos.at<double>(i, j));
+				(tracing_points->at<float>(i, j) - init_pos.at<float>(i, j));
 		}
 		_sum /= 4.0f;
-		_mass_point.at<double>(i, 0) = _sum;
+		_mass_point.at<float>(i, 0) = _sum;
 	}
 	mass_point = _mass_point.clone();
 	this->trace.push_back(_mass_point);
 };
 void OpenGLWidget::drawTrace() {
-	glLineWidth(300.0);
+	glLineWidth(100.0);
 	glBegin(GL_LINES);
 	for (auto itt = trace.begin(); itt != trace.end(); itt++){
-		glVertex3d(itt->at<double>(0, 0), itt->at<double>(1, 0), itt->at<double>(2, 0));
+		glVertex3f(itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));
 	}
 	glEnd();
 	if (trace.end() != trace.begin()){
 	cv::Mat last = *(trace.end()-1);
-	qDebug("%f, %f, %f", last.at<double>(0, 0), last.at<double>(1, 0), last.at<double>(2, 0));
+	qDebug("%f, %f, %f", last.at<float>(0, 0), last.at<float>(1, 0), last.at<float>(2, 0));
 }
 }
 GLuint OpenGLWidget::makeObject(STLModel *model) {
@@ -148,6 +148,12 @@ void OpenGLWidget::initializeGL()
 
 }
 
+void OpenGLWidget::updateRT(float *RT) {
+	for (int i = 0; i < 16; i++) {
+		lower.RT[i] = RT[i];
+	}
+}
+
 void OpenGLWidget::paintGL()
 {
 	int pointSize = 1E3;
@@ -173,9 +179,11 @@ void OpenGLWidget::paintGL()
 	auto _zoomratio = 1.0f / Zoom_ratio;
 	glScalef(_zoomratio, _zoomratio, _zoomratio);
 	//glTranslated(mass_point.at<double>(0, 0), mass_point.at<double>(1, 0), mass_point.at<double>(2, 0));
-	drawTrace();
 	for (int model_index = Upper; model_index < EndCase; model_index++) {
+		glPushMatrix();
+		glMultMatrixf(lower.RT);
 		glCallList(model_list.at(model_index));
+		glPopMatrix();
 	}
 	/*
 	glBegin(GL_POINTS);

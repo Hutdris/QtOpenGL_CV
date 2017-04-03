@@ -31,8 +31,6 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
     QPushButton *upperButton;
     QPushButton *pushButton_4;
     QPushButton *pushButton_5;
@@ -58,12 +56,6 @@ public:
         MainWindow->resize(1247, 886);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(30, 40, 101, 31));
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(30, 110, 171, 51));
         upperButton = new QPushButton(centralWidget);
         upperButton->setObjectName(QStringLiteral("upperButton"));
         upperButton->setGeometry(QRect(30, 170, 51, 51));
@@ -107,10 +99,10 @@ public:
         openGLWidget->setLayoutDirection(Qt::RightToLeft);
         textBrowser = new QTextBrowser(centralWidget);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(310, 660, 911, 171));
+        textBrowser->setGeometry(QRect(310, 710, 911, 121));
         lcdNumber = new QLCDNumber(centralWidget);
         lcdNumber->setObjectName(QStringLiteral("lcdNumber"));
-        lcdNumber->setGeometry(QRect(200, 650, 64, 23));
+        lcdNumber->setGeometry(QRect(230, 790, 64, 23));
         icpButton = new QPushButton(centralWidget);
         icpButton->setObjectName(QStringLiteral("icpButton"));
         icpButton->setGeometry(QRect(30, 490, 56, 17));
@@ -122,35 +114,17 @@ public:
         pushButton_6->setGeometry(QRect(40, 550, 101, 21));
         RecCheckBox = new QCheckBox(centralWidget);
         RecCheckBox->setObjectName(QStringLiteral("RecCheckBox"));
-        RecCheckBox->setGeometry(QRect(110, 490, 63, 15));
+        RecCheckBox->setGeometry(QRect(110, 490, 101, 21));
         MainWindow->setCentralWidget(centralWidget);
-        pushButton_2->raise();
-        upperButton->raise();
-        pushButton_4->raise();
-        pushButton_5->raise();
-        lowerButton->raise();
-        centerButton->raise();
-        upperLabel->raise();
-        lowerLabel->raise();
-        centerLabel->raise();
-        openGLWidget->raise();
-        textBrowser->raise();
-        pushButton->raise();
-        lcdNumber->raise();
-        icpButton->raise();
-        pushButton_3->raise();
-        pushButton_6->raise();
-        RecCheckBox->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1247, 20));
+        menuBar->setGeometry(QRect(0, 0, 1247, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
 
         retranslateUi(MainWindow);
-        QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(animate()));
         QObject::connect(openGLWidget, SIGNAL(getZoomRatio(int)), lcdNumber, SLOT(display(int)));
         QObject::connect(icpButton, SIGNAL(clicked()), MainWindow, SLOT(runICP()));
         QObject::connect(pushButton_3, SIGNAL(clicked()), MainWindow, SLOT(camerasDisplay()));
@@ -163,18 +137,16 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "Import STL", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Import ", 0));
         upperButton->setText(QApplication::translate("MainWindow", "Upper", 0));
-        pushButton_4->setText(QApplication::translate("MainWindow", "End&Save", 0));
-        pushButton_5->setText(QApplication::translate("MainWindow", "Rcording", 0));
+        pushButton_4->setText(QApplication::translate("MainWindow", "Pause", 0));
+        pushButton_5->setText(QApplication::translate("MainWindow", "Start/Stop Recording", 0));
         lowerButton->setText(QApplication::translate("MainWindow", "Lower", 0));
         centerButton->setText(QApplication::translate("MainWindow", "CenterLabel", 0));
         upperLabel->setText(QString());
         lowerLabel->setText(QString());
         centerLabel->setText(QString());
         icpButton->setText(QApplication::translate("MainWindow", "Run ICP", 0));
-        pushButton_3->setText(QApplication::translate("MainWindow", "Camera display", 0));
+        pushButton_3->setText(QApplication::translate("MainWindow", "Set first frame", 0));
         pushButton_6->setText(QApplication::translate("MainWindow", "initCameras", 0));
         RecCheckBox->setText(QApplication::translate("MainWindow", "Recording", 0));
     } // retranslateUi
