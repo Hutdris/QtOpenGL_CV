@@ -4,15 +4,24 @@
 
 void OpenGLWidget::SetLightSource()
 {
-	float light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
-	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	float light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
+	float light_diffuse[] = { 0.1, 0.1, 0.1, 1.0 };
+	float light_specular[] = { 0.5, 0.5, 0.5, 1.0 };
+
+	GLfloat MaterialAmbient[] = { 1.0,1.0,1.0,1.0f };
+	GLfloat MaterialDiffuse[] = { 0.7,0.7,0.7,1.0f };
+	GLfloat MaterialSpecular[] = { 0.5,0.5,0.5, 1.0f };
+	GLfloat AmbientLightPosition[] = { 1000,1000,1000,1.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, MaterialAmbient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, MaterialDiffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, MaterialSpecular);
 
 	glEnable(GL_LIGHTING);                                 //開燈 
+	glEnable(GL_LIGHT0);
 
 														   // 設定發光體的光源的特性 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);      //環境光(Ambient Light) 
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);      //散射光(Diffuse Light) 
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);      //環境光(Ambient Light) 
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);      //散射光(Diffuse Light) 
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);     //反射光(Specular Light) 
 	float light_position[] = { 5.0f, 5.0f, 10.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);     //光的座標 
@@ -23,11 +32,12 @@ void OpenGLWidget::SetLightSource()
 
 void OpenGLWidget::SetMaterial()
 {
-	float material_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-	float material_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };
-	float material_specular[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat MaterialAmbient[] = { 1.0,1.0,1.0,1.0f };
+	GLfloat MaterialDiffuse[] = { 0.7,0.7,0.7,1.0f };
+	GLfloat MaterialSpecular[] = { 1.2,1.2,1.2, 1.0f };
+	GLfloat AmbientLightPosition[] = { 1000,1000,1000,1.0f };
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+	//glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
 	//glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
 }
@@ -53,8 +63,8 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 	//connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 	//timer->start(int(1000/fps));
 	model_list.resize(3);
-	init_pos = cv::Mat::zeros(3, 9, CV_64FC1);
-	mass_point = cv::Mat::zeros(3, 1, CV_64FC1);
+	init_pos = cv::Mat::zeros(3, 9, CV_32FC1);
+	mass_point = cv::Mat::zeros(3, 1, CV_32FC1);
 	tracing_points = &(init_pos);
 	qDebug("wait");
 }
@@ -65,32 +75,39 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
-void OpenGLWidget::set_tracing_points(cv::Mat *points) {
-	tracing_points = points;
+void OpenGLWidget::set_tracing_points(cv::Mat points) {
+	if (points.cols != 9) {
+		return;
+	}
 	cv::Mat _mass_point = cv::Mat::zeros(3, 1, CV_32FC1);
 	for (int i = 0; i < 3; i++) {
 		float _sum = 0;
 		for (int j = 6 - 1; j < 9; j++) {
 			_sum +=
-				(tracing_points->at<float>(i, j) - init_pos.at<float>(i, j));
+				(points.at<float>(i, j) - init_pos.at<float>(i, j));
 		}
 		_sum /= 4.0f;
 		_mass_point.at<float>(i, 0) = _sum;
 	}
 	mass_point = _mass_point.clone();
-	this->trace.push_back(_mass_point);
+	trace.push_back(mass_point);
 };
 void OpenGLWidget::drawTrace() {
-	glLineWidth(300.0);
+	glLineWidth(300);
 	glBegin(GL_LINES);
-	for (auto itt = trace.begin(); itt != trace.end(); itt++){
-		glVertex3f(itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));
+	if (trace.size() > 5) {
+	for (auto itt = trace.begin(); itt != trace.end()-1; itt++){
+		glVertex3f(itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));             // startpoint
+		glVertex3f((itt+1)->at<float>(0, 0), (itt+1)->at<float>(1, 0), (itt+1)->at<float>(2, 0)); //endpoint
+		// qDebug("%f, %f, %f", itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));
+	}
 	}
 	glEnd();
-	if (trace.end() != trace.begin()){
+	if (trace.size() > 5){
 	cv::Mat last = *(trace.end()-1);
-	qDebug("%f, %f, %f", last.at<float>(0, 0), last.at<float>(1, 0), last.at<float>(2, 0));
-}
+	cv::Mat lastlast = *(trace.end()-2);
+	qDebug("%f, %f, %f", last.at<float>(0, 0) - lastlast.at<float>(0, 0), last.at<float>(1, 0) - lastlast.at<float>(1, 0), last.at<float>(2, 0) - lastlast.at<float>(2, 0));
+	}
 }
 GLuint OpenGLWidget::makeObject(STLModel *model) {
 	GLuint _list;
@@ -178,22 +195,34 @@ void OpenGLWidget::paintGL()
 	//glTranslatef(-1*rTri/10.f, 0.0f, 0.0f);
 	auto _zoomratio = 1.0f / Zoom_ratio;
 	glScalef(_zoomratio, _zoomratio, _zoomratio);
+	glBegin(GL_POINTS);
+	glPointSize(pointSize);
+	for (auto itt = trace.begin(); itt != trace.end(); itt++) {
+		glVertex3f(itt->at<float>(0, 0),itt->at<float>(1, 0),
+			itt->at<float>(2, 0));
+	}
+	glEnd();
+	// drawTrace();
 	//glTranslated(mass_point.at<double>(0, 0), mass_point.at<double>(1, 0), mass_point.at<double>(2, 0));
-	//drawTrace();
 	for (int model_index = Upper; model_index < EndCase; model_index++) {
 		glPushMatrix();
-		glMultMatrixf(lower.RT);
+		switch (model_index) {
+		case Upper:
+			glMultMatrixf(upper.RT);
+
+			break;
+		case Center:
+			glMultMatrixf(center.RT);
+			break;
+		case Lower:
+			glMultMatrixf(lower.RT);
+			break;
+		}
+
 		glCallList(model_list.at(model_index));
 		glPopMatrix();
 	}
-	/*
-	glBegin(GL_POINTS);
-	glPointSize(pointSize);
-	for (int i = 6-1; i < 9; i++) {
-		glVertex3f(tracing_points->at<double>(0, i),tracing_points->at<double>(1, i),
-			tracing_points->at<double>(2, i));
-	}
-	glEnd();*/
+	
 }
 
 

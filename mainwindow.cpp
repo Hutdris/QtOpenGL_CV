@@ -142,6 +142,7 @@ void MainWindow::camerasDisplay() {
 	cv::imshow("img2", img2);
 	cv::waitKey(10);
 */
+	tracer.pre_frame_check();
 	tracer.image_update_from_video();
 	//tracer.image_update(PGmgr);
 	tracer.points_update();
@@ -155,6 +156,9 @@ void MainWindow::camerasDisplay() {
 			_array.push_back(tracer.lower_RT.at<float>(j, i));
 		}
 	}
+
+	// For tracing points
+	ui->openGLWidget->set_tracing_points(tri_points);
     ui->openGLWidget->updateRT(&(_array[0]));
 	ui->openGLWidget->update();
 	if (rec_flag){

@@ -27,7 +27,7 @@ public:
 	enum Position{Upper, Lower, Center, EndCase};
 	OpenGLWidget(QWidget *parent = 0);
 	~OpenGLWidget();
-	void set_tracing_points(cv::Mat *points);
+	void set_tracing_points(cv::Mat points);
 	class STLModel {
 	public:
 		STLModel();
