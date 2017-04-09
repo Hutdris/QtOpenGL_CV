@@ -26,6 +26,10 @@ public:
 	void image_update_from_video();
 	void Tracer::pre_frame_check();
 	cv::Mat lower_RT, upper_RT;
+	const cv::Mat get_tri_points() {
+		static cv::Mat new_points = tri_points.clone();
+		return new_points;
+	};
 private:
 	//calibration results matrixs
 	cv::Mat dist1, dist2, mtx1, mtx2, RT1, RT2, fund_mat, test, project1, project2;

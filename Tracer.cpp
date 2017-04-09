@@ -104,7 +104,7 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 	const int led_num = 9;
 	if ((all_leds_key1.size() == all_leds_key2.size())&(all_leds_key2.size() == led_num)) {
 		//traiangluate eat '2*N' array not '1*N' points vector
-		//Tranlate keypoints to sorted vector<Point2d>
+		//Translate keypoints to sorted vector<Point2d>
 		vector<cv::Point2f> f_leds1, f_leds2;
 		for (int i = 0; i < led_num; i++) {
 			f_leds1.push_back(all_leds_key1[i].pt);
@@ -130,13 +130,11 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		cout << tri_points << endl;
 		char buffer_tri[300];
 		pre_tri_points = tri_points.clone();
-		qDebug(type2str(tri_points.type()).c_str());
-		qDebug(type2str(pre_tri_points.type()).c_str());
+		//qDebug(type2str(tri_points.type()).c_str());
+		//qDebug(type2str(pre_tri_points.type()).c_str());
 		cout << '!' << endl;
 	}
 }
-
-
 
 
 Tracer::Tracer()
@@ -144,6 +142,10 @@ Tracer::Tracer()
 	const int led_num = 9;
 	vh.leftCam =  cv::VideoCapture("qrc/video/camL.mp4");
 	vh.rightCam = cv::VideoCapture("qrc/video/camR.mp4");
+	/*
+	vh.leftCam = cv::VideoCapture("qrc/video/camL.avi");
+	vh.rightCam = cv::VideoCapture("qrc/video/camR.avi");
+*/
 	vh.rightFlip = false;
 	vh.leftFlip = true;
 	pre_tri_points = 
@@ -158,7 +160,7 @@ Tracer::Tracer()
 		1.0, 0.0, 0.0, 0.0, // x
 		0.0 ,1.0, 0.0, 0.0, // y
 		0.0, 0.0, 1.0, 0.0, // z
-		0.0, 0.0, 0.0, 1.0  //dummy
+		0.0, 0.0, 0.0, 1.0  //dummy values
 		);
 	initialize();
 }
@@ -184,6 +186,7 @@ void Tracer::initialize() {
 	glob_blob_p.minInertiaRatio = 0.1f;
 	glob_blob_detector = cv::SimpleBlobDetector::create(glob_blob_p);
 }
+
 void keys2pts(vector <cv::KeyPoint> &keys, vector <cv::Point2f> &pts) {
 	if (keys.size() != 9) {
 		return;
@@ -222,12 +225,12 @@ void Tracer::points_update() {
 		vector<uchar> status;
 		vector<float> err;
 		const int max_pry = 3;
-		cv::Size winsize(21, 21);
-		cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
+		cv::Size winsize(51, 51);
+		cv::TermCriteria termcrit(cv::TermCriteria::EPS | cv::TermCriteria::COUNT, 30, 0.0001);
 		cv::calcOpticalFlowPyrLK(pre_raw_src.first, raw_src1, pre_pts.first, pts.first, status, err, winsize,
-			max_pry, termcrit, 0, 0.1);
+			max_pry, termcrit, 0, 0.001);
 		cv::calcOpticalFlowPyrLK(pre_raw_src.second, raw_src2, pre_pts.second, pts.second, status, err, winsize,
-			max_pry, termcrit, 0, 0.1);
+			max_pry, termcrit, 0, 0.001);
 
 		pts2keys(pts.first, all_leds_key1);
 		pts2keys(pts.second, all_leds_key2);
@@ -288,7 +291,7 @@ void Tracer::image_update_from_video() {
 				if (vh.leftFlip) 
 					cv::flip(raw_src2, raw_src2, 0);
 
-				int _zoom = 2;
+				int _zoom = 1;
 				cv::resize(raw_src1, raw_src1, raw_src1.size() / _zoom);
 				cv::resize(raw_src2, raw_src2, raw_src2.size() / _zoom);
 			}

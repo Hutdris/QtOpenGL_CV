@@ -156,6 +156,9 @@ void MainWindow::camerasDisplay() {
 			_array.push_back(tracer.lower_RT.at<float>(j, i));
 		}
 	}
+
+	// For tracing points
+	ui->openGLWidget->set_tracing_points(tri_points);
     ui->openGLWidget->updateRT(&(_array[0]));
 	ui->openGLWidget->update();
 	if (rec_flag){
