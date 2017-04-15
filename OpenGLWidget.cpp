@@ -98,13 +98,14 @@ void OpenGLWidget::drawTrace() {
 	if (trace.size() > 5) {
 	for (auto itt = trace.begin(); itt != trace.end(); itt++){
 		glVertex3f(itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));             // startpoint
-		qDebug("%f, %f, %f", itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));
+		//qDebug("%f, %f, %f", itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));
 	}
 	}
 	glEnd();
 	if (trace.size() > 5){
 	cv::Mat last = *(trace.end()-1);
 	cv::Mat lastlast = *(trace.end()-2);
+	qDebug("%f, %f, %f", last.at<float>(0, 0), last.at<float>(1, 0) , last.at<float>(2, 0));
 	// qDebug("%f, %f, %f", last.at<float>(0, 0) - lastlast.at<float>(0, 0), last.at<float>(1, 0) - lastlast.at<float>(1, 0), last.at<float>(2, 0) - lastlast.at<float>(2, 0));
 	}
 }
@@ -179,7 +180,7 @@ void OpenGLWidget::paintGL()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0, 0, 10.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
+	gluLookAt(0, 0, 100.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
 	SetLightSource();
 	SetMaterial();
 	//glEnable(GL_BLEND);//啟動混和功能 需要半透明功能時使用

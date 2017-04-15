@@ -213,7 +213,7 @@ void PGApi::GetStereoImage(cv::Mat &image1, cv::Mat &image2) {
 			convertedImage1.GetData(),
 			rowBytes1
 		);
-		cv::flip(_img1, image1, 0);
+		cv::flip(_img1, image1, -1);
 		//_img1.copyTo(image1);
 		unsigned int rowBytes2 = static_cast<uint>((double)convertedImage2.GetReceivedDataSize() / (double)convertedImage2.GetRows());
 		cv::Mat _img2(convertedImage2.GetRows(), convertedImage2.GetCols(), CV_8U, convertedImage2.GetData(), rowBytes2);

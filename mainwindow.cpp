@@ -142,11 +142,12 @@ void MainWindow::camerasDisplay() {
 	cv::imshow("img2", img2);
 	cv::waitKey(10);
 */
-	tracer.pre_frame_check();
-	tracer.image_update_from_video();
-	//tracer.image_update(PGmgr);
+	// tracer.pre_frame_check();
+	// tracer.image_update_from_video();
+	tracer.image_update(PGmgr);
 	tracer.points_update();
 	tracer.leds_triangulate(tri_points);
+
 
 	std::vector<float> _array;
 	_array.clear();

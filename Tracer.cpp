@@ -105,14 +105,25 @@ void printMat(cv::Mat m) {
 	// qDebug(matAsString.c_str());
 	qDebug() << "hi" << endl;
 }
+void printTriPTs(cv::Mat pts) {
+	for (int i = 0; i < 4; i++) {
+		// qDebug("%f %f %f %f %f %f %f %f %f", pts.at<float>(i, 0), pts.at<float>)
+	}
+	qDebug("");
+}
 void printRT(cv::Mat rt) {
 		for (int r = 0; r < rt.rows; r++) {
 				qDebug("%f %f %f %f", rt.at<float>(r, 0), rt.at<float>(r, 1), rt.at<float>(r, 2), rt.at<float>(r, 3));
 		}
 		qDebug("");
-
 }
 
+void printRTd(cv::Mat rt) {
+		for (int r = 0; r < rt.rows; r++) {
+				qDebug("%f %f %f %f", rt.at<double>(r, 0), rt.at<double>(r, 1), rt.at<double>(r, 2), rt.at<double>(r, 3));
+		}
+		qDebug("");
+}
 void Tracer::leds_triangulate(cv::Mat &tri_points) {
 	const int led_num = 9;
 	if ((all_leds_key1.size() == all_leds_key2.size())&(all_leds_key2.size() == led_num)) {
@@ -133,32 +144,70 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 				tri_points.at<float>(j, i) /= tri_points.at<float>(3, i);
 			}
 		}
+
+
+		cv::Mat _sub_tri;
+		cv::Mat _sub_pre_tri;
+		cv::Mat tfRT(3, 4, CV_64F)
+			, inliner;
+		vector<cv::Point3d> pre_points, cur_points;
+		
+
 		switch (RT_sem)
 			{
 			case(0):
-				lower_RT = tri_points(cv::Range(0, 4), cv::Range(5, 9)) *
-					pre_tri_points(cv::Range(0, 4), cv::Range(5, 9)).inv() // 
-					* lower_RT; // 
-				lower_RT_display = lower_RT.clone();
-				printRT(lower_RT_display);
+
+		_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
+		_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+
+		lower_RT = _sub_tri
+			*_sub_pre_tri.inv()
+		*lower_RT;
+				// printRT(lower_RT_display);
 				for (int i = 0; i < 3; i++) {
 					lower_RT_display.at<float>(i, 3) -= init_RT.at<float>(i, 3);
 				}
 
-				printMat(lower_RT_display);
 				break;
+				// printRT(lower_RT);
 			case (3): // Fisrt itr: init pre_tripoints
-				pre_tri_points = tri_points.clone();
-				lower_RT_display = lower_RT.clone();
-				init_RT = lower_RT.clone();
-				printMat(tri_points);
-
-				RT_sem--;
-				break;
+			tri_points.copyTo(pre_tri_points);
+			lower_RT_display = lower_RT.clone();
+			init_RT = lower_RT.clone();
+			RT_sem--;
+			break;
 			default: // init init_RT loop (0<case<sem_bound)
-				lower_RT = tri_points(cv::Range(0, 4), cv::Range(5, 9)) *
-					pre_tri_points(cv::Range(0, 4), cv::Range(5, 9)).inv() // 
-					* lower_RT; // 
+
+
+		for (int i = 5; i < 9; i++) {
+			cv::Point3d pre_pt, cur_pt;
+			pre_pt.x = double(pre_tri_points.at<float>(0, i));
+			pre_pt.y = double(pre_tri_points.at<float>(1, i));
+			pre_pt.z = double(pre_tri_points.at<float>(2, i));
+			cur_pt.x = double(tri_points.at<float>(0, i));
+			cur_pt.y = double(tri_points.at<float>(1, i));
+			cur_pt.z = double(tri_points.at<float>(2, i));
+			pre_points.push_back(pre_pt);
+			cur_points.push_back(cur_pt);
+		}
+		
+		cv::estimateAffine3D(
+			pre_points
+			,cur_points
+			, tfRT, inliner
+		);
+		pre_points.clear();
+		cur_points.clear();
+		printRTd(tfRT);
+		
+
+		_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
+		_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+		printRT(_sub_tri);
+		printRT(_sub_pre_tri);
+		lower_RT = _sub_tri
+			*_sub_pre_tri.inv()
+			*lower_RT;
 				for (int i = 0; i < 3; i++) {
 					init_RT.at<float>(i, 3) = tri_points.at<float>(i, 8);
 				}
@@ -168,11 +217,29 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 				RT_sem--;
 				break;
 		}
-			printRT(lower_RT);
-		pre_tri_points = tri_points.clone();
+			// printRT(lower_RT);
+		tri_points.copyTo(pre_tri_points);
 	}
 }
 
+
+
+cv::KalmanFilter Tracer::kf_gen() {
+	cv::KalmanFilter kf(4, 2);
+	kf.transitionMatrix = (cv::Mat_<float>(4, 4) << 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1);
+
+		kf.statePre.at<float>(0) = 0;
+		kf.statePre.at<float>(1) = 0;
+		kf.statePre.at<float>(2) = 0;
+		kf.statePre.at<float>(3) = 0;
+		cv::setIdentity(kf.measurementMatrix);
+		cv::setIdentity(kf.processNoiseCov, cv::Scalar::all(1e-4));
+		cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(10));
+		cv::setIdentity(kf.errorCovPost, cv::Scalar::all(.1));
+
+		return kf;
+
+}
 
 Tracer::Tracer()
 {
@@ -200,7 +267,20 @@ Tracer::Tracer()
 		0.0, 0.0, 0.0, 1.0  //dummy values
 		);
 	initialize();
+	for (int i = 0; i < 9; i++) {
+		kalman_handler.l_cam_KF.push_back(kf_gen());
+		kalman_handler.r_cam_KF.push_back(kf_gen());
+		kalman_handler.l_predict.push_back(cv::Mat::zeros(2, 1, CV_32F));
+		kalman_handler.r_predict.push_back(cv::Mat::zeros(2, 1, CV_32F));
+		kalman_handler.l_measure.push_back(cv::Mat::zeros(2, 1, CV_32F));
+		kalman_handler.r_measure.push_back(cv::Mat::zeros(2, 1, CV_32F));
+		kalman_handler.l_estimate.push_back(cv::Mat::zeros(2, 1, CV_32F));
+		kalman_handler.r_estimate.push_back(cv::Mat::zeros(2, 1, CV_32F));
+	}
+	
+
 }
+
 void Tracer::initialize() {
 	//Initalization
 	// Cali params	
@@ -208,12 +288,12 @@ void Tracer::initialize() {
 	project1 = mtx1*RT1;
 	project2 = mtx2*RT2;
 	//BlobDetector parms
-	glob_blob_p.minThreshold = 110;
+	glob_blob_p.minThreshold = 1;
 	glob_blob_p.maxThreshold = 400;
 	glob_blob_p.filterByColor = true;
 	glob_blob_p.blobColor = 255;
 	glob_blob_p.filterByArea = true;
-	glob_blob_p.minArea = 10;
+	glob_blob_p.minArea = 1;
 	glob_blob_p.maxArea = 1000;
 	glob_blob_p.filterByCircularity = true;
 	glob_blob_p.minCircularity = 0.4f;
@@ -246,6 +326,27 @@ void pts2keys(vector <cv::Point2f> &pts, vector <cv::KeyPoint> &keys) {
 void Tracer::points_update() {
 	const int total_leds_cnt = 9;
 	bool display_flag = true;
+	int zoom_ratio = 4;
+	cv::Mat pt;
+	for (int i = 0; i < total_leds_cnt; i++) {  //Predict pt by kalman fliter
+		kalman_handler.l_predict.at(i) = kalman_handler.l_cam_KF.at(i).predict();
+		kalman_handler.r_predict.at(i) = kalman_handler.r_cam_KF.at(i).predict();
+	}
+	cv::Mat zoom_src1, zoom_src2;
+	cv::resize(raw_src1, zoom_src1, raw_src1.size() / zoom_ratio);
+	cv::resize(raw_src2, zoom_src2, raw_src2.size() / zoom_ratio);
+	glob_blob_detector->detect(zoom_src1, all_leds_key1);
+	glob_blob_detector->detect(zoom_src2, all_leds_key2);
+
+	for (auto itt = all_leds_key1.begin(); itt != all_leds_key1.end(); itt++) {
+		itt->pt *= zoom_ratio;
+		itt->size *= zoom_ratio;
+	}
+	for (auto itt = all_leds_key2.begin(); itt != all_leds_key2.end(); itt++) {
+		itt->pt *= zoom_ratio;
+		itt->size *= zoom_ratio;
+	}
+/*
 	if (!points_init) {
 		glob_blob_detector->detect(raw_src1, all_leds_key1);
 		glob_blob_detector->detect(raw_src2, all_leds_key2);
@@ -265,6 +366,10 @@ void Tracer::points_update() {
 		cv::Size winsize(51, 51);
 		cv::TermCriteria termcrit(cv::TermCriteria::EPS | cv::TermCriteria::COUNT, 30, 0.0001);
 		cv::calcOpticalFlowPyrLK(pre_raw_src.first, raw_src1, pre_pts.first, pts.first, status, err, winsize,
+	for (auto itt = all_leds_key1.begin(); itt != all_leds_key1.end(); itt++) {
+		itt->pt *= zoom_ratio;
+		itt->size *= zoom_ratio;
+	}
 			max_pry, termcrit, 0, 0.001);
 		cv::calcOpticalFlowPyrLK(pre_raw_src.second, raw_src2, pre_pts.second, pts.second, status, err, winsize,
 			max_pry, termcrit, 0, 0.001);
@@ -272,6 +377,7 @@ void Tracer::points_update() {
 		pts2keys(pts.first, all_leds_key1);
 		pts2keys(pts.second, all_leds_key2);
 	}
+	*/
 	//vector <cv::KeyPoint> test_leds;
 	/*
 	raw_src1 = cv::imread("qrc/l.png", 0);
@@ -281,16 +387,16 @@ void Tracer::points_update() {
 	if (display_flag) {
 		drawKeypoints(raw_src1, all_leds_key1, raw_src1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 		drawKeypoints(raw_src2, all_leds_key2, raw_src2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-		cv::flip(raw_src1, frame1, 0);
-		cv::flip(raw_src2, frame2, 0);
+		// cv::flip(raw_src1, frame1, 0);
+		// cv::flip(raw_src2, frame2, 0);
 		cv::imshow("camL", raw_src1);
-		// cv::waitKey(10);
+		cv::waitKey(10);
 		cv::imshow("camR", raw_src2);
 		cv::waitKey(10);
 		//cv::destroyAllWindows();
 	}
 	//qDebug("%d, %d", all_leds_key1.size(), all_leds_key2.size());
-	if ((all_leds_key1.size() > total_leds_cnt) | (all_leds_key1.size() > total_leds_cnt)){
+	if ((all_leds_key1.size() != total_leds_cnt) | (all_leds_key1.size() != total_leds_cnt)){
 		all_leds_key1.clear();
 		all_leds_key2.clear();
 		return;
@@ -303,6 +409,21 @@ void Tracer::points_update() {
 	std::sort(all_leds_key2.begin(), all_leds_key2.begin()+5, compare_by_pt_x);
 	std::sort(all_leds_key2.begin()+5, all_leds_key2.end(), compare_by_pt_x);
 	
+	for (int i = 0; i < total_leds_cnt; i++) {  //keypt to mat(measure)
+		kalman_handler.l_measure.at(i).at<float>(0) = all_leds_key1.at(i).pt.x;
+		kalman_handler.l_measure.at(i).at<float>(1) = all_leds_key1.at(i).pt.y;
+		kalman_handler.r_measure.at(i).at<float>(0) = all_leds_key2.at(i).pt.x;
+		kalman_handler.r_measure.at(i).at<float>(1) = all_leds_key2.at(i).pt.y;
+		kalman_handler.l_estimate.at(i) = kalman_handler.l_cam_KF.at(i).correct(kalman_handler.l_measure.at(i)); // update kalman filter by measure pt
+		kalman_handler.r_estimate.at(i) = kalman_handler.r_cam_KF.at(i).correct(kalman_handler.r_measure.at(i));
+		if (!kalman_handler.inited) {
+			kalman_handler.inited = true;
+			return;
+		}
+		all_leds_key1.at(i).pt = cv::Point2f(kalman_handler.l_estimate.at(i).at<float>(0), kalman_handler.l_estimate.at(i).at<float>(1)); //set keypt by est pt
+		all_leds_key2.at(i).pt = cv::Point2f(kalman_handler.r_estimate.at(i).at<float>(0), kalman_handler.r_estimate.at(i).at<float>(1));
+	}
+
 }
 
 void Tracer::pre_frame_check() {
@@ -310,9 +431,7 @@ void Tracer::pre_frame_check() {
 		pre_raw_src.first = raw_src1.clone();
 		pre_raw_src.second = raw_src2.clone();
 	}
-	if ((all_leds_key1.size() != 0) && (all_leds_key2.size() != 0)) {
-		pre_leds.first.reserve(9);
-		pre_leds.second.reserve(9);
+	if ((all_leds_key1.size() != 0) && (all_leds_key2.size() != 0)) { // 假如沒抓到剛好九個點 all_led_keys都會被清空 
 
 		pre_leds.first = all_leds_key1;
 		pre_leds.second = all_leds_key2;
