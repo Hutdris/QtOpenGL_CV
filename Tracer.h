@@ -30,6 +30,7 @@ public:
 		static cv::Mat new_points = tri_points.clone();
 		return new_points;
 	};
+	cv::Mat init_RT, lower_RT_display;
 private:
 	//calibration results matrixs
 	cv::Mat dist1, dist2, mtx1, mtx2, RT1, RT2, fund_mat, test, project1, project2;
@@ -45,6 +46,8 @@ private:
 	cv::SimpleBlobDetector::Params glob_blob_p;
 	cv::Ptr<cv::SimpleBlobDetector> glob_blob_detector;
 
+
+
 	class VideoHandler
 	{
 	public:
@@ -52,6 +55,7 @@ private:
 		bool leftFlip, rightFlip;
 	};
 	bool RT_inited = false, points_init = false;
+	int RT_sem = 3;
 	VideoHandler vh;
 };
 

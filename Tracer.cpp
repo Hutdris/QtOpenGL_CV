@@ -99,6 +99,19 @@ void Tracer::load_calibrate_result(const char *filePath) {
 
 }
 
+void printMat(cv::Mat m) {
+
+	// jstring matAsString(m.begin<unsigned char>(), m.end<unsigned char>()); 
+	// qDebug(matAsString.c_str());
+	qDebug() << "hi" << endl;
+}
+void printRT(cv::Mat rt) {
+		for (int r = 0; r < rt.rows; r++) {
+				qDebug("%f %f %f %f", rt.at<float>(r, 0), rt.at<float>(r, 1), rt.at<float>(r, 2), rt.at<float>(r, 3));
+		}
+		qDebug("");
+
+}
 
 void Tracer::leds_triangulate(cv::Mat &tri_points) {
 	const int led_num = 9;
@@ -120,19 +133,43 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 				tri_points.at<float>(j, i) /= tri_points.at<float>(3, i);
 			}
 		}
-		if (!RT_inited) {
-			pre_tri_points = tri_points.clone();
-			RT_inited = true;
+		switch (RT_sem)
+			{
+			case(0):
+				lower_RT = tri_points(cv::Range(0, 4), cv::Range(5, 9)) *
+					pre_tri_points(cv::Range(0, 4), cv::Range(5, 9)).inv() // 
+					* lower_RT; // 
+				lower_RT_display = lower_RT.clone();
+				printRT(lower_RT_display);
+				for (int i = 0; i < 3; i++) {
+					lower_RT_display.at<float>(i, 3) -= init_RT.at<float>(i, 3);
+				}
+
+				printMat(lower_RT_display);
+				break;
+			case (3): // Fisrt itr: init pre_tripoints
+				pre_tri_points = tri_points.clone();
+				lower_RT_display = lower_RT.clone();
+				init_RT = lower_RT.clone();
+				printMat(tri_points);
+
+				RT_sem--;
+				break;
+			default: // init init_RT loop (0<case<sem_bound)
+				lower_RT = tri_points(cv::Range(0, 4), cv::Range(5, 9)) *
+					pre_tri_points(cv::Range(0, 4), cv::Range(5, 9)).inv() // 
+					* lower_RT; // 
+				for (int i = 0; i < 3; i++) {
+					init_RT.at<float>(i, 3) = tri_points.at<float>(i, 8);
+				}
+
+				//qDebug("lower: %f, %f, %f\n", lower_RT.at<float>(0, 3), lower_RT.at<float>(1, 3), lower_RT.at<float>(2, 3));
+				//qDebug("init: %f, %f, %f\n", init_RT.at<float>(0, 3), init_RT.at<float>(1, 3), init_RT.at<float>(2, 3));
+				RT_sem--;
+				break;
 		}
-		lower_RT = tri_points(cv::Range(0, 4), cv::Range(5, 9)) *
-			pre_tri_points(cv::Range(0, 4), cv::Range(5, 9)).inv() // 
-			* lower_RT; // 
-		cout << tri_points << endl;
-		char buffer_tri[300];
+			printRT(lower_RT);
 		pre_tri_points = tri_points.clone();
-		//qDebug(type2str(tri_points.type()).c_str());
-		//qDebug(type2str(pre_tri_points.type()).c_str());
-		cout << '!' << endl;
 	}
 }
 
@@ -145,7 +182,7 @@ Tracer::Tracer()
 	/*
 	vh.leftCam = cv::VideoCapture("qrc/video/camL.avi");
 	vh.rightCam = cv::VideoCapture("qrc/video/camR.avi");
-*/
+	*/
 	vh.rightFlip = false;
 	vh.leftFlip = true;
 	pre_tri_points = 
@@ -244,8 +281,10 @@ void Tracer::points_update() {
 	if (display_flag) {
 		drawKeypoints(raw_src1, all_leds_key1, raw_src1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 		drawKeypoints(raw_src2, all_leds_key2, raw_src2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+		cv::flip(raw_src1, frame1, 0);
+		cv::flip(raw_src2, frame2, 0);
 		cv::imshow("camL", raw_src1);
-		cv::waitKey(10);
+		// cv::waitKey(10);
 		cv::imshow("camR", raw_src2);
 		cv::waitKey(10);
 		//cv::destroyAllWindows();
@@ -286,11 +325,8 @@ void Tracer::image_update(PGApi &pgmgr) {
 void Tracer::image_update_from_video() {
 		if (vh.leftCam.isOpened() & vh.rightCam.isOpened()){
 			if (vh.leftCam.read(raw_src1)&vh.rightCam.read(raw_src2)) {
-				if (vh.rightFlip) 
-					cv::flip(raw_src1, raw_src1, 0);
-				if (vh.leftFlip) 
-					cv::flip(raw_src2, raw_src2, 0);
-
+				cv::flip(raw_src1, raw_src1, -1);
+				//cv::flip(raw_src2, raw_src2, 0);
 				int _zoom = 1;
 				cv::resize(raw_src1, raw_src1, raw_src1.size() / _zoom);
 				cv::resize(raw_src2, raw_src2, raw_src2.size() / _zoom);
