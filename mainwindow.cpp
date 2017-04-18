@@ -143,28 +143,32 @@ void MainWindow::camerasDisplay() {
 	cv::waitKey(10);
 */
 	// tracer.pre_frame_check();
-	// tracer.image_update_from_video();
-	tracer.image_update(PGmgr);
-	tracer.points_update();
-	tracer.leds_triangulate(tri_points);
+	tracer.image_update_from_video();
+	//tracer.image_update(PGmgr);
+	// 
+	int led_cnt = tracer.points_update();
+	if (led_cnt) { 
+		tracer.leds_triangulate(tri_points);
 
 
-	std::vector<float> _array;
-	_array.clear();
+		std::vector<float> _array;
+		_array.clear();
 
-	// RT:4*4 -> 16 array openGL
-	for (int i = 0; i < 4; i++) { //col
-		for (int j = 0; j < 4; j++) { //row
-			_array.push_back(tracer.lower_RT_display.at<float>(j, i));
+		// RT:4*4 -> 16 array openGL
+		for (int i = 0; i < 4; i++) { //col
+			for (int j = 0; j < 4; j++) { //row
+				_array.push_back(tracer.lower_RT_display.at<float>(j, i));
+			}
 		}
-	}
 
-	// For tracing points
-	ui->openGLWidget->set_tracing_points(tri_points);
-    ui->openGLWidget->updateRT(&(_array[0]));
-	ui->openGLWidget->update();
-	if (rec_flag){
-		tri_pts_buffer.push_back(tri_points.clone());
-		RT_buffer.push_back(tracer.lower_RT.clone());
+		// For tracing points
+		ui->openGLWidget->set_tracing_points(tri_points);
+		ui->openGLWidget->updateRT(&(_array[0]));
+		ui->openGLWidget->update();
+		if (rec_flag){
+			tri_pts_buffer.push_back(tri_points.clone());
+			RT_buffer.push_back(tracer.lower_RT.clone());
+		}
+
 	}
 }

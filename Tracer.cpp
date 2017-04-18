@@ -323,7 +323,7 @@ void pts2keys(vector <cv::Point2f> &pts, vector <cv::KeyPoint> &keys) {
 	}
 }
 
-void Tracer::points_update() {
+int Tracer::points_update() {
 	const int total_leds_cnt = 9;
 	bool display_flag = true;
 	int zoom_ratio = 4;
@@ -396,10 +396,10 @@ void Tracer::points_update() {
 		//cv::destroyAllWindows();
 	}
 	//qDebug("%d, %d", all_leds_key1.size(), all_leds_key2.size());
-	if ((all_leds_key1.size() != total_leds_cnt) | (all_leds_key1.size() != total_leds_cnt)){
+	if ((all_leds_key1.size() != total_leds_cnt) | (all_leds_key2.size() != total_leds_cnt)){
 		all_leds_key1.clear();
 		all_leds_key2.clear();
-		return;
+		return 0;
 	}
 	std::sort(all_leds_key1.begin(), all_leds_key1.end(), compare_by_pt_y);
 	std::sort(all_leds_key1.begin(), all_leds_key1.begin()+5, compare_by_pt_x);
@@ -418,11 +418,12 @@ void Tracer::points_update() {
 		kalman_handler.r_estimate.at(i) = kalman_handler.r_cam_KF.at(i).correct(kalman_handler.r_measure.at(i));
 		if (!kalman_handler.inited) {
 			kalman_handler.inited = true;
-			return;
+			return 0;
 		}
 		all_leds_key1.at(i).pt = cv::Point2f(kalman_handler.l_estimate.at(i).at<float>(0), kalman_handler.l_estimate.at(i).at<float>(1)); //set keypt by est pt
 		all_leds_key2.at(i).pt = cv::Point2f(kalman_handler.r_estimate.at(i).at<float>(0), kalman_handler.r_estimate.at(i).at<float>(1));
 	}
+	return total_leds_cnt;
 
 }
 
