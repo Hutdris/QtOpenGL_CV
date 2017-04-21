@@ -143,8 +143,8 @@ void MainWindow::camerasDisplay() {
 	cv::waitKey(10);
 */
 	// tracer.pre_frame_check();
-	tracer.image_update_from_video();
-	//tracer.image_update(PGmgr);
+	// tracer.image_update_from_video();
+	tracer.image_update(PGmgr);
 	// 
 	int led_cnt = tracer.points_update();
 	if (led_cnt) { 
@@ -157,7 +157,7 @@ void MainWindow::camerasDisplay() {
 		// RT:4*4 -> 16 array openGL
 		for (int i = 0; i < 4; i++) { //col
 			for (int j = 0; j < 4; j++) { //row
-				_array.push_back(tracer.lower_RT_display.at<float>(j, i));
+				_array.push_back(tracer.lower_RT.at<float>(j, i));
 			}
 		}
 

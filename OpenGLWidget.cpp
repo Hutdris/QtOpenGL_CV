@@ -152,8 +152,8 @@ void OpenGLWidget::initializeGL()
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
 
 	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	set_stlModel("Models/cube.stl", Upper);
-	set_stlModel("Models/cube.stl", Lower);
+	set_stlModel("Models/oriented_upper.stl", Upper);
+	set_stlModel("Models/oriented_lower.stl", Lower);
 	set_stlModel("Models/cube.stl", Center);
 
 	model_list.at(Upper) = makeObject(&upper);

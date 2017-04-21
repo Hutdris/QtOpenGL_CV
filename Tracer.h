@@ -33,13 +33,15 @@ public:
 	};
 	cv::Mat init_RT, lower_RT_display;
 private:
+
+	void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT);
 	//calibration results matrixs
 	cv::Mat dist1, dist2, mtx1, mtx2, RT1, RT2, fund_mat, test, project1, project2;
 	//led points
 	cv::Mat all_leds, pt_measurement;
 	vector<cv::KeyPoint> all_leds_key1, all_leds_key2;
 	pair<vector<cv::KeyPoint>, vector<cv::KeyPoint>> pre_leds;
-	cv::Mat fourD_points, lower_leds, facebow_leds, tri_points, pre_tri_points;
+	cv::Mat fourD_points, lower_leds, facebow_leds, tri_points, pre_tri_points,  init_pos;
 
 	//image matrixs
 	cv::Mat raw_src1, raw_src2, frame1, frame2, frame1_with_led, frame2_with_led;

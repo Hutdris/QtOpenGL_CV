@@ -8,11 +8,69 @@
 #include <cmath>
 #include <algorithm>
 
+#include "Eigen\Dense"
+#include "Eigen\SVD"
+#include "Eigen\Jacobi"
+
+
 using namespace std;
 
 inline bool compare_by_pt_y(cv::KeyPoint &k1,cv::KeyPoint &k2) { return k1.pt.y < k2.pt.y; };
 inline bool compare_by_pt_x(cv::KeyPoint &k1,cv::KeyPoint &k2) { return k1.pt.x < k2.pt.x; };
 
+void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT)
+{
+	if (pre_pts.cols != cur_pts.cols) {
+		return;
+	}
+	int no_of_samples_(0);
+	float accumulated_weight(0.0);
+	Eigen::Vector3f pre_mean_(0,0,0), cur_mean_(0,0,0);
+	Eigen::Matrix<float, 3, 3> covariance_;
+	covariance_.fill(0);
+	
+	for (int i = 0; i < pre_pts.cols; i++) {
+		Eigen::Vector3f pre_pts_, cur_pts_;
+		pre_pts_<<(pre_pts.at<float>(0, i)), (pre_pts.at<float>(1, i)), (pre_pts.at<float>(2, i));
+		cur_pts_<<(cur_pts.at<float>(0, i)), (cur_pts.at<float>(1, i)), (cur_pts.at<float>(2, i));
+		accumulated_weight += 1;
+		float alpha = 1 / accumulated_weight;
+		Eigen::Vector3f diff1 = pre_pts_ - pre_mean_, diff2 = cur_pts_ - cur_mean_;
+		covariance_ = (1.0f - alpha)*(covariance_ + alpha *(diff2*diff1.transpose()));
+
+		pre_mean_ += alpha*(diff1);
+		cur_mean_ += alpha*(diff2);
+		
+	}
+
+
+
+  //Eigen::JacobiSVD<Eigen::Matrix<float, 3, 3> > svd (covariance_, Eigen::ComputeFullU | Eigen::ComputeFullV);
+  Eigen::JacobiSVD<Eigen::Matrix<float, 3, 3> > svd (covariance_, Eigen::ComputeFullU | Eigen::ComputeFullV);
+  const Eigen::Matrix<float, 3, 3>& u = svd.matrixU(),
+                                   & v = svd.matrixV();
+  Eigen::Matrix<float, 3, 3> s;
+  s.setIdentity();
+  if (u.determinant()*v.determinant() < 0.0f)
+    s(2,2) = -1.0f;
+  
+  Eigen::Matrix<float, 3, 3> r = u * s * v.transpose();
+  Eigen::Vector3f t = pre_mean_ - r*cur_mean_;
+  
+  cv::Mat  ret = (cv::Mat_<float>(4, 4) << 
+  r(0,0), r(0,1),r(0,2),t(0),
+  r(1,0),r(1,1),r(1,2),t(1),
+  r(2,0),r(2,1),r(2,2),t(2),
+  0.0f,0.0f,0.0f,1.0f
+  );
+  RT = ret;
+  /*
+  ret(0,0)=r(0,0); ret(0,1)=r(0,1); ret(0,2)=r(0,2); ret(0,3)=t(0);
+  ret(1,0)=r(1,0); ret(1,1)=r(1,1); ret(1,2)=r(1,2); ret(1,3)=t(1);
+  ret(2,0)=r(2,0); ret(2,1)=r(2,1); ret(2,2)=r(2,2); ret(2,3)=t(2);
+  ret(3,0)=0.0f;   ret(3,1)=0.0f;   ret(3,2)=0.0f;   ret(3,3)=1.0f;
+  */
+}
 string type2str(int type) {
 	// print cv::Mat type
 	string r;
@@ -156,14 +214,11 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		switch (RT_sem)
 			{
 			case(0):
+				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
+				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+				getTransformation(init_pos, _sub_tri, lower_RT);
+				printRT(init_pos);
 
-		_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
-		_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
-
-		lower_RT = _sub_tri
-			*_sub_pre_tri.inv()
-		*lower_RT;
-				// printRT(lower_RT_display);
 				for (int i = 0; i < 3; i++) {
 					lower_RT_display.at<float>(i, 3) -= init_RT.at<float>(i, 3);
 				}
@@ -171,53 +226,34 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 				break;
 				// printRT(lower_RT);
 			case (3): // Fisrt itr: init pre_tripoints
-			tri_points.copyTo(pre_tri_points);
-			lower_RT_display = lower_RT.clone();
-			init_RT = lower_RT.clone();
-			RT_sem--;
-			break;
-			default: // init init_RT loop (0<case<sem_bound)
+				tri_points.copyTo(pre_tri_points);
+				lower_RT_display = lower_RT.clone();
+				init_RT = lower_RT.clone();
 
-
-		for (int i = 5; i < 9; i++) {
-			cv::Point3d pre_pt, cur_pt;
-			pre_pt.x = double(pre_tri_points.at<float>(0, i));
-			pre_pt.y = double(pre_tri_points.at<float>(1, i));
-			pre_pt.z = double(pre_tri_points.at<float>(2, i));
-			cur_pt.x = double(tri_points.at<float>(0, i));
-			cur_pt.y = double(tri_points.at<float>(1, i));
-			cur_pt.z = double(tri_points.at<float>(2, i));
-			pre_points.push_back(pre_pt);
-			cur_points.push_back(cur_pt);
-		}
-		
-		cv::estimateAffine3D(
-			pre_points
-			,cur_points
-			, tfRT, inliner
-		);
-		pre_points.clear();
-		cur_points.clear();
-		printRTd(tfRT);
-		
-
-		_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
-		_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
-		printRT(_sub_tri);
-		printRT(_sub_pre_tri);
-		lower_RT = _sub_tri
-			*_sub_pre_tri.inv()
-			*lower_RT;
-				for (int i = 0; i < 3; i++) {
-					init_RT.at<float>(i, 3) = tri_points.at<float>(i, 8);
-				}
-
-				//qDebug("lower: %f, %f, %f\n", lower_RT.at<float>(0, 3), lower_RT.at<float>(1, 3), lower_RT.at<float>(2, 3));
-				//qDebug("init: %f, %f, %f\n", init_RT.at<float>(0, 3), init_RT.at<float>(1, 3), init_RT.at<float>(2, 3));
 				RT_sem--;
 				break;
+			default: // init init_RT loop (0<case<sem_bound)
+				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
+				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+				init_pos = _sub_tri.clone();
+				
+				getTransformation(init_pos, _sub_tri, lower_RT);
+
+				RT_sem--;
+				break;
+				/*
+				lower_RT = _sub_tri
+					*_sub_pre_tri.inv()
+					*lower_RT;
+						for (int i = 0; i < 3; i++) {
+							init_RT.at<float>(i, 3) = tri_points.at<float>(i, 8);
+						}
+
+		*/
+						//qDebug("lower: %f, %f, %f\n", lower_RT.at<float>(0, 3), lower_RT.at<float>(1, 3), lower_RT.at<float>(2, 3));
+						//qDebug("init: %f, %f, %f\n", init_RT.at<float>(0, 3), init_RT.at<float>(1, 3), init_RT.at<float>(2, 3));
 		}
-			// printRT(lower_RT);
+			printRT(lower_RT);
 		tri_points.copyTo(pre_tri_points);
 	}
 }
@@ -288,13 +324,13 @@ void Tracer::initialize() {
 	project1 = mtx1*RT1;
 	project2 = mtx2*RT2;
 	//BlobDetector parms
-	glob_blob_p.minThreshold = 1;
+	glob_blob_p.minThreshold = 10;
 	glob_blob_p.maxThreshold = 400;
 	glob_blob_p.filterByColor = true;
 	glob_blob_p.blobColor = 255;
 	glob_blob_p.filterByArea = true;
-	glob_blob_p.minArea = 1;
-	glob_blob_p.maxArea = 1000;
+	glob_blob_p.minArea = 50;
+	glob_blob_p.maxArea = 500;
 	glob_blob_p.filterByCircularity = true;
 	glob_blob_p.minCircularity = 0.4f;
 	glob_blob_p.filterByConvexity = false;
@@ -326,7 +362,7 @@ void pts2keys(vector <cv::Point2f> &pts, vector <cv::KeyPoint> &keys) {
 int Tracer::points_update() {
 	const int total_leds_cnt = 9;
 	bool display_flag = true;
-	int zoom_ratio = 4;
+	int zoom_ratio = 1;
 	cv::Mat pt;
 	for (int i = 0; i < total_leds_cnt; i++) {  //Predict pt by kalman fliter
 		kalman_handler.l_predict.at(i) = kalman_handler.l_cam_KF.at(i).predict();
@@ -408,6 +444,7 @@ int Tracer::points_update() {
 	std::sort(all_leds_key2.begin(), all_leds_key2.end(), compare_by_pt_y);
 	std::sort(all_leds_key2.begin(), all_leds_key2.begin()+5, compare_by_pt_x);
 	std::sort(all_leds_key2.begin()+5, all_leds_key2.end(), compare_by_pt_x);
+	return total_leds_cnt; // Shut kalman filter
 	
 	for (int i = 0; i < total_leds_cnt; i++) {  //keypt to mat(measure)
 		kalman_handler.l_measure.at(i).at<float>(0) = all_leds_key1.at(i).pt.x;
