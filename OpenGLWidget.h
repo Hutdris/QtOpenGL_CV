@@ -76,6 +76,7 @@ public slots:
 		init_pos = tracing_points->clone();
 		trace.clear();
 	};
+	void tracing_output_reset();
 	signals:
 	void getZoomRatio(int z_r);
 
@@ -84,12 +85,17 @@ private:
 	STLloader stlloader;
 	STLModel upper, lower, center;
 	GLfloat rTri;
+	
+	
 	QVector3D rotate;
+	QVector3D tracing_init_pos;
+	vector<QVector3D> tracing_pts;
+
 	GLuint  m_Pos;
 	int Zoom_ratio = 2;
 	GLuint  fps;
 	vector <GLuint> model_list;
-	QPoint m_start_pos;
+	QPoint m_start_pos; // For mouse event
 	
 };
 

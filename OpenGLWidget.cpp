@@ -1,17 +1,18 @@
 #include "OpenGLWidget.h"
 #include <algorithm>
 #include <QTimer>
+#include <fstream>
 
 void OpenGLWidget::SetLightSource()
 {
 	float light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
-	float light_diffuse[] = { 0.1, 0.1, 0.1, 1.0 };
+	float light_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
 	float light_specular[] = { 0.5, 0.5, 0.5, 1.0 };
 
 	GLfloat MaterialAmbient[] = { 1.0,1.0,1.0,1.0f };
 	GLfloat MaterialDiffuse[] = { 0.7,0.7,0.7,1.0f };
 	GLfloat MaterialSpecular[] = { 0.5,0.5,0.5, 1.0f };
-	GLfloat AmbientLightPosition[] = { 1000,1000,1000,1.0f };
+	GLfloat AmbientLightPosition[] = { 100,100,100,1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, MaterialAmbient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, MaterialDiffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, MaterialSpecular);
@@ -23,7 +24,7 @@ void OpenGLWidget::SetLightSource()
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);      //環境光(Ambient Light) 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);      //散射光(Diffuse Light) 
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);     //反射光(Specular Light) 
-	float light_position[] = { 5.0f, 5.0f, 10.0f };
+	float light_position[] = { 10.0f, 10.0f, 10.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);     //光的座標 
 
 	glEnable(GL_LIGHT0);
@@ -66,7 +67,10 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 	init_pos = cv::Mat::zeros(3, 9, CV_32FC1);
 	mass_point = cv::Mat::zeros(3, 1, CV_32FC1);
 	tracing_points = &(init_pos);
-	qDebug("wait");
+	tracing_init_pos.setX(0);
+	tracing_init_pos.setY(0);
+	tracing_init_pos.setZ(30);
+	tracing_pts.push_back(tracing_init_pos);
 }
 
 
@@ -75,6 +79,15 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
+void OpenGLWidget::tracing_output_reset() {
+	ofstream ort("result/tracing_pts.txt");
+	for (auto itt = tracing_pts.begin(); itt != tracing_pts.end(); itt++) {
+		ort << itt->x()<<','<<itt->y() <<','<<itt->z()<< endl;
+	}
+	ort.close();
+	tracing_pts.clear();
+	tracing_pts.push_back(tracing_init_pos);
+}
 void OpenGLWidget::set_tracing_points(cv::Mat points) {
 	if (points.cols != 9) {
 		return;
@@ -91,21 +104,32 @@ void OpenGLWidget::set_tracing_points(cv::Mat points) {
 	}
 	mass_point = _mass_point.clone();
 	trace.push_back(mass_point);
+	QVector3D cur_pt;
+	cur_pt.setX((lower.RT[0] * tracing_init_pos.x() + lower.RT[4] * tracing_init_pos.y()+ lower.RT[8] * tracing_init_pos.z() + lower.RT[12]));
+	cur_pt.setY((lower.RT[1] * tracing_init_pos.x() + lower.RT[5] * tracing_init_pos.y()+ lower.RT[9] * tracing_init_pos.z() + lower.RT[13]));
+	cur_pt.setZ((lower.RT[2] * tracing_init_pos.x() + lower.RT[6] * tracing_init_pos.y() + lower.RT[10] * tracing_init_pos.z() + lower.RT[14]));
+	tracing_pts.push_back(cur_pt);
+	
 };
 void OpenGLWidget::drawTrace() {
 	glLineWidth(3);
-	glBegin(GL_LINE_STIPPLE);
-	if (trace.size() > 5) {
+	glBegin(GL_LINE_STRIP);
+	if (tracing_pts.size() > 5) {
+	for(auto itt = tracing_pts.begin(); itt != tracing_pts.end(); itt++){
+		glVertex3f(itt->x(), itt->y(), itt->z());             // startpoint
+	}
+
+		/*
 	for (auto itt = trace.begin(); itt != trace.end(); itt++){
 		glVertex3f(itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));             // startpoint
 		//qDebug("%f, %f, %f", itt->at<float>(0, 0), itt->at<float>(1, 0), itt->at<float>(2, 0));
-	}
+	}*/
+
 	}
 	glEnd();
-	if (trace.size() > 5){
-	cv::Mat last = *(trace.end()-1);
-	cv::Mat lastlast = *(trace.end()-2);
-	qDebug("%f, %f, %f", last.at<float>(0, 0), last.at<float>(1, 0) , last.at<float>(2, 0));
+	if (tracing_pts.size() > 5){
+		auto itt = tracing_pts.end() - 1;
+		qDebug("%f, %f, %f", itt->x(), itt->y(), itt->z());
 	// qDebug("%f, %f, %f", last.at<float>(0, 0) - lastlast.at<float>(0, 0), last.at<float>(1, 0) - lastlast.at<float>(1, 0), last.at<float>(2, 0) - lastlast.at<float>(2, 0));
 	}
 }
@@ -180,7 +204,7 @@ void OpenGLWidget::paintGL()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0, 0, 100.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
+	gluLookAt(0, 0, 50.0f, 0, 0, 0, 0, 1, 0);   //視線的座標及方向
 	SetLightSource();
 	SetMaterial();
 	//glEnable(GL_BLEND);//啟動混和功能 需要半透明功能時使用
