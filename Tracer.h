@@ -23,6 +23,7 @@ public:
 	//inline bool pt_compare_by_y(Point2d p1, Point2d p2) { return p1.y < p2.y; };
 	cv::KalmanFilter kf_gen();
 	int points_update();
+	int find_points(cv::Mat & frame, vector<cv::KeyPoint> pts);
 	void image_update(PGApi &pgmgr);
 	void image_update_from_video();
 	void Tracer::pre_frame_check();

@@ -143,8 +143,8 @@ void MainWindow::camerasDisplay() {
 	cv::waitKey(10);
 */
 	// tracer.pre_frame_check();
-	// tracer.image_update_from_video();
-	tracer.image_update(PGmgr);
+	tracer.image_update_from_video();
+	// tracer.image_update(PGmgr);
 	// 
 	int led_cnt = tracer.points_update();
 	if (led_cnt) { 

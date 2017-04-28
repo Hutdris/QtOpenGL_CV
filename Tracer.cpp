@@ -359,6 +359,39 @@ void pts2keys(vector <cv::Point2f> &pts, vector <cv::KeyPoint> &keys) {
 	}
 }
 
+
+int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint> pts) {
+	qDebug(type2str(frame.type()).c_str());
+	cv::Mat bw(frame.size(), frame.type());
+	cv::threshold(
+		frame, // src
+		bw, // dst
+		230,   // threshold_value(0~255)
+		255,   // max_binary value
+		0	   // thredshold type
+	);
+	// cv::Mat bw = 200 < 128 ? (frame < 200) : (frame > 200);
+	cv::Mat labelImage(bw.size(), CV_16U);
+	cv::Mat stats;
+	cv::Mat centroids;
+	int neighborhood = 8;
+	int nLabels = cv::connectedComponentsWithStats(bw, labelImage, stats, centroids, 8, CV_16U);
+	qDebug("stats:%s centroids:%s", type2str(stats.type()).c_str(), type2str(centroids.type()).c_str());
+	qDebug("%d", nLabels);
+
+	int total_leds_cnt = 9;
+	pts.clear();
+	if (nLabels == total_leds_cnt+1) { // stats/centroids contains background as label[0]
+		for (auto i = 1; i<total_leds_cnt+1; i++) {
+			cv::KeyPoint _pt;
+			_pt.pt = cv::Point2f((float)centroids.at<double>(i, 0), (float)centroids.at<double>(i, 1));
+			_pt.size = max(stats.at<int>(i, cv::ConnectedComponentsTypes::CC_STAT_WIDTH), stats.at<int>(i, cv::ConnectedComponentsTypes::CC_STAT_HEIGHT));
+			pts.push_back(_pt);
+		}
+		return total_leds_cnt;
+	}
+	return 0;
+}
 int Tracer::points_update() {
 	const int total_leds_cnt = 9;
 	bool display_flag = true;
@@ -368,12 +401,15 @@ int Tracer::points_update() {
 		kalman_handler.l_predict.at(i) = kalman_handler.l_cam_KF.at(i).predict();
 		kalman_handler.r_predict.at(i) = kalman_handler.r_cam_KF.at(i).predict();
 	}
+
 	cv::Mat zoom_src1, zoom_src2;
 	cv::resize(raw_src1, zoom_src1, raw_src1.size() / zoom_ratio);
 	cv::resize(raw_src2, zoom_src2, raw_src2.size() / zoom_ratio);
-	glob_blob_detector->detect(zoom_src1, all_leds_key1);
-	glob_blob_detector->detect(zoom_src2, all_leds_key2);
+	//glob_blob_detector->detect(zoom_src1, all_leds_key1);
+	//glob_blob_detector->detect(zoom_src2, all_leds_key2);
 
+	find_points(raw_src1, all_leds_key1);
+	find_points(raw_src2, all_leds_key2);
 	for (auto itt = all_leds_key1.begin(); itt != all_leds_key1.end(); itt++) {
 		itt->pt *= zoom_ratio;
 		itt->size *= zoom_ratio;
@@ -487,6 +523,8 @@ void Tracer::image_update_from_video() {
 				int _zoom = 1;
 				cv::resize(raw_src1, raw_src1, raw_src1.size() / _zoom);
 				cv::resize(raw_src2, raw_src2, raw_src2.size() / _zoom);
+				cv::cvtColor(raw_src1,raw_src1, cv::COLOR_BGR2GRAY);
+				cv::cvtColor(raw_src2,raw_src2, cv::COLOR_BGR2GRAY);
 			}
 			else {  // reset frames pos when video ends
 				vh.leftCam.set(CV_CAP_PROP_POS_FRAMES, 0);
