@@ -23,7 +23,8 @@ public:
 	//inline bool pt_compare_by_y(Point2d p1, Point2d p2) { return p1.y < p2.y; };
 	cv::KalmanFilter kf_gen();
 	int points_update();
-	int find_points(cv::Mat & frame, vector<cv::KeyPoint> pts);
+	int find_points(cv::Mat & frame, vector<cv::KeyPoint> &pts);
+	void point_registor(vector<cv::KeyPoint> & pts);
 	void image_update(PGApi &pgmgr);
 	void image_update_from_video();
 	void Tracer::pre_frame_check();
@@ -32,7 +33,15 @@ public:
 		static cv::Mat new_points = tri_points.clone();
 		return new_points;
 	};
+	const pair<vector<cv::KeyPoint>, vector<cv::KeyPoint>> get_all_pts() {
+		return make_pair(all_leds_key1, all_leds_key2);
+	}
 	cv::Mat init_RT, lower_RT_display;
+
+	const int max_RT_sem = 2;
+	void reset_init_pos() {
+		RT_sem = max_RT_sem;
+	}
 private:
 
 	void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT);
@@ -59,7 +68,8 @@ private:
 		bool leftFlip, rightFlip;
 	};
 	bool RT_inited = false, points_init = false;
-	int RT_sem = 3;
+	int RT_sem = max_RT_sem;
+	vector<cv::KalmanFilter> tri_KF;
 	VideoHandler vh;
 	class KalmanHandler {
 	public:
@@ -73,6 +83,7 @@ private:
 		bool inited = false;
 	};
 	KalmanHandler kalman_handler;
+	cv::KalmanFilter kf3d_gen();
 };
 
 

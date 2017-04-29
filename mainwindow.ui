@@ -313,22 +313,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_3</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>camerasDisplay()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>98</x>
-     <y>569</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>177</x>
-     <y>563</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton_6</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -376,11 +360,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reset_init_pos()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>121</x>
+     <y>564</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>558</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>runICP()</slot>
   <slot>camerasDisplay()</slot>
   <slot>initCameras()</slot>
   <slot>recording()</slot>
+  <slot>reset_init_pos()</slot>
  </slots>
 </ui>

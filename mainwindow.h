@@ -23,6 +23,7 @@ public:
     ~MainWindow();
 	cv::Mat tri_points;
 	vector <cv::Mat> tri_pts_buffer, RT_buffer;
+	vector<vector<cv::KeyPoint>> cam1_buffer, cam2_buffer;
 protected:
 	virtual void keyPressEvent(QKeyEvent *e);
 	
@@ -40,6 +41,7 @@ private slots:
 	void camerasDisplay();
 
 	void recording();
+	void reset_init_pos();
 private:
     Ui::MainWindow *ui;
 	void append_textBrowser(const QString &s);

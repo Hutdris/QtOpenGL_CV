@@ -109,27 +109,42 @@ void MainWindow::initCameras() {
 	//tracer_timer->stop();
 
 }
+void save_mat(vector<cv::Mat> &vec, const char* file_name) {
+	ofstream od(file_name);
+	for (auto itt = vec.begin(); itt != vec.end(); itt++) {
+		od << *itt << endl;
+	}
+	od.close();
+	vec.clear();
+}
+void save_keypoint(vector<vector<cv::KeyPoint>> &vec, const char* file_name) {
+	ofstream od(file_name);
+	for (auto itt = vec.begin(); itt != vec.end(); itt++) {
+		for (auto jtt = itt->begin(); jtt != itt->end(); jtt++) {
+			od << jtt->pt.x << ' '<<jtt->pt.y << ',';
+		}
+		od << endl ;
+	}
+	od.close();
+	vec.clear();
+}
 void MainWindow::recording() {
 	if (!rec_flag) {
 		rec_flag = true;
 		tri_pts_buffer.reserve(100000);
 		RT_buffer.reserve(100000);
+		cam1_buffer.reserve(100000);
+		cam2_buffer.reserve(100000);
+
 		append_textBrowser("Start recording.\n");
 	}
 	else {
-	ofstream od("result/tri_points.txt");
-	for (auto itt = tri_pts_buffer.begin(); itt != tri_pts_buffer.end(); itt++) {
-		od << *itt << endl;
-	}
-	ofstream ort("result/RT.txt");
-	for (auto itt = RT_buffer.begin(); itt != RT_buffer.end(); itt++) {
-		ort << *itt << endl;
-	}
-	ort.close();
-	od.close();
-	tri_pts_buffer.clear();
-	RT_buffer.clear();
+		save_mat(tri_pts_buffer, "result/tri_points.txt");
+		save_mat(RT_buffer, "result/RT.txt");
+		save_keypoint(cam1_buffer, "result/cam1.txt");
+		save_keypoint(cam2_buffer, "result/cam2.txt");
 	append_textBrowser("Stop recoding.\n");
+	rec_flag = false;
 	}
 }
 void MainWindow::camerasDisplay() {
@@ -143,8 +158,8 @@ void MainWindow::camerasDisplay() {
 	cv::waitKey(10);
 */
 	// tracer.pre_frame_check();
-	tracer.image_update_from_video();
-	// tracer.image_update(PGmgr);
+	// tracer.image_update_from_video();
+	tracer.image_update(PGmgr);
 	// 
 	int led_cnt = tracer.points_update();
 	if (led_cnt) { 
@@ -168,7 +183,13 @@ void MainWindow::camerasDisplay() {
 		if (rec_flag){
 			tri_pts_buffer.push_back(tri_points.clone());
 			RT_buffer.push_back(tracer.lower_RT.clone());
+			cam1_buffer.push_back(tracer.get_all_pts().first);
+			cam2_buffer.push_back(tracer.get_all_pts().second);
+
 		}
 
 	}
+}
+void MainWindow::reset_init_pos() {
+	tracer.reset_init_pos();
 }

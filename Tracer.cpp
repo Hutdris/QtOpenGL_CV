@@ -33,8 +33,8 @@ void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT)
 		Eigen::Vector3f pre_pts_, cur_pts_;
 		pre_pts_<<(pre_pts.at<float>(0, i)), (pre_pts.at<float>(1, i)), (pre_pts.at<float>(2, i));
 		cur_pts_<<(cur_pts.at<float>(0, i)), (cur_pts.at<float>(1, i)), (cur_pts.at<float>(2, i));
-		accumulated_weight += 1;
-		float alpha = 1 / accumulated_weight;
+		accumulated_weight += 1.0;
+		float alpha = 1.0 / accumulated_weight;
 		Eigen::Vector3f diff1 = pre_pts_ - pre_mean_, diff2 = cur_pts_ - cur_mean_;
 		covariance_ = (1.0f - alpha)*(covariance_ + alpha *(diff2*diff1.transpose()));
 
@@ -63,7 +63,7 @@ void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT)
   r(2,0),r(2,1),r(2,2),t(2),
   0.0f,0.0f,0.0f,1.0f
   );
-  RT = ret;
+  ret.copyTo(RT);
   /*
   ret(0,0)=r(0,0); ret(0,1)=r(0,1); ret(0,2)=r(0,2); ret(0,3)=t(0);
   ret(1,0)=r(1,0); ret(1,1)=r(1,1); ret(1,2)=r(1,2); ret(1,3)=t(1);
@@ -198,8 +198,8 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
 		// x/=w, y/=w, z/=w, w/=w
 		for (int i = 0; i < led_num; i++) {
-			for (int j = 0; j < 4; j++) {
-				tri_points.at<float>(j, i) /= tri_points.at<float>(3, i);
+			for (int j = 0; j < 3; j++) {
+				 tri_points.at<float>(j, i) /= tri_points.at<float>(3, i);
 			}
 		}
 
@@ -208,14 +208,16 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		cv::Mat _sub_pre_tri;
 		cv::Mat tfRT(3, 4, CV_64F)
 			, inliner;
+		cv::Mat pre_lower_RT;
 		vector<cv::Point3d> pre_points, cur_points;
 		
-
+		int max_b = max_RT_sem;
 		switch (RT_sem)
 			{
 			case(0):
 				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
 				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+
 				getTransformation(init_pos, _sub_tri, lower_RT);
 				printRT(init_pos);
 
@@ -225,7 +227,7 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 
 				break;
 				// printRT(lower_RT);
-			case (3): // Fisrt itr: init pre_tripoints
+			case (2): // Fisrt itr: init pre_tripoints
 				tri_points.copyTo(pre_tri_points);
 				lower_RT_display = lower_RT.clone();
 				init_RT = lower_RT.clone();
@@ -236,7 +238,7 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
 				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
 				init_pos = _sub_tri.clone();
-				
+
 				getTransformation(init_pos, _sub_tri, lower_RT);
 
 				RT_sem--;
@@ -258,6 +260,13 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 	}
 }
 
+
+cv::KalmanFilter Tracer::kf3d_gen() {
+	cv::KalmanFilter kf(6, 3);
+	return kf;
+	
+
+}
 
 
 cv::KalmanFilter Tracer::kf_gen() {
@@ -360,37 +369,100 @@ void pts2keys(vector <cv::Point2f> &pts, vector <cv::KeyPoint> &keys) {
 }
 
 
-int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint> pts) {
+int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint>& pts) {
 	qDebug(type2str(frame.type()).c_str());
 	cv::Mat bw(frame.size(), frame.type());
 	cv::threshold(
 		frame, // src
-		bw, // dst
-		230,   // threshold_value(0~255)
+		frame, // dst
+		250,   // threshold_value(0~255)
 		255,   // max_binary value
 		0	   // thredshold type
 	);
-	// cv::Mat bw = 200 < 128 ? (frame < 200) : (frame > 200);
+	bw = frame;
+
+
+
+
+	// for 0
 	cv::Mat labelImage(bw.size(), CV_16U);
 	cv::Mat stats;
 	cv::Mat centroids;
+	int nLabels;
 	int neighborhood = 8;
-	int nLabels = cv::connectedComponentsWithStats(bw, labelImage, stats, centroids, 8, CV_16U);
-	qDebug("stats:%s centroids:%s", type2str(stats.type()).c_str(), type2str(centroids.type()).c_str());
-	qDebug("%d", nLabels);
+	// for 1
+	vector<cv::Vec3f> circles;
+	// for 2
+	vector<vector<cv::Point>> contours; // Vector for storing contour
+	vector<cv::Vec4i> hierarchy;
 
 	int total_leds_cnt = 9;
+
 	pts.clear();
-	if (nLabels == total_leds_cnt+1) { // stats/centroids contains background as label[0]
-		for (auto i = 1; i<total_leds_cnt+1; i++) {
+	//if (nLabels == total_leds_cnt+1) { // stats/centroids contains background as label[0]
+	int sw = 2; //0->connetedComponent
+				// 1-> Hough
+				// 2-> findContour
+	switch (sw){
+	case 0:
+		nLabels = cv::connectedComponentsWithStats(bw, labelImage, stats, centroids, 4, CV_16U);
+		qDebug("stats:%s centroids:%s", type2str(stats.type()).c_str(), type2str(centroids.type()).c_str());
+		qDebug("%d", nLabels);
+
+
+		for (auto i = 1; i<nLabels; i++) {
 			cv::KeyPoint _pt;
 			_pt.pt = cv::Point2f((float)centroids.at<double>(i, 0), (float)centroids.at<double>(i, 1));
 			_pt.size = max(stats.at<int>(i, cv::ConnectedComponentsTypes::CC_STAT_WIDTH), stats.at<int>(i, cv::ConnectedComponentsTypes::CC_STAT_HEIGHT));
-			pts.push_back(_pt);
+			if (_pt.size > 5)
+				pts.push_back(_pt);
 		}
-		return total_leds_cnt;
+		return pts.size();
+	case 1:
+		// Apply the Hough Transform to find the circles
+		cv::HoughCircles(bw, circles, CV_HOUGH_GRADIENT, 1, bw.rows / 50, 80, 40);
+		for (auto it = circles.begin(); it != circles.end(); it++) {
+			if ((*it)[2] > 3) {
+				cv::KeyPoint _pt;
+				_pt.pt = cv::Point2f((*it)[0], (*it)[1]);
+				_pt.size = (*it)[2]*2;
+				pts.push_back(_pt);
+			}
+		}
+		return pts.size();
+	case 2:
+		//find contour
+		cv::findContours(bw, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE); // Find the contours in the image
+		for (auto it = contours.begin(); it != contours.end(); it++) {
+			double a = cv::contourArea(*it, false);
+			if (a > 6) {
+				cv::Rect b_rect;
+				b_rect = cv::boundingRect(*it);
+
+				cv::KeyPoint _pt;
+				_pt.pt = cv::Point2f(
+					b_rect.x + (b_rect.width / 2)
+					, b_rect.y + (b_rect.height / 2));
+				_pt.size = max(b_rect.width, b_rect.height);
+				pts.push_back(_pt);
+				// cv::rectangle(frame, b_rect, 255);
+				
+			}
+		}
+		return pts.size();
+
+	}
+	if (1) { // stats/centroids contains background as label[0]
 	}
 	return 0;
+}
+
+void Tracer::point_registor(vector<cv::KeyPoint> & pts) {
+	std::sort(pts.begin(), pts.end(), compare_by_pt_y);
+	std::sort(pts.begin(), pts.begin()+5, compare_by_pt_x);
+
+	std::sort(pts.begin()+5, pts.begin()+5+2, compare_by_pt_x);
+	std::sort(pts.begin()+7, pts.begin()+7+2, compare_by_pt_x);
 }
 int Tracer::points_update() {
 	const int total_leds_cnt = 9;
@@ -418,43 +490,7 @@ int Tracer::points_update() {
 		itt->pt *= zoom_ratio;
 		itt->size *= zoom_ratio;
 	}
-/*
-	if (!points_init) {
-		glob_blob_detector->detect(raw_src1, all_leds_key1);
-		glob_blob_detector->detect(raw_src2, all_leds_key2);
-		points_init = true;
-	}
-	else {
-		pair <vector<cv::Point2f>, vector<cv::Point2f>> pre_pts, pts;
-		// ¯ä
-		keys2pts(all_leds_key1, pts.first);
-		keys2pts(all_leds_key2, pts.second);
-		keys2pts(pre_leds.first, pre_pts.first);
-		keys2pts(pre_leds.second, pre_pts.second);
 
-		vector<uchar> status;
-		vector<float> err;
-		const int max_pry = 3;
-		cv::Size winsize(51, 51);
-		cv::TermCriteria termcrit(cv::TermCriteria::EPS | cv::TermCriteria::COUNT, 30, 0.0001);
-		cv::calcOpticalFlowPyrLK(pre_raw_src.first, raw_src1, pre_pts.first, pts.first, status, err, winsize,
-	for (auto itt = all_leds_key1.begin(); itt != all_leds_key1.end(); itt++) {
-		itt->pt *= zoom_ratio;
-		itt->size *= zoom_ratio;
-	}
-			max_pry, termcrit, 0, 0.001);
-		cv::calcOpticalFlowPyrLK(pre_raw_src.second, raw_src2, pre_pts.second, pts.second, status, err, winsize,
-			max_pry, termcrit, 0, 0.001);
-
-		pts2keys(pts.first, all_leds_key1);
-		pts2keys(pts.second, all_leds_key2);
-	}
-	*/
-	//vector <cv::KeyPoint> test_leds;
-	/*
-	raw_src1 = cv::imread("qrc/l.png", 0);
-	raw_src2 = cv::imread("qrc/r.png", 0);
-	*/
 
 	if (display_flag) {
 		drawKeypoints(raw_src1, all_leds_key1, raw_src1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
@@ -462,9 +498,9 @@ int Tracer::points_update() {
 		// cv::flip(raw_src1, frame1, 0);
 		// cv::flip(raw_src2, frame2, 0);
 		cv::imshow("camL", raw_src1);
-		cv::waitKey(10);
+		cv::waitKey(5);
 		cv::imshow("camR", raw_src2);
-		cv::waitKey(10);
+		cv::waitKey(5);
 		//cv::destroyAllWindows();
 	}
 	//qDebug("%d, %d", all_leds_key1.size(), all_leds_key2.size());
@@ -473,13 +509,9 @@ int Tracer::points_update() {
 		all_leds_key2.clear();
 		return 0;
 	}
-	std::sort(all_leds_key1.begin(), all_leds_key1.end(), compare_by_pt_y);
-	std::sort(all_leds_key1.begin(), all_leds_key1.begin()+5, compare_by_pt_x);
-	std::sort(all_leds_key1.begin()+5, all_leds_key1.end(), compare_by_pt_x);
+	point_registor(all_leds_key1);
+	point_registor(all_leds_key2);
 
-	std::sort(all_leds_key2.begin(), all_leds_key2.end(), compare_by_pt_y);
-	std::sort(all_leds_key2.begin(), all_leds_key2.begin()+5, compare_by_pt_x);
-	std::sort(all_leds_key2.begin()+5, all_leds_key2.end(), compare_by_pt_x);
 	return total_leds_cnt; // Shut kalman filter
 	
 	for (int i = 0; i < total_leds_cnt; i++) {  //keypt to mat(measure)
