@@ -226,7 +226,6 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 					for (int j = 0; j < 3; j++) { //x, y, z
 						predict_tri.at<float>(j, i) = predict_pt.at<float>(j);
 						measure.at<float>(j) = tri_points.at<float>(j, i);
-						tri_KF.at(i).measurementMatrix.at<float>(j) = tri_points.at<float>(j, i);
 					}
 					qDebug("%f, %f, %f", measure.at<float>(0), measure.at<float>(1), measure.at<float>(2));
 					inliner = tri_KF.at(i).correct(measure);
@@ -328,7 +327,6 @@ cv::KalmanFilter Tracer::kf3d_gen(cv::Point3f init_pt) {
 	kf.statePost.at<float>(4) = 0;
 	kf.statePost.at<float>(5) = 0;
 */
-	// kf.measurementMatrix = cv::Mat::zeros(3, 1, CV_32F);
 	cv::setIdentity(kf.measurementMatrix);
 	cv::setIdentity(kf.processNoiseCov, cv::Scalar::all(1e-4));
 	cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(10));
