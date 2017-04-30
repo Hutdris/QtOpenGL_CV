@@ -131,10 +131,10 @@ public:
         retranslateUi(MainWindow);
         QObject::connect(openGLWidget, SIGNAL(getZoomRatio(int)), lcdNumber, SLOT(display(int)));
         QObject::connect(icpButton, SIGNAL(clicked()), MainWindow, SLOT(runICP()));
-        QObject::connect(pushButton_3, SIGNAL(clicked()), MainWindow, SLOT(camerasDisplay()));
         QObject::connect(pushButton_6, SIGNAL(clicked()), MainWindow, SLOT(initCameras()));
         QObject::connect(pushButton_5, SIGNAL(clicked()), MainWindow, SLOT(recording()));
         QObject::connect(pushButton, SIGNAL(clicked()), openGLWidget, SLOT(tracing_output_reset()));
+        QObject::connect(pushButton_3, SIGNAL(clicked()), MainWindow, SLOT(reset_init_pos()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi

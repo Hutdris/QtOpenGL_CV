@@ -38,7 +38,7 @@ public:
 	}
 	cv::Mat init_RT, lower_RT_display;
 
-	const int max_RT_sem = 2;
+	const int max_RT_sem = 1;
 	void reset_init_pos() {
 		RT_sem = max_RT_sem;
 	}
@@ -83,7 +83,8 @@ private:
 		bool inited = false;
 	};
 	KalmanHandler kalman_handler;
-	cv::KalmanFilter kf3d_gen();
+
+	cv::KalmanFilter kf3d_gen(cv::Point3f init_pt);
 };
 
 

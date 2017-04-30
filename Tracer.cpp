@@ -165,7 +165,7 @@ void printMat(cv::Mat m) {
 }
 void printTriPTs(cv::Mat pts) {
 	for (int i = 0; i < 4; i++) {
-		// qDebug("%f %f %f %f %f %f %f %f %f", pts.at<float>(i, 0), pts.at<float>)
+		// qDebug("%f %f %f %f %f %f %f %f %f", pts.at<float>(i, 0), pts.at<float>);
 	}
 	qDebug("");
 }
@@ -204,11 +204,14 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		}
 
 
-		cv::Mat _sub_tri;
+		cv::Mat _sub_tri, _guess_sub_tri;
 		cv::Mat _sub_pre_tri;
+		cv::Mat predict_tri(4, 9, CV_32F);
+		cv::Mat estimate_tri(4, 9, CV_32F);
+		cv::Mat measure = cv::Mat::zeros(3,1,  CV_32F);
 		cv::Mat tfRT(3, 4, CV_64F)
-			, inliner;
-		cv::Mat pre_lower_RT;
+			, inliner, predict_pt;
+		cv::Mat pre_lower_RT, diff;
 		vector<cv::Point3d> pre_points, cur_points;
 		
 		int max_b = max_RT_sem;
@@ -216,29 +219,54 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 			{
 			case(0):
 				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
-				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
 
-				getTransformation(init_pos, _sub_tri, lower_RT);
+				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+				for (int i = 0; i < tri_points.cols; i++) {
+					predict_pt = tri_KF.at(i).predict();
+					for (int j = 0; j < 3; j++) { //x, y, z
+						predict_tri.at<float>(j, i) = predict_pt.at<float>(j);
+						measure.at<float>(j) = tri_points.at<float>(j, i);
+						tri_KF.at(i).measurementMatrix.at<float>(j) = tri_points.at<float>(j, i);
+					}
+					qDebug("%f, %f, %f", measure.at<float>(0), measure.at<float>(1), measure.at<float>(2));
+					inliner = tri_KF.at(i).correct(measure);
+					for (int k = 0; k < 3; k++) {
+						estimate_tri.at<float>(k, i) = inliner.at<float>(k);
+
+					}
+					qDebug("%f, %f, %f", inliner.at<float>(0), inliner.at<float>(1), inliner.at<float>(2));
+
+				}
+				_guess_sub_tri = predict_tri(cv::Rect(5, 0, 4, 4));
+				getTransformation(init_pos, _guess_sub_tri, lower_RT);
 				printRT(init_pos);
 
-				for (int i = 0; i < 3; i++) {
-					lower_RT_display.at<float>(i, 3) -= init_RT.at<float>(i, 3);
-				}
+				//for (int i = 0; i < 3; i++) {
+				//	lower_RT_display.at<float>(i, 3) -= init_RT.at<float>(i, 3);
+				//}
 
 				break;
 				// printRT(lower_RT);
-			case (2): // Fisrt itr: init pre_tripoints
+			case (1): // Fisrt itr: init pre_tripoints
 				tri_points.copyTo(pre_tri_points);
 				lower_RT_display = lower_RT.clone();
 				init_RT = lower_RT.clone();
-
+				tri_KF.clear();
+				for (int i = 0; i < tri_points.cols; i++) {
+					cv::Point3f pt(tri_points.at<float>(0, i), tri_points.at<float>(1, i), tri_points.at<float>(2, i));
+					tri_KF.push_back(kf3d_gen(pt));
+				}
+				init_pos = tri_points(cv::Rect(5, 0, 4, 4));
 				RT_sem--;
 				break;
 			default: // init init_RT loop (0<case<sem_bound)
 				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
 				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
 				init_pos = _sub_tri.clone();
-
+				printRT(init_pos);
+				//diff = _sub_tri - _sub_pre_tri;
+				
+				//float dist = sqrtf((pow(diff.at<float>(0, 0), 2) + pow(diff.at<float>(1, 0), 2) + pow(diff.at<float>(2, 0), 2)));
 				getTransformation(init_pos, _sub_tri, lower_RT);
 
 				RT_sem--;
@@ -261,8 +289,50 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 }
 
 
-cv::KalmanFilter Tracer::kf3d_gen() {
-	cv::KalmanFilter kf(6, 3);
+cv::KalmanFilter Tracer::kf3d_gen(cv::Point3f init_pt) {
+	cv::KalmanFilter kf(6, 3, 0, CV_32F);
+	kf.transitionMatrix = (cv::Mat_<float>(6, 6) <<
+							1, 0, 0, 1, 0, 0,
+							0, 1, 0, 0, 1, 0,
+							0, 0, 1, 0, 0, 1,
+							0, 0, 0, 1, 0, 0,
+							0, 0, 0, 0, 1, 0,
+							0, 0, 0, 0, 0, 1
+							);
+
+	kf.statePre.at<float>(0) = init_pt.x;
+	kf.statePre.at<float>(1) = init_pt.y;
+	kf.statePre.at<float>(2) = init_pt.z;
+	kf.statePre.at<float>(3) = 0;
+	kf.statePre.at<float>(4) = 0;
+	kf.statePre.at<float>(5) = 0;
+	/*
+	kf.statePre.at<float>(0) = 0;
+	kf.statePre.at<float>(1) = 0;
+	kf.statePre.at<float>(2) = 0;
+	kf.statePre.at<float>(3) = 0;
+	kf.statePre.at<float>(4) = 0;
+	kf.statePre.at<float>(5) = 0;
+	
+	kf.statePost.at<float>(0) = 0;
+	kf.statePost.at<float>(1) = 0;
+	kf.statePost.at<float>(2) = 0;
+	kf.statePost.at<float>(3) = 0;
+	kf.statePost.at<float>(4) = 0;
+	kf.statePost.at<float>(5) = 0;
+	
+	kf.statePost.at<float>(0) = init_pt.x;
+	kf.statePost.at<float>(1) = init_pt.y;
+	kf.statePost.at<float>(2) = init_pt.z;
+	kf.statePost.at<float>(3) = 0;
+	kf.statePost.at<float>(4) = 0;
+	kf.statePost.at<float>(5) = 0;
+*/
+	// kf.measurementMatrix = cv::Mat::zeros(3, 1, CV_32F);
+	cv::setIdentity(kf.measurementMatrix);
+	cv::setIdentity(kf.processNoiseCov, cv::Scalar::all(1e-4));
+	cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(10));
+	cv::setIdentity(kf.errorCovPost, cv::Scalar::all(.1));
 	return kf;
 	
 
@@ -374,12 +444,11 @@ int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint>& pts) {
 	cv::Mat bw(frame.size(), frame.type());
 	cv::threshold(
 		frame, // src
-		frame, // dst
-		250,   // threshold_value(0~255)
+		bw, // dst
+		200,   // threshold_value(0~255)
 		255,   // max_binary value
 		0	   // thredshold type
 	);
-	bw = frame;
 
 
 
