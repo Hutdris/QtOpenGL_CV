@@ -1,0 +1,11 @@
+debug/
+GeneratedFiles
+release
+result/
+x64
+
+
+*.db
+*.opendb
+*.avi
+

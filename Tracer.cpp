@@ -55,7 +55,7 @@ void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT)
     s(2,2) = -1.0f;
   
   Eigen::Matrix<float, 3, 3> r = u * s * v.transpose();
-  Eigen::Vector3f t = pre_mean_ - r*cur_mean_;
+  Eigen::Vector3f t = cur_mean_ - r*pre_mean_ ;
   
   cv::Mat  ret = (cv::Mat_<float>(4, 4) << 
   r(0,0), r(0,1),r(0,2),t(0),
@@ -198,7 +198,7 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 		cv::triangulatePoints(project1, project2, f_leds1, f_leds2, tri_points);
 		// x/=w, y/=w, z/=w, w/=w
 		for (int i = 0; i < led_num; i++) {
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j <= 3; j++) {
 				 tri_points.at<float>(j, i) /= tri_points.at<float>(3, i);
 			}
 		}
@@ -213,14 +213,14 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 			, inliner, predict_pt;
 		cv::Mat pre_lower_RT, diff;
 		vector<cv::Point3d> pre_points, cur_points;
-		
+		bool kalman_on = true;
 		int max_b = max_RT_sem;
 		switch (RT_sem)
 			{
 			case(0):
-				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4));
+				_sub_tri = tri_points(cv::Rect(5, 0, 4, 4)).clone();
 
-				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4));
+				_sub_pre_tri = pre_tri_points(cv::Rect(5, 0, 4, 4)).clone();
 				for (int i = 0; i < tri_points.cols; i++) {
 					predict_pt = tri_KF.at(i).predict();
 					for (int j = 0; j < 3; j++) { //x, y, z
@@ -236,9 +236,18 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 					qDebug("%f, %f, %f", inliner.at<float>(0), inliner.at<float>(1), inliner.at<float>(2));
 
 				}
-				_guess_sub_tri = predict_tri(cv::Rect(5, 0, 4, 4));
+
+		
+				// kalman filer switch
+				if (kalman_on)
+					_guess_sub_tri = predict_tri(cv::Rect(5, 0, 4, 4)).clone();
+				else
+					_guess_sub_tri = _sub_tri.clone();
+					
 				getTransformation(init_pos, _guess_sub_tri, lower_RT);
 				printRT(init_pos);
+				qDebug();
+				printRT(_guess_sub_tri);
 
 				//for (int i = 0; i < 3; i++) {
 				//	lower_RT_display.at<float>(i, 3) -= init_RT.at<float>(i, 3);
@@ -247,15 +256,16 @@ void Tracer::leds_triangulate(cv::Mat &tri_points) {
 				break;
 				// printRT(lower_RT);
 			case (1): // Fisrt itr: init pre_tripoints
-				tri_points.copyTo(pre_tri_points);
-				lower_RT_display = lower_RT.clone();
+				pre_tri_points = tri_points.clone();
+
 				init_RT = lower_RT.clone();
 				tri_KF.clear();
 				for (int i = 0; i < tri_points.cols; i++) {
 					cv::Point3f pt(tri_points.at<float>(0, i), tri_points.at<float>(1, i), tri_points.at<float>(2, i));
 					tri_KF.push_back(kf3d_gen(pt));
 				}
-				init_pos = tri_points(cv::Rect(5, 0, 4, 4));
+				init_pos = tri_points(cv::Rect(5, 0, 4, 4)).clone();
+				printRT(init_pos);
 				RT_sem--;
 				break;
 			default: // init init_RT loop (0<case<sem_bound)
@@ -327,6 +337,13 @@ cv::KalmanFilter Tracer::kf3d_gen(cv::Point3f init_pt) {
 	kf.statePost.at<float>(4) = 0;
 	kf.statePost.at<float>(5) = 0;
 */
+
+	kf.statePost.at<float>(0) = init_pt.x;
+	kf.statePost.at<float>(1) = init_pt.y;
+	kf.statePost.at<float>(2) = init_pt.z;
+	kf.statePost.at<float>(3) = 0;
+	kf.statePost.at<float>(4) = 0;
+	kf.statePost.at<float>(5) = 0;
 	cv::setIdentity(kf.measurementMatrix);
 	cv::setIdentity(kf.processNoiseCov, cv::Scalar::all(1e-4));
 	cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(10));
@@ -406,8 +423,8 @@ void Tracer::initialize() {
 	glob_blob_p.filterByColor = true;
 	glob_blob_p.blobColor = 255;
 	glob_blob_p.filterByArea = true;
-	glob_blob_p.minArea = 50;
-	glob_blob_p.maxArea = 500;
+	glob_blob_p.minArea = 35/zoom_ratio;
+	glob_blob_p.maxArea = 2000/zoom_ratio;
 	glob_blob_p.filterByCircularity = true;
 	glob_blob_p.minCircularity = 0.4f;
 	glob_blob_p.filterByConvexity = false;
@@ -443,7 +460,7 @@ int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint>& pts) {
 	cv::threshold(
 		frame, // src
 		bw, // dst
-		200,   // threshold_value(0~255)
+		150,   // threshold_value(0~255)
 		255,   // max_binary value
 		0	   // thredshold type
 	);
@@ -502,7 +519,7 @@ int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint>& pts) {
 		cv::findContours(bw, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE); // Find the contours in the image
 		for (auto it = contours.begin(); it != contours.end(); it++) {
 			double a = cv::contourArea(*it, false);
-			if (a > 6) {
+			if (a > 10) {
 				cv::Rect b_rect;
 				b_rect = cv::boundingRect(*it);
 
@@ -534,7 +551,6 @@ void Tracer::point_registor(vector<cv::KeyPoint> & pts) {
 int Tracer::points_update() {
 	const int total_leds_cnt = 9;
 	bool display_flag = true;
-	int zoom_ratio = 1;
 	cv::Mat pt;
 	for (int i = 0; i < total_leds_cnt; i++) {  //Predict pt by kalman fliter
 		kalman_handler.l_predict.at(i) = kalman_handler.l_cam_KF.at(i).predict();
@@ -544,8 +560,8 @@ int Tracer::points_update() {
 	cv::Mat zoom_src1, zoom_src2;
 	cv::resize(raw_src1, zoom_src1, raw_src1.size() / zoom_ratio);
 	cv::resize(raw_src2, zoom_src2, raw_src2.size() / zoom_ratio);
-	//glob_blob_detector->detect(zoom_src1, all_leds_key1);
-	//glob_blob_detector->detect(zoom_src2, all_leds_key2);
+	// glob_blob_detector->detect(zoom_src1, all_leds_key1);
+	// glob_blob_detector->detect(zoom_src2, all_leds_key2);
 
 	find_points(raw_src1, all_leds_key1);
 	find_points(raw_src2, all_leds_key2);
@@ -562,11 +578,15 @@ int Tracer::points_update() {
 	if (display_flag) {
 		drawKeypoints(raw_src1, all_leds_key1, raw_src1, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 		drawKeypoints(raw_src2, all_leds_key2, raw_src2, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-		// cv::flip(raw_src1, frame1, 0);
-		// cv::flip(raw_src2, frame2, 0);
-		cv::imshow("camL", raw_src1);
+
+		cv::namedWindow("camL", CV_WINDOW_AUTOSIZE);
+		cv::namedWindow("camR", CV_WINDOW_AUTOSIZE);
+		cv::Mat display1, display2;
+		cv::resize(raw_src1, display1, cv::Size(800, 600));
+		cv::resize(raw_src2, display2, cv::Size(800, 600));
+		cv::imshow("camL", display1);
 		cv::waitKey(5);
-		cv::imshow("camR", raw_src2);
+		cv::imshow("camR", display2);
 		cv::waitKey(5);
 		//cv::destroyAllWindows();
 	}

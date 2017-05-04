@@ -44,6 +44,7 @@ public:
 	}
 private:
 
+	int zoom_ratio = 1;
 	void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT);
 	//calibration results matrixs
 	cv::Mat dist1, dist2, mtx1, mtx2, RT1, RT2, fund_mat, test, project1, project2;
