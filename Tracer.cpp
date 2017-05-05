@@ -55,12 +55,12 @@ void Tracer::getTransformation(cv::Mat pre_pts, cv::Mat cur_pts, cv::Mat &RT)
     s(2,2) = -1.0f;
   
   Eigen::Matrix<float, 3, 3> r = u * s * v.transpose();
-  Eigen::Vector3f t = cur_mean_ - r*pre_mean_ ;
+  Eigen::Vector3f t = cur_mean_ - pre_mean_ ;
   
   cv::Mat  ret = (cv::Mat_<float>(4, 4) << 
   r(0,0), r(0,1),r(0,2),t(0),
-  r(1,0),r(1,1),r(1,2),t(1),
-  r(2,0),r(2,1),r(2,2),t(2),
+  r(1,0),r(1,1),r(1,2), -t(1),
+  r(2,0),r(2,1),r(2,2),-t(2),
   0.0f,0.0f,0.0f,1.0f
   );
   ret.copyTo(RT);
@@ -346,7 +346,7 @@ cv::KalmanFilter Tracer::kf3d_gen(cv::Point3f init_pt) {
 	kf.statePost.at<float>(5) = 0;
 	cv::setIdentity(kf.measurementMatrix);
 	cv::setIdentity(kf.processNoiseCov, cv::Scalar::all(1e-4));
-	cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(10));
+	cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(.005));
 	cv::setIdentity(kf.errorCovPost, cv::Scalar::all(.1));
 	return kf;
 	
@@ -364,7 +364,7 @@ cv::KalmanFilter Tracer::kf_gen() {
 		kf.statePre.at<float>(3) = 0;
 		cv::setIdentity(kf.measurementMatrix);
 		cv::setIdentity(kf.processNoiseCov, cv::Scalar::all(1e-4));
-		cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(10));
+		cv::setIdentity(kf.measurementNoiseCov, cv::Scalar::all(1000));
 		cv::setIdentity(kf.errorCovPost, cv::Scalar::all(.1));
 
 		return kf;
@@ -460,7 +460,7 @@ int Tracer::find_points(cv::Mat & frame, vector<cv::KeyPoint>& pts) {
 	cv::threshold(
 		frame, // src
 		bw, // dst
-		150,   // threshold_value(0~255)
+		220,   // threshold_value(0~255)
 		255,   // max_binary value
 		0	   // thredshold type
 	);
@@ -582,8 +582,8 @@ int Tracer::points_update() {
 		cv::namedWindow("camL", CV_WINDOW_AUTOSIZE);
 		cv::namedWindow("camR", CV_WINDOW_AUTOSIZE);
 		cv::Mat display1, display2;
-		cv::resize(raw_src1, display1, cv::Size(800, 600));
-		cv::resize(raw_src2, display2, cv::Size(800, 600));
+		cv::resize(raw_src1, display1, cv::Size(1024, 768));
+		cv::resize(raw_src2, display2, cv::Size(1024, 768));
 		cv::imshow("camL", display1);
 		cv::waitKey(5);
 		cv::imshow("camR", display2);
